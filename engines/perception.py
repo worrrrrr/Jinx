@@ -3,13 +3,10 @@
 import re
 import unicodedata
 from dataclasses import dataclass, asdict
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional
 
 @dataclass(frozen=True)
 class PerceptionOutput:
-    """
-    โครงสร้างข้อมูลมาตรฐาน (Schema) ของชั้นรับรู้ ป้องกันข้อผิดพลาดเชิงไวยากรณ์ในด่านถัดไป
-    """
     raw: str
     clean: str
     intent: str
@@ -28,7 +25,7 @@ class PerceptionOutput:
 
 class PerceptionEngine:
     """
-    Perception Layer (ฉบับอัปเกรด): สกัดและวิเคราะห์อินพุตด้วยเกณฑ์คะแนนเชิงน้ำหนัก (Weighted Scoring)
+    Perception Layer (ฉบับสมบูรณ์สูงสุด): รองรับการแปลโจทย์อธิบายภาษาไทยและภาษาอังกฤษเป็นสมการสากล
     """
     
     def __init__(self):
@@ -38,7 +35,7 @@ class PerceptionEngine:
         self.file_pattern = re.compile(r"([a-zA-Z0-9_\-.]+(?:\.(?:md|json|py|log|txt|csv|yaml|yml|conf|js|html|css)))")
         self.url_pattern = re.compile(r"(https?://[^\s]+)")
         
-        # ========== INTENT MAP (จัดกลุ่มกลุ่มคีย์เวิร์ดเพื่อวัดคะแนนความหนาแน่น) ==========
+        # ========== INTENT MAP ==========
         self.intent_keywords = {
             "task:solve": ["คำนวณ", "แก้", "solve", "บวก", "ลบ", "คูณ", "หาร", "เท่ากับ", "สมการ", "ผลลัพ", "หาค่า", "เท่าไร", "เท่าไหร่", "ได้เท่าไหร่", "กี่"],
             "task:edit": ["แก้ไข", "ปรับปรุง", "edit", "update", "modify", "fix", "เปลี่ยน", "patch"],
@@ -92,43 +89,36 @@ class PerceptionEngine:
         self.chitchat_regex = [re.compile(p, re.IGNORECASE) for p in self.chitchat_signals]
 
     def perceive(self, text: str) -> Dict[str, Any]:
-        """
-        ประมวลผลข้อความนำเข้าเพื่อส่งออกเป็นโครงสร้างข้อมูลมาตรฐาน
-        """
         clean_text = self._normalize(text)
         lower_text = clean_text.lower()
         
-        # ค้นหา Intent และ Domain ด้วยระบบคำนวณคะแนนค่าน้ำหนักความสัมพันธ์
         intent = self._score_intent(lower_text)
         entities = self._extract_entities(clean_text)
         domain = self._score_domain(lower_text, entities, intent)
         
-        # ระบบช่วยเหลือกรณีเป็นสมการคณิตศาสตร์ที่ไม่มีคีย์เวิร์ดนำทาง
+        # ตรวจสอบเพื่อแยกเป้าหมายคณิตศาสตร์
         if intent == "unknown" and self._is_math_expression(clean_text):
             intent = "task:solve"
             domain = "math"
             
-        # ระบบช่วยเหลือกรณีเป็นประโยคคุยเล่นทั่วไป
         if intent == "unknown" and self._is_chitchat(lower_text):
             intent = "chat:chitchat"
             domain = "conversation"
             
-        # ระบบช่วยเหลือระบุหมวดหมู่คำถามหลัก (QA)
         if intent == "unknown" and self._is_question(lower_text) and domain != "math":
             intent = self._guess_question_type(lower_text)
             domain = "qa"
-            
+        
         confidence = self._compute_confidence(intent, domain, entities, lower_text)
         action = self._infer_action(intent, domain)
         
-        # จัดระเบียบการแยกข้อมูลสมการ (คัดภาษาไทยออกเพื่อไม่ให้ปะปนในเครื่องมือคำนวณ)
+        # คลีนภาษาและสกัดสูตรล่วงหน้า
         if domain == "math":
             topic = self._extract_math_formula(clean_text)
             entities = [topic] if topic else []
         else:
             topic = self._extract_topic(clean_text, intent)
             
-        # บรรจุข้อมูลและตรวจสอบตามกติกาของ PerceptionOutput Schema
         output = PerceptionOutput(
             raw=text,
             clean=clean_text,
@@ -151,31 +141,20 @@ class PerceptionEngine:
         return re.sub(r"\s+", " ", text).strip()
 
     def _score_intent(self, text: str) -> str:
-        """
-        คำนวณและประเมินผล Intent ด้วยระบบค่าน้ำหนักความหนาแน่นสูงสุด (Weighted Scoring)
-        """
         best_intent = "unknown"
         max_score = 0
-        
         for intent, kw_list in self.intent_keywords.items():
             score = 0
             for kw in kw_list:
-                # คำนวณคะแนนตามจำนวนที่ตรวจเจอ
                 matches = len(re.findall(re.escape(kw), text))
                 if matches > 0:
-                    # คำสั้นหรือคีย์เวิร์ดย่อยได้คะแนนต่ำกว่าเพื่อป้องกัน false positive
                     score += matches * (1 if len(kw) <= 2 else 2)
-            
             if score > max_score:
                 max_score = score
                 best_intent = intent
-                
         return best_intent
 
     def _score_domain(self, text: str, entities: List[str], intent: str) -> str:
-        """
-        คำนวณประเมินผล Domain ด้วยระบบวิเคราะห์สัดส่วนคะแนนรวมและบริบทตัวแปรแวดล้อม
-        """
         if self._is_math_expression(text):
             return "math"
         if intent.startswith("task:solve"):
@@ -193,7 +172,6 @@ class PerceptionEngine:
                 if matches > 0:
                     score += matches * 1
             
-            # ตรวจสอบตัวแปรทางกายภาพอื่นมาร่วมวิเคราะห์คะแนน
             if domain == "file" and any(e.endswith((".md", ".json", ".py", ".txt")) for e in entities):
                 score += 5
             if domain == "web" and any(e.startswith(("http", "www")) for e in entities):
@@ -203,7 +181,6 @@ class PerceptionEngine:
                 max_score = score
                 best_domain = domain
                 
-        # หากไม่มีโดเมนใดมีคะแนนโดดเด่น ให้สืบหาโดเมนตาม Intent หลัก
         if max_score == 0:
             if intent.startswith(("task:edit", "task:create", "task:delete")):
                 return "file"
@@ -227,10 +204,17 @@ class PerceptionEngine:
         return list(set(entities))
 
     def _is_math_expression(self, text: str) -> bool:
-        clean = text.replace(" ", "")
+        """
+        ตรวจสอบคณิตศาสตร์เชิงสัญญลักษณ์ โดยจำแนกหลังผ่านฟังก์ชัน NLP Compiler
+        """
+        # ทดสอบประมวลผลแปลประโยคเป็นสมการคณิตศาสตร์ล่วงหน้า
+        compiled = self._extract_math_formula(text)
+        
+        clean = compiled.replace(" ", "")
         has_ops = bool(self.has_math_ops.search(clean))
         has_numbers = any(c.isdigit() for c in clean)
         has_vars = any(c.isalpha() for c in clean)
+        
         return has_ops and (has_numbers or has_vars) and len(clean) < 100
 
     def _is_chitchat(self, text: str) -> bool:
@@ -302,7 +286,65 @@ class PerceptionEngine:
         return intent not in ["task:delete", "task:copy", "task:move"]
 
     def _extract_math_formula(self, text: str) -> str:
-        """สกัดกรองตัดอักขระภาษาไทยทิ้งทั้งหมด เหลือเฉพาะสัญญลักษณ์คณิตศาสตร์สากล"""
-        clean = re.sub(r"[\u0e00-\u0e7f]", "", text)
+        """
+        NLP to Math Compiler (ฉบับเสถียรภาพสูงสุด): รองรับการแยกวรรณยุกต์อักษรยืดหยุ่นของภาษาไทย
+        """
+        # 1. ปรับสมดุลข้อมูลเป็นตัวพิมพ์เล็ก
+        clean = text.lower().strip()
+        
+        # 2. คัดกรองตัวอักษรหรือประโยคสร้อยที่ไม่ใช่เป้าหมายในการแก้สมการ
+        strip_words = [
+            "ถ้า", "เมื่อ", "กำหนดให้", "จงหา", "หาค่า", "คำนวณ", "ได้เท่าไหร่", "เท่ากับเท่าไหร่", "คืออะไร",
+            "if", "when", "given", "find", "answer", "solve", "determine", "what is", "calculate", "หาค่าของ"
+        ]
+        for w in strip_words:
+            clean = re.sub(rf"\b{w}\b", "", clean)
+            clean = clean.replace(w, "")
+            
+        # 3. แปลงคำสั่งเปรียบเทียบเชิงอสมการและความสัมพันธ์แบบยืดหยุ่นสูง (Flexible Thai & English Comparators)
+        # รูปแบบ: A มากกว่า B [อักษรไทย/ช่องว่าง] C -> A - B = C
+        clean = re.sub(r"([a-zA-Z0-9]+)\s*มากกว่า\s*([a-zA-Z0-9]+)\s*[\u0e00-\u0e7f\s]*\s*([a-zA-Z0-9.]+)", r"\1 - \2 = \3", clean)
+        clean = re.sub(r"\b([a-zA-Z0-9]+)\s*more\s*than\s*([a-zA-Z0-9]+)\s*(?:equal|is|equals|equal\s*to|\s)*\s*([a-zA-Z0-9.]+)", r"\1 - \2 = \3", clean)
+        
+        # รูปแบบ: A น้อยกว่า B [อักษรไทย/ช่องว่าง] C -> B - A = C
+        clean = re.sub(r"([a-zA-Z0-9]+)\s*น้อยกว่า\s*([a-zA-Z0-9]+)\s*[\u0e00-\u0e7f\s]*\s*([a-zA-Z0-9.]+)", r"\2 - \1 = \3", clean)
+        clean = re.sub(r"\b([a-zA-Z0-9]+)\s*less\s*than\s*([a-zA-Z0-9]+)\s*(?:equal|is|equals|equal\s*to|\s)*\s*([a-zA-Z0-9.]+)", r"\2 - \1 = \3", clean)
+        
+       
+        clean = re.sub(r"(?:และ|เเละ|เละ)", ",", clean)
+        clean = re.sub(r"\band\b", ",", clean)
+        clean = re.sub(r"\bเเละ\b", ",", clean)
+        
+        # 5. แปลงเครื่องหมายคำนวณพื้นฐาน (Arithmetic Operators)
+        clean = re.sub(r"\bเท่ากับ\b", "=", clean)
+        clean = re.sub(r"\bเท่า\b", "=", clean)
+        clean = re.sub(r"\b(?:is|equal|equals)\b", "=", clean)
+        
+        clean = re.sub(r"\bบวก\b", "+", clean)
+        clean = re.sub(r"\bรวมกับ\b", "+", clean)
+        clean = re.sub(r"\bplus\b", "+", clean)
+        
+        clean = re.sub(r"\bลบ\b", "-", clean)
+        clean = re.sub(r"\bหักออก\b", "-", clean)
+        clean = re.sub(r"\bminus\b", "-", clean)
+        
+        clean = re.sub(r"\bคูณ\b", "*", clean)
+        clean = re.sub(r"\bคูณกับ\b", "*", clean)
+        clean = re.sub(r"\btimes\b", "*", clean)
+        
+        clean = re.sub(r"\bหาร\b", "/", clean)
+        clean = re.sub(r"\bหารด้วย\b", "/", clean)
+        clean = re.sub(r"\bdivide\b", "/", clean)
+        clean = re.sub(r"\bdivided by\b", "/", clean)
+
+        # 6. ล้างตัวแปรสร้อยปลายข้อความที่มีลักษณะลอย (เช่น " xy=24 x,y")
+        clean = re.sub(r"\s+[a-zA-Z](?:\s*,\s*[a-zA-Z\s])*$", "", clean)
+        
+        # 7. คัดอักษรภาษาไทยที่ตกค้างออกทั้งหมดเพื่อให้เหลือเฉพาะสมการสากล
+        clean = re.sub(r"[\u0e00-\u0e7f]", "", clean)
+        
+        # 8. ปรับแต่งเว้นวรรค
         clean = re.sub(r"\s+", " ", clean).strip()
+        clean = re.sub(r"\s*,\s*", ", ", clean)
+        
         return clean

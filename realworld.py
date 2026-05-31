@@ -44,7 +44,15 @@ def run_realworld_test():
         # 5. โจทย์ภาษาไทยที่มีคำคณิตศาสตร์ (ต้องตัดสิทธิ์ไม่ให้รัน Engine ดิบ และประเมินผลอย่างปลอดภัย)
         {
             "category": "THAI WORD PROBLEM",
-            "query": "ถ้า x มากกว่า y อยู่ 5 และ xy=24 หาค่า x,y"
+            "query": "ถ้า x มากกว่า y อยู่ 5 และ xy=24 "
+        },
+        {
+            "category": "ENG WORD PROBLEM",
+            "query": " if x more than y equal 5  and  x*y=24  find answer"
+        },
+        {
+            "category": "ENG WORD PROBLEM",
+            "query": " x-y=5, xy=24 "
         }
     ]
 
@@ -62,7 +70,7 @@ def run_realworld_test():
         # รันผ่านท่อประมวลผล Pipeline หลัก (Perception -> Reasoning -> Execution -> Response)
         answer = jinx.run(query)
         
-        print(f"💬 คำตอบที่ Jinx ตอบกลับ: {answer}")
+        print(answer)
         print("-" * 70)
 
 if __name__ == "__main__":

@@ -11,7 +11,6 @@ import z3
 import re
 from typing import Dict, Any, List, Callable
 
-# ตั้งค่าการถอดรหัสรูปแบบสมการย่อ
 SYM_TRANSFORMATIONS = standard_transformations + (
     implicit_multiplication_application,
     convert_xor,
@@ -25,24 +24,11 @@ def get_tools() -> Dict[str, Callable]:
     }
 
 
-# แก้ไขในไฟล์ tools/math.py
-
 def compute_math_handler(action: str, inp: str, entities: List[str]) -> Dict[str, Any]:
     if not inp:
         return {"status": "fail", "message": "ไม่มีข้อความสมการนำเข้า"}
 
-    # ✅ ป้องกันภาษาไทยปนเปื้อนในอินพุตของเครื่องมือคำนวณเชิงสัญลักษณ์โดยเด็ดขาด 
-    # หากพบอักขระภาษาไทย ให้แจ้งเตือนเพื่อให้ผู้ใช้ป้อนเฉพาะสมการคณิตศาสตร์ดิบ เช่น "x-y=5, x*y=24"
-    if re.search(r"[\u0e00-\u0e7f]", inp):
-        return {
-            "status": "fail", 
-            "message": "ไม่สนับสนุนโจทย์อธิบายภาษาไทยในโหมดคำนวณสัญลักษณ์โดยตรง กรุณาเขียนเป็นสมการ เช่น 'x - y = 5, x*y = 24'"
-        }
-
-    # ปรับแต่งคำสั่งยกกำลัง ^ เป็น ** ล่วงหน้า
     clean_inp = inp.strip().replace("^", "**")
-
-    # ปรับแก้กรณีระบบสมการเว้นวรรคไม่มีเครื่องหมายจุลภาคคั่น
     clean_inp = re.sub(r"(\S+=[^\s,]+)\s+([a-zA-Z0-9])", r"\1, \2", clean_inp)
 
     if _is_z3_constraint_problem(clean_inp):
@@ -52,8 +38,11 @@ def compute_math_handler(action: str, inp: str, entities: List[str]) -> Dict[str
 
 
 def _is_z3_constraint_problem(text: str) -> bool:
+    """
+    ตรวจจับอสมการหรือฟังก์ชันตรรกศาสตร์สากลเพื่อเรียกใช้ค่าย Z3
+    """
     has_inequality = bool(re.search(r"[<>!]", text))
-    has_logical_keywords = any(kw in text for kw in ["And", "Or", "Not", "Implies", "&&", "||", ","])
+    has_logical_keywords = any(kw in text for kw in ["And", "Or", "Not", "Implies", "If", "&&", "||"])
     
     variables = set(re.findall(r"\b[a-zA-Z]\b", text))
     math_funcs = {"sin", "cos", "tan", "log", "exp", "abs", "diff", "integrate"}
@@ -63,6 +52,9 @@ def _is_z3_constraint_problem(text: str) -> bool:
 
 
 def _solve_with_sympy(expr_str: str) -> Dict[str, Any]:
+    """
+    วิเคราะห์คำนวณและหาเซ็ตคำตอบพีชคณิตทั้งหมดด้วย SymPy
+    """
     try:
         if "diff" in expr_str or "integrate" in expr_str:
             parsed_expr = parse_expr(expr_str, transformations=SYM_TRANSFORMATIONS)
@@ -74,23 +66,30 @@ def _solve_with_sympy(expr_str: str) -> Dict[str, Any]:
             }
 
         if "=" in expr_str:
-            parts = expr_str.split("=")
-            if len(parts) == 2:
-                lhs = parse_expr(parts[0], transformations=SYM_TRANSFORMATIONS)
-                rhs = parse_expr(parts[1], transformations=SYM_TRANSFORMATIONS)
-                equation = lhs - rhs
+            delimiters = r",|\n"
+            eq_strings = [e.strip() for e in re.split(delimiters, expr_str) if e.strip()]
+            
+            parsed_eqs = []
+            for eq in eq_strings:
+                if "=" in eq:
+                    parts = eq.split("=", 1)
+                    lhs = parse_expr(parts[0], transformations=SYM_TRANSFORMATIONS)
+                    rhs = parse_expr(parts[1], transformations=SYM_TRANSFORMATIONS)
+                    parsed_eqs.append(lhs - rhs)
+                else:
+                    parsed_eqs.append(parse_expr(eq, transformations=SYM_TRANSFORMATIONS))
+            
+            variables = set()
+            for parsed_eq in parsed_eqs:
+                variables.update(parsed_eq.free_symbols)
                 
-                variables = list(equation.free_symbols)
-                if not variables:
-                    return {"status": "fail", "message": "ไม่พบตัวแปรในการแก้สมการ"}
-                
-                solutions = sp.solve(equation, variables, dict=True)
-                return {
-                    "status": "success",
-                    "result": str(solutions),
-                    "expression": expr_str,
-                    "engine": "sympy_solver"
-                }
+            solutions = sp.solve(parsed_eqs, list(variables), dict=True)
+            return {
+                "status": "success",
+                "result": solutions,
+                "expression": expr_str,
+                "engine": "sympy_solver"
+            }
 
         parsed_expr = parse_expr(expr_str, transformations=SYM_TRANSFORMATIONS)
         result = parsed_expr.evalf() if parsed_expr.is_number else sp.simplify(parsed_expr)
@@ -113,14 +112,16 @@ def _solve_with_sympy(expr_str: str) -> Dict[str, Any]:
 
 
 def _solve_with_z3(constraints_str: str) -> Dict[str, Any]:
+    """
+    วิเคราะห์แก้ไขอสมการจำกัดขอบเขตด้วย Z3-Solver
+    """
     solver = z3.Solver()
     z3_vars = {}
     
     try:
-        # สแกนและประกาศตัวแปรในโจทย์
-        all_words = set(re.findall(r"\b[a-zA-Z_][a-zA-Z0-9_]*\b", constraints_str))
+        all_variables = set(re.findall(r"\b[a-zA-Z]\b", constraints_str))
         reserved_words = {"And", "Or", "Not", "Implies", "If", "sin", "cos", "tan", "log", "exp", "abs", "True", "False"}
-        variables = all_words - reserved_words
+        variables = all_variables - reserved_words
         
         for var in variables:
             z3_vars[var] = z3.Real(var)
@@ -131,18 +132,26 @@ def _solve_with_z3(constraints_str: str) -> Dict[str, Any]:
             "Or": z3.Or,
             "Not": z3.Not,
             "Implies": z3.Implies,
-            "If": z3.If
+            "If": z3.If,
+            "Eq": lambda a, b: a == b,
+            "Ne": lambda a, b: a != b,
+            "Lt": lambda a, b: a < b,
+            "Le": lambda a, b: a <= b,
+            "Gt": lambda a, b: a > b,
+            "Ge": lambda a, b: a >= b,
+            "StrictLessThan": lambda a, b: a < b,
+            "LessThan": lambda a, b: a <= b,
+            "StrictGreaterThan": lambda a, b: a > b,
+            "GreaterThan": lambda a, b: a >= b,
         }
         
         delimiters = r",|\n"
         constraints_list = [c.strip() for c in re.split(delimiters, constraints_str) if c.strip()]
         
         for constraint in constraints_list:
-            # ข้ามกรณีประโยคที่มีภาษาไทยปนเปื้อนในเงื่อนไขย่อยโดยเด็ดขาด
             if re.search(r"[\u0e00-\u0e7f]", constraint):
                 continue
                 
-            # แปลงข้อจำกัดแต่ละชุดด้วยฟังก์ชันประมวลผลแยกฝั่ง LHS/RHS ป้องกันบักการประเมินผลล่วงหน้าของ SymPy
             constraint_obj = _parse_and_build_z3_constraint(constraint, eval_env)
             if constraint_obj is not None:
                 solver.add(constraint_obj)
@@ -158,14 +167,11 @@ def _solve_with_z3(constraints_str: str) -> Dict[str, Any]:
             for name, var_obj in z3_vars.items():
                 val = model[var_obj]
                 if val is not None:
-                    # ตรวจจับประเภทตัวเลขของ Z3 แบบครอบคลุม
                     if z3.is_int_value(val):
                         solution[name] = val.as_long()
                     elif z3.is_rational_value(val):
-                        # ใช้ as_fraction() เพื่อป้องกันการสูญเสียความละเอียดของเลขทศนิยมเศษส่วน
                         solution[name] = float(val.as_fraction())
                     elif z3.is_algebraic_value(val):
-                        # กรณีเลขอตรรกยะ (เช่น รากที่สอง) ให้ประมาณการเป็นทศนิยม 10 ตำแหน่ง
                         approx_val = val.approx(10)
                         solution[name] = float(approx_val.as_fraction())
                     else:
@@ -187,11 +193,6 @@ def _solve_with_z3(constraints_str: str) -> Dict[str, Any]:
 
 
 def _parse_and_build_z3_constraint(constraint: str, eval_env: Dict[str, Any]) -> Any:
-    """
-    วิเคราะห์และแยกโครงสร้างฝั่งซ้าย (LHS) และฝั่งขวา (RHS) เพื่อแปลงเครื่องหมายเชิงสัมพันธ์ส่งต่อให้ Z3 
-    โดยหลีกเลี่ยงการใช้ '==' ของ Python ตรงๆ ในระหว่างการเรียกใช้งาน parse_expr
-    """
-    # เรียงลำดับตัวดำเนินการจากยาวไปสั้นเพื่อความแม่นยำในการตรวจจับสัญลักษณ์ย่อย
     operators = [("==", "=="), ("!=", "!="), ("<=", "<="), (">=", ">="), ("=", "=="), ("<", "<"), (">", ">")]
     
     op_found = None
@@ -207,7 +208,6 @@ def _parse_and_build_z3_constraint(constraint: str, eval_env: Dict[str, Any]) ->
         parts = constraint.split(op, 1)
         lhs_str, rhs_str = parts[0].strip(), parts[1].strip()
         
-        # แปลงโครงสร้างแยกจากกันอิสระ ป้องกันปัญหา SymPy คืนค่า False ทันทีจากการเปรียบเทียบผิดที่
         lhs_parsed = parse_expr(lhs_str, transformations=SYM_TRANSFORMATIONS)
         rhs_parsed = parse_expr(rhs_str, transformations=SYM_TRANSFORMATIONS)
         
@@ -221,12 +221,10 @@ def _parse_and_build_z3_constraint(constraint: str, eval_env: Dict[str, Any]) ->
         elif z3_op == "<=": return lhs_val <= rhs_val
         elif z3_op == ">=": return lhs_val >= rhs_val
     else:
-        # กรณีไม่มีเครื่องหมายเชิงสัมพันธ์ (เช่น การระบุพหุนามเปล่า หรือตัวแปรเดี่ยว)
         parsed = parse_expr(constraint, transformations=SYM_TRANSFORMATIONS)
         val = eval(str(parsed), {"__builtins__": {}}, eval_env)
         
         if z3.is_bool(val) or isinstance(val, bool):
             return val
         else:
-            # ตั้งสมมติฐานว่าพหุนามที่เขียนเปล่า มีค่าเทียบเท่ากับการสมมติให้สมการเท่ากับ 0
             return val == 0

@@ -1,4 +1,4 @@
-# engines/reasoning.py
+# engines/reasoning.py (อัปเดต PlanOutput และโครงสร้างส่งออกแผนงาน)
 
 import re
 from dataclasses import dataclass, asdict
@@ -6,9 +6,7 @@ from typing import Dict, Any, List
 
 @dataclass(frozen=True)
 class PlanOutput:
-    """
-    โครงสร้างแผนงานมาตรฐาน (Schema) ของชั้นวางแผน เพื่อความทนทานในการรันคำสั่งย่อย
-    """
+    action: str  # 👈 เพิ่มฟิลด์ประสานงานคำสั่งหลักไปยังเครื่องมือย่อย
     intent: str
     domain: str
     tasks: List[str]
@@ -24,11 +22,7 @@ class PlanOutput:
 
 
 class ReasoningEngine:
-    """
-    Reasoning Engine: รับข้อมูลรับรู้มาตรฐาน → ออกแบบแผนงานการประมวลผลระบบย่อย
-    """
     def __init__(self):
-        # ========== STRATEGY MATRIX (จับคู่กระบวนการทำงานที่แม่นยำ) ==========
         self.strategy_matrix = {
             ("task:solve", "math"): ["validate_numbers", "parse_expression", "compute_math", "format_result"],
             ("task:edit", "file"): ["check_file_exists", "backup_file", "update_file_content", "verify_change"],
@@ -58,7 +52,6 @@ class ReasoningEngine:
             "default": ["analyze_input", "route_to_appropriate_handler"]
         }
         
-        # กฎการทำงานร่วมกับบริบทแวดล้อม (Contextual Adaptive Rules)
         self.context_rules = [
             {"if_intent_contains": "delete", "if_entity_has": "file", "then_add_task": "confirm_with_user", "priority": "high"},
             {"if_domain": "math", "if_confidence_below": 0.7, "then_add_task": "double_check_calculation", "priority": "normal"},
@@ -66,10 +59,8 @@ class ReasoningEngine:
         ]
 
     def plan(self, perception: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        รับส่งข้อมูลรับรู้มาตรฐานที่ผ่านการสกัดกรอง → ออกแบบและรายงานแผนงาน
-        """
-        # สกัดข้อมูลจาก Perception Dictionary (การันตีความปลอดภัยของโครงสร้างข้อมูลขาเข้า)
+        # สกัดข้อมูลแผนงานหลัก
+        action = perception.get("action", "noop")  # 👈 ดึงคำสั่งจาก Perception
         intent = perception.get("intent", "unknown")
         domain = perception.get("domain", "general")
         entities = perception.get("entities", [])
@@ -79,15 +70,13 @@ class ReasoningEngine:
         is_chitchat = perception.get("is_chitchat", False)
         is_question = perception.get("is_question", False)
         
-        # ค้นหากลยุทธ์ของแผนการรันคำสั่ง (Task Sequence)
         task_sequence = self._find_strategy(intent, domain)
         task_sequence = self._apply_context_rules(task_sequence, intent, domain, entities, topic, confidence)
-        
-        # จัดการสัญญานระบุลักษณะคำตอบ (Response Hint Generation)
         response_hint = self._generate_response_hint(intent, topic, len(entities) > 0)
         
-        # บรรจุโครงสร้างและตรวจสอบกฎเกณฑ์ผ่าน PlanOutput Schema
+        # แนบคำสั่งรันหลักเข้าสู่กระบวนการ PlanOutput
         plan_output = PlanOutput(
+            action=action,  # 👈 จัดส่งลงในแผนงานมาตรฐาน
             intent=intent,
             domain=domain,
             tasks=task_sequence,
@@ -110,7 +99,6 @@ class ReasoningEngine:
         if (intent, domain) in self.strategy_matrix:
             return list(self.strategy_matrix[(intent, domain)])
         
-        # ค้นหาเงื่อนไขกรณีตรงกับ Pattern
         for (intent_pattern, domain_key), tasks in self.strategy_matrix.items():
             if domain == domain_key and isinstance(intent_pattern, str) and re.match(intent_pattern, intent):
                 return list(tasks)
@@ -120,27 +108,17 @@ class ReasoningEngine:
 
     def _apply_context_rules(self, tasks: List[str], intent: str, domain: str, 
                              entities: List[str], topic: str, confidence: float) -> List[str]:
-        """
-        ปรับปรุงแผนงานตามสภาวะและสัญญาณบริบทเพื่อความทนทานและความปลอดภัยของระบบ
-        """
         modified_tasks = tasks.copy()
-        
         for rule in self.context_rules:
             triggered = True
-            
-            # 1. ตรวจเงื่อนไข Intent
             if "if_intent_contains" in rule and rule["if_intent_contains"] not in intent:
                 triggered = False
-            # 2. ตรวจเงื่อนไข Domain
             if "if_domain" in rule and rule["if_domain"] != domain:
                 triggered = False
-            # 3. ตรวจเงื่อนไข Entity
             if "if_entity_has" in rule and not any(rule["if_entity_has"] in ent for ent in entities):
                 triggered = False
-            # 4. ตรวจค่าความมั่นใจต่ำกว่าเกณฑ์
             if "if_confidence_below" in rule and confidence >= rule["if_confidence_below"]:
                 triggered = False
-            # 5. ตรวจคำคีย์เวิร์ดในหัวข้อสนทนา
             if "if_topic_contains_any" in rule:
                 topic_lower = topic.lower()
                 if not any(kw in topic_lower for kw in rule["if_topic_contains_any"]):
@@ -180,11 +158,7 @@ class ReasoningEngine:
         return "low"
 
     def _generate_response_hint(self, intent: str, topic: str, has_entities: bool) -> Dict[str, Any]:
-        """
-        สกัดสัญญาณจำเพาะสำหรับชี้นำทิศทางการปรุงแต่งข้อความตอบกลับใน Response Layer
-        """
         hint = {"style": "neutral", "tone": "friendly", "length": "medium"}
-        
         if "greet" in intent:
             hint.update({"style": "warm", "emoji": True, "length": "short"})
         elif "farewell" in intent:
@@ -197,8 +171,6 @@ class ReasoningEngine:
             hint.update({"style": "informative", "tone": "helpful", "include_sources": True})
         elif "chitchat" in intent:
             hint.update({"style": "casual", "tone": "conversational", "ask_back": True})
-        
         if has_entities:
             hint["mention_entities"] = True
-            
         return hint
