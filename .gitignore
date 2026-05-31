@@ -1,0 +1,55 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.env
+
+# Virtual environments
+.venv
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pycache/
+
+# Virtual env (ถ้าไม่ได้ใช้ uv venv แยก)
+.venv/
+venv/
+
+# UV
+uv.lock
+.python-version
+
+# Logs / runtime
+logs/
+*.log
+
+# Runtime temp (ถ้าอนาคตมี)
+tmp/
+temp/
+cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Obsidian (เลือกเอา)
+data/knowledge/.obsidian/workspace*
+data/knowledge/.obsidian/cache*
+data/knowledge/.obsidian/plugins/
+
+# IDE
+.vscode/
+.idea/
+
+# test / coverage (ถ้ามีทีหลัง)
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter (ถ้ามี)
+.ipynb_checkpoints/
