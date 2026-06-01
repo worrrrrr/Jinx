@@ -3,7 +3,11 @@
 import logging
 import time
 from typing import Dict, Any, Optional
-
+from core.memory import (
+    SessionMemory,
+    extract_variables_from_result,
+    substitute_variables_in_text,
+)
 from engines.perception import PerceptionEngine
 from engines.reasoning import ReasoningEngine
 from engines.execution import ExecutionEngine
@@ -36,6 +40,9 @@ class Orchestrator:
             
         # สร้างรหัสจำเพาะการเชื่อมต่อของเซสชัน (Session Tracking)
         self.session_id = f"jinx_{int(time.time())}"
+
+        max_history = int(self.config.get("memory_max_history", 10))
+        self.memory = SessionMemory(max_history=max_history)
         
         # ระบบจัดเก็บสถิติเชิงปริมาณ (Telemetry metrics)
         self._stats = {
@@ -61,13 +68,31 @@ class Orchestrator:
             # 2. REASONING LAYER: วางแผนการทำงานตามเงื่อนไขบริบท พร้อมส่งสัญญาณจัดแต่งประโยค
             plan_output = self.reasoning.plan(perception_output)
             logger.debug(f"🧭 Plan generated: tasks={plan_output['tasks']}, status='{plan_output['status']}'")
+
+            # แทนค่าตัวแปรเฉพาะนิพจน์ที่ไม่มี '=' (ไม่แทนในสมการที่กำลังหาตัวแปร)
+            if plan_output.get("domain") == "math" and self.memory.variables:
+                topic = plan_output.get("topic", "")
+                if topic and "=" not in topic:
+                    plan_output["topic"] = substitute_variables_in_text(
+                        topic, self.memory.variables
+                    )
             
             # 3. EXECUTION LAYER: ประมวลผลเครื่องมือจริง (Math/Search/File)
             execution_output = self.execution.execute(plan_output)
             logger.debug(f"⚙️ Execution finished: status='{execution_output['status']}'")
+
+            if execution_output.get("status") == "success":
+                new_vars = extract_variables_from_result(execution_output.get("result"))
+                if new_vars:
+                    self.memory.store_variables(new_vars)
+
+            self.memory.update_context("last_intent", perception_output.get("intent"))
+            self.memory.update_context("last_domain", perception_output.get("domain"))
             
             # 4. RESPONSE LAYER: ปรุงแต่งและเรียบเรียงประโยคตอบสนองผู้ใช้ตามบุคลิกภาพ
             response_answer = self.response.format(execution_output, perception=perception_output)
+
+            self.memory.add_turn(user_input, response_answer)
             
             # คำนวณและบันทึกเวลาการทำงานเพื่อประเมินประสิทธิภาพความหน่วง (Latency Telemetry)
             latency = (time.time() - start_time) * 1000
@@ -111,8 +136,17 @@ class Orchestrator:
                 "reasoning_healthy": self.reasoning is not None,
                 "execution_healthy": self.execution is not None,
                 "response_healthy": self.response is not None
-            }
+            },
+            "memory": {
+                "turns": len(self.memory.history),
+                "variables": dict(self.memory.variables),
+            },
         }
+
+    def reset_memory(self):
+        """ล้างความจำเซสชัน (ประวัติสนทนาและตัวแปร)"""
+        self.memory.clear()
+        logger.info("🔄 Session memory cleared")
 
     def reset_stats(self):
         """

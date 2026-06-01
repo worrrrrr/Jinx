@@ -9,7 +9,7 @@ from sympy.parsing.sympy_parser import (
 )
 import z3
 import re
-from typing import Dict, Any, List, Callable
+from typing import Dict, Any, List, Callable, Optional, Union
 
 SYM_TRANSFORMATIONS = standard_transformations + (
     implicit_multiplication_application,
@@ -51,6 +51,134 @@ def _is_z3_constraint_problem(text: str) -> bool:
     return (has_inequality or has_logical_keywords) and len(unique_vars) > 1
 
 
+def _var_name_from_sympy_key(key: Any) -> str:
+    if isinstance(key, str):
+        return key
+    name = getattr(key, "name", None)
+    return str(name) if name else str(key)
+
+
+def _sympy_to_display_number(val: Any) -> Union[int, float, str]:
+    """
+    แปลงค่า SymPy เป็นตัวเลขทศนิยม/จำนวนเต็มที่อ่านง่าย 
+    และคัดกรองค่าประมาณ (เช่น LambertW หรือจำนวนอตรรกยะ) เป็นข้อความที่มีสัญลักษณ์ ≈ นำหน้าโดยตรง
+    """
+    if val is None:
+        return "ไม่มีค่า"
+    try:
+        # ตรวจจับฟังก์ชัน LambertW และบังคับส่งคืนเป็นสตริงค่าประมาณ "≈ {value}" ทันที
+        if "LambertW" in str(val):
+            f = float(sp.N(val))
+            approx_val = round(f, 6)
+            return f"≈ {approx_val:,.6f}".rstrip("0").rstrip(".")
+
+        if getattr(val, "is_Rational", False) and val.is_Rational:
+            f = float(val)
+            if abs(f - round(f)) < 1e-9:
+                return int(round(f))
+            
+            # ตรวจสอบว่าเป็นทศนิยมไม่รู้จบในฐานสิบ (เช่น 1/3) หรือไม่ หากใช่ให้แปลงเป็นค่าประมาณ
+            from fractions import Fraction
+            frac = Fraction(f).limit_denominator(1000)
+            denom = frac.denominator
+            while denom % 2 == 0: denom //= 2
+            while denom % 5 == 0: denom //= 5
+            if denom != 1:
+                return f"≈ {round(f, 6):,.6f}".rstrip("0").rstrip(".")
+            return round(f, 6)
+
+        if getattr(val, "is_number", False) and val.is_number:
+            approx = complex(val.evalf(15))
+            if abs(approx.imag) > 1e-8:
+                return str(val)
+            f = approx.real
+            if abs(f - round(f)) < 1e-9 and abs(f) < 1e12:
+                return int(round(f))
+            
+            # ตรวจหาค่ารากพหุนามและจำนวนอตรรกยะ (เช่น pi, sqrt(2)) ที่ไม่ใช่ค่าตรรกยะปกติ
+            if not getattr(val, "is_rational", False):
+                return f"≈ {round(f, 6):,.6f}".rstrip("0").rstrip(".")
+            return round(f, 6)
+            
+    except (TypeError, ValueError, AttributeError):
+        pass
+    return str(val)
+
+
+def _humanize_solutions(solutions: List[Dict[Any, Any]]) -> List[Dict[str, Union[int, float, str]]]:
+    """แปลงผล solve ของ SymPy เป็น dict ตัวเลขธรรมดาหรือสตริงค่าประมาณ."""
+    rows: List[Dict[str, Union[int, float, str]]] = []
+    for sol in solutions:
+        row: Dict[str, Union[int, float, str]] = {}
+        for key, val in sol.items():
+            row[_var_name_from_sympy_key(key)] = _sympy_to_display_number(val)
+        rows.append(row)
+
+    def sort_key(row: Dict[str, Union[int, float, str]]) -> tuple:
+        # ตรรกะแยกตัวเลขจากสตริงที่มีเครื่องหมาย "≈" เพื่อความแม่นยำในการจัดเรียงผลลัพธ์
+        def extract_numeric(v):
+            if isinstance(v, (int, float)):
+                return float(v)
+            if isinstance(v, str) and v.startswith("≈"):
+                try:
+                    return float(v.replace("≈", "").strip())
+                except ValueError:
+                    return 0
+            return 0
+
+        nums = [extract_numeric(v) for v in row.values()]
+        primary = nums[0] if nums else 0
+        is_int = any(isinstance(v, int) for v in row.values())
+        return (0 if is_int else 1, primary)
+
+    return sorted(rows, key=sort_key)
+
+
+def format_solution_pair(name: str, val: Union[int, float, str]) -> str:
+    """จัดรูปแบบ x = 27 (ค่าเท่ากัน) หรือ x ≈ 1.150825 (ค่าประมาณ)."""
+    if isinstance(val, int):
+        return f"{name} = {val}"
+    if isinstance(val, str) and val.strip().startswith("≈"):
+        # รักษารูปแบบสัญลักษณ์ ≈ ที่ถูกจัดแต่งมาจากเครื่องมือคอร์หลัก
+        return f"{name} {val.strip()}"
+    if isinstance(val, float):
+        text = f"{val:,.6f}".rstrip("0").rstrip(".")
+        return f"{name} ≈ {text}"
+    return f"{name} = {val}"
+
+
+def format_solutions_readable(solutions: List[Dict[str, Union[int, float, str]]]) -> str:
+    """ข้อความสรุปผลสมการสำหรับแสดงผู้ใช้."""
+    if not solutions:
+        return "ไม่พบคำตอบจากสมการ"
+    parts = []
+    for sol in solutions:
+        pairs = ", ".join(format_solution_pair(k, v) for k, v in sol.items())
+        parts.append(f"({pairs})")
+    return " หรือ ".join(parts)
+
+
+def _is_pure_numeric(expr_str: str) -> bool:
+    """นิพจน์ตัวเลขล้วน (ไม่มีตัวแปร) — SymPy parse บางรูปแบบเช่น 9.8-9.11 ผิดพลาด."""
+    compact = expr_str.replace(" ", "").replace("**", "")
+    return bool(compact) and bool(re.fullmatch(r"[\d.+\-*/^%()]+", compact))
+
+
+def _eval_pure_numeric(expr_str: str) -> Any:
+    """คำนวณเลขด้วย Python eval (สอดคล้องกับ SymPy สำหรับนิพจน์ตัวเลขล้วน)."""
+    clean = expr_str.strip().replace("^", "**")
+    if not _is_pure_numeric(clean):
+        return None
+    try:
+        value = eval(clean, {"__builtins__": None}, {})
+        if isinstance(value, (int, float)):
+            rounded = round(float(value), 10)
+            return int(rounded) if rounded == int(rounded) else rounded
+    except (SyntaxError, TypeError, ZeroDivisionError):
+        return None
+    return None
+
+
 def _solve_with_sympy(expr_str: str) -> Dict[str, Any]:
     """
     วิเคราะห์คำนวณและหาเซ็ตคำตอบพีชคณิตทั้งหมดด้วย SymPy
@@ -86,9 +214,18 @@ def _solve_with_sympy(expr_str: str) -> Dict[str, Any]:
             solutions = sp.solve(parsed_eqs, list(variables), dict=True)
             return {
                 "status": "success",
-                "result": solutions,
+                "result": _humanize_solutions(solutions) if solutions else solutions,
                 "expression": expr_str,
                 "engine": "sympy_solver"
+            }
+
+        numeric_result = _eval_pure_numeric(expr_str)
+        if numeric_result is not None:
+            return {
+                "status": "success",
+                "result": numeric_result,
+                "expression": expr_str,
+                "engine": "numeric_eval",
             }
 
         parsed_expr = parse_expr(expr_str, transformations=SYM_TRANSFORMATIONS)

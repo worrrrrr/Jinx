@@ -53,6 +53,9 @@ def run_realworld_test():
         {
             "category": "ENG WORD PROBLEM",
             "query": " x-y=5, xy=24 "
+        },{
+            "category": "KNOWLEDGE QUERY",
+            "query": " Jinx คืออะไร "
         }
     ]
 

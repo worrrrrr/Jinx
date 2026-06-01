@@ -1,7 +1,8 @@
 # core/memory.py
 
-from typing import Dict, Any, List, Optional
 import collections
+import re
+from typing import Dict, Any, List, Optional
 
 
 class SessionMemory:
@@ -34,8 +35,11 @@ class SessionMemory:
         """
         for k, v in new_vars.items():
             # เก็บเฉพาะคีย์ตัวแปรที่เป็นตัวอักษรภาษาอังกฤษเดี่ยวตามมาตรฐานคณิตศาสตร์
-            if isinstance(k, str) and k.strip().isalpha() and len(k.strip()) == 1:
-                self.variables[k.strip()] = v
+            var_name = _var_name_from_key(k) if not isinstance(k, str) else (
+                k.strip() if len(k.strip()) == 1 and k.strip().isalpha() else None
+            )
+            if var_name:
+                self.variables[var_name] = _normalize_var_value(v)
 
     def get_variable(self, name: str) -> Optional[Any]:
         """
@@ -73,3 +77,57 @@ class SessionMemory:
         self.history.clear()
         self.variables.clear()
         self.context.clear()
+
+
+def _var_name_from_key(key: Any) -> Optional[str]:
+    if isinstance(key, str) and len(key.strip()) == 1 and key.strip().isalpha():
+        return key.strip()
+    sym_name = getattr(key, "name", None)
+    if isinstance(sym_name, str) and len(sym_name) == 1 and sym_name.isalpha():
+        return sym_name
+    return None
+
+
+def _normalize_var_value(val: Any) -> Any:
+    if hasattr(val, "evalf") and callable(val.evalf):
+        try:
+            return float(val.evalf())
+        except (TypeError, ValueError):
+            pass
+    return val
+
+
+def extract_variables_from_result(result: Any) -> Dict[str, Any]:
+    """
+    ดึงค่าตัวแปรตัวอักษรเดี่ยวจากผลลัพธ์เครื่องมือคณิต (dict / list ของ dict)
+    """
+    found: Dict[str, Any] = {}
+
+    if isinstance(result, dict):
+        for key, val in result.items():
+            name = _var_name_from_key(key)
+            if name and val is not None:
+                found[name] = _normalize_var_value(val)
+        return found
+
+    if isinstance(result, list):
+        for item in result:
+            if isinstance(item, dict):
+                branch = extract_variables_from_result(item)
+                if branch:
+                    return branch
+        return found
+
+    return found
+
+
+def substitute_variables_in_text(text: str, variables: Dict[str, Any]) -> str:
+    """แทนที่ตัวแปรที่จำไว้ในสมการ (เฉพาะตัวอักษรเดี่ยว) ก่อนส่งให้เครื่องมือคณิต."""
+    if not text or not variables:
+        return text
+    out = text
+    for name, value in variables.items():
+        if not (isinstance(name, str) and len(name) == 1 and name.isalpha()):
+            continue
+        out = re.sub(rf"\b{re.escape(name)}\b", str(value), out)
+    return out

@@ -13,14 +13,15 @@ VAULT_DIR = os.path.join(
 
 def get_tools() -> Dict[str, Callable]:
     """
-    ส่งคืนพจนานุกรมคีย์เครื่องมือสำหรับลงทะเบียนใน ExecutionEngine
+    เครื่องมือ Obsidian Vault (data/knowledge/) — แยกจาก workspace ใน tools/file.py
     """
     return {
+        "vault_write": handle_vault_write,
+        "vault_read": handle_vault_read,
+        "vault_list": handle_vault_list,
+        # legacy aliases สำหรับโน้ต markdown
         "update_file": handle_vault_write,
-        "create_file": handle_vault_write,
-        "read_file": handle_vault_read,
-        "list_file": handle_vault_list,
-        "file": handle_vault_list
+        "create_note": handle_vault_write,
     }
 
 

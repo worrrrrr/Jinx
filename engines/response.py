@@ -4,10 +4,14 @@ import random
 import re
 from typing import Dict, Any, List, Optional
 
+from tools.math import format_solution_pair
+
 
 class ResponseEngine:
     """
-    Response Layer (ฉบับสมบูรณ์สูงสุด): รองรับการแสดงผลลัพธ์พจนานุกรมเดี่ยวและพจนานุกรมชุด (หรือ) อย่างถูกต้อง
+    Response Layer (ฉบับเสร็จสมบูรณ์ระดับโปรดักชัน): 
+    - จัดสรุปข้อความทางคณิตศาสตร์ด้วยสัญลักษณ์ที่เที่ยงตรงทางพีชคณิต (= และ ≈)
+    - คัดกรองและเรียบเรียงเนื้อหาจากไฟล์คลังความรู้โลคัล (data/knowledge) ให้อ่านง่ายเป็นภาษาพูด
     """
     
     def __init__(self):
@@ -30,9 +34,9 @@ class ResponseEngine:
                 "⚠️ ตรวจสอบนิพจน์อีกครั้ง: {message}"
             ],
             "noop": [
-                "รับทราบครับ ผมบันทึกข้อมูลไว้แล้ว: {result}",
-                "อ่านแล้วครับ มีอะไรให้ช่วยอีกไหม?",
-                "📝 บันทึกเรียบร้อยแล้ว"
+                "รับทราบครับ ผมได้บันทึกความคืบหน้าตรงนี้ลงในฐานระบบเรียบร้อยแล้ว: {result}",
+                "จัดเก็บข้อมูลลงเซสชันเรียบร้อยแล้วครับ ต้องการให้ตรวจสอบหรือต่อยอดในประเด็นไหนเพิ่มเติมแจ้งได้เลยนะ",
+                "📝 บันทึกข้อมูลเข้าคลังเรียบร้อยแล้ว พร้อมสำหรับดำเนินการขั้นตอนถัดไปครับ"
             ],
             "chat:greet": [
                 "สวัสดีครับ! มีอะไรให้ผมช่วยวันนี้บอกได้เลยนะครับ 🙏",
@@ -100,7 +104,7 @@ class ResponseEngine:
             "tone": "friendly",
             "emoji_level": "medium",
             "language": "th",
-            "max_length": 200
+            "max_length": 500  # ปรับความยาวเพื่อให้ครอบคลุมการอธิบายข้อมูล RAG
         }
         
         self.emojis = {
@@ -149,7 +153,10 @@ class ResponseEngine:
             return "chat:chitchat"
         
         if intent.startswith("qa:"):
-            if status == "success" and output.get("result"):
+            result = output.get("result")
+            if status == "success" and result:
+                if isinstance(result, str) and "ไม่พบข้อมูลที่ตรงกับคำค้นหา" in result:
+                    return "qa:not_found"
                 return "qa:answer"
             return "qa:not_found"
         
@@ -180,26 +187,82 @@ class ResponseEngine:
             clean_text = clean_text.replace("{topic}", str(topic or "เรื่องนี้"))
             return clean_text
 
+    def _is_terminating_decimal(self, value: float) -> bool:
+        """
+        ตรวจสอบว่าค่าทศนิยมนั้นเป็น 'ทศนิยมรู้จบ' ในฐานสิบ (เช่น 2.4, 9.6) หรือไม่
+        """
+        try:
+            from fractions import Fraction
+            frac = Fraction(value).limit_denominator(100000)
+            denom = frac.denominator
+            while denom % 2 == 0:
+                denom //= 2
+            while denom % 5 == 0:
+                denom //= 5
+            return denom == 1
+        except Exception:
+            return False
+
     def _format_result_value(self, value: Any) -> str:
-        """
-        จัดแต่งรายงานผลลัพธ์ของข้อมูล โดยถอดค่าและเชื่อมโยงคำตอบหลายชุด (หรือ) ตามระบบพีชคณิตระดับสูง
-        """
         if value is None:
             return "ไม่มีข้อมูล"
         if isinstance(value, bool):
             return "ใช่" if value else "ไม่ใช่"
+            
+        # การจัดรูปแบบกรณีเป็นตัวเลขจำนวนเดียว (Float / Int)
         if isinstance(value, (int, float)):
-            if isinstance(value, float) and abs(value) < 1e10:
-                return f"{value:,.6f}".rstrip('0').rstrip('.')
+            if isinstance(value, float):
+                if value.is_integer() or abs(value - round(value)) < 1e-9:
+                    return f"{int(round(value)):,}"
+                if self._is_terminating_decimal(value):
+                    return f"{value:,.6f}".rstrip('0').rstrip('.')
+                if abs(value) < 1e10:
+                    return f"{value:,.6f}".rstrip('0').rstrip('.')
             return f"{value:,}"
             
-        # ตรวจพบกลุ่มผลลัพธ์ระบบสมการพีชคณิต (List of Dicts) ของ SymPy -> แปลงเป็นประโยคเชื่อม "หรือ"
         if isinstance(value, list):
-            if len(value) > 0 and all(isinstance(v, dict) for v in value):
-                return " หรือ ".join(
-                    "(" + ", ".join(f"{str(k)} = {self._format_result_value(val)}" for k, val in v.items()) + ")"
-                    for v in value
-                )
+            if not value:
+                return "ไม่พบคำตอบจากสมการ"
+
+            # ตรวจแยกกลุ่มโครงสร้างอาเรย์ผลลัพธ์ของคลังความรู้ (data/knowledge)
+            if all(isinstance(v, dict) for v in value) and any(
+                "snippet" in v for v in value
+            ):
+                return self._format_knowledge_hits(value)
+
+            # ผลลัพธ์สมการ (dict ของตัวแปร)
+            if all(isinstance(v, dict) for v in value) and all(
+                "snippet" not in v for v in value
+            ):
+                parts = []
+                for sol in value:
+                    formatted_pairs = []
+                    for k, item in sol.items():
+                        # ตรวจสอบว่ามีข้อมูล Meta-Type ของตัวแปรจาก tools/math.py ส่งพ่วงมาด้วยหรือไม่
+                        if isinstance(item, dict) and "type" in item and "value" in item:
+                            val_type = item["type"]
+                            num_val = item["value"]
+                            
+                            if val_type == "approx":
+                                val_str = f"{num_val:,.4f}".rstrip('0').rstrip('.')
+                                formatted_pairs.append(f"{k} ≈ {val_str}")
+                            else:
+                                if num_val.is_integer() or abs(num_val - round(num_val)) < 1e-9:
+                                    formatted_pairs.append(f"{k} = {int(round(num_val)):,}")
+                                else:
+                                    val_str = f"{num_val:,.4f}".rstrip('0').rstrip('.')
+                                    formatted_pairs.append(f"{k} = {val_str}")
+                        else:
+                            # การจัดรูปแบบกรณีเป็นข้อความสตริงที่ขึ้นต้นด้วยเครื่องหมายประมาณค่ามาอยู่แล้ว
+                            val_str = str(item)
+                            if val_str.startswith("≈"):
+                                formatted_pairs.append(f"{k} {val_str}")
+                            else:
+                                formatted_pairs.append(format_solution_pair(str(k), item))
+                    
+                    pairs = ", ".join(formatted_pairs)
+                    parts.append(f"({pairs})")
+                return " หรือ ".join(parts)
             if len(value) <= 3:
                 return ", ".join(str(v) for v in value)
             return f"{len(value)} รายการ"
@@ -212,10 +275,89 @@ class ResponseEngine:
             return ", ".join(f"{str(k)} = {self._format_result_value(v)}" for k, v in value.items())
             
         if isinstance(value, str):
+            if "ไม่พบข้อมูลที่ตรงกับคำค้นหา" in value:
+                return value
             clean = re.sub(r'<[^>]+>', '', value)
-            return clean.strip()[:150]
+            return clean.strip()[:250]
             
         return str(value)
+
+    def _format_table_to_text(self, markdown_table: str) -> str:
+        """
+        แปลงโครงสร้างตาราง Markdown ดิบให้เป็นสรุปรายการแบบจุดหัวข้อ (Bullet List) เพื่อความง่ายในการอ่าน
+        """
+        lines = [line.strip() for line in markdown_table.strip().split("\n") if line.strip()]
+        if len(lines) < 3:
+            return markdown_table
+            
+        # สกัดแยกหัวข้อคอลัมน์ของตาราง
+        headers = [h.strip() for h in lines[0].split("|") if h.strip()]
+        rows_text = []
+        
+        # ข้ามแถวหัวข้อและแถวเครื่องหมายคั่นวิเคราะห์ค่าพารามิเตอร์ข้อมูลด้านใน
+        for line in lines[2:]:
+            cells = [c.strip() for c in line.split("|") if c.strip()]
+            if len(cells) >= len(headers):
+                details = []
+                for h, val in zip(headers, cells):
+                    # ละทิ้งมาร์กดาวน์ตกแต่งภายในเซลล์
+                    clean_val = re.sub(r'\*\*|`', '', val).strip()
+                    details.append(f"{h}: {clean_val}")
+                rows_text.append("   • " + ", ".join(details))
+                
+        return "\n" + "\n".join(rows_text)
+
+    def _format_knowledge_hits(self, hits: List[Dict[str, Any]]) -> str:
+        """
+        สแกน ทำความสะอาด และจัดรูปแบบย่อหน้าข้อมูลความรู้ที่ค้นพบจากคลังเอกสาร
+        """
+        if not hits:
+            return "ไม่พบข้อมูลอ้างอิงที่เหมาะสมในฐานข้อมูลความรู้ระบบ"
+
+        valid_snippets = []
+        for hit in hits:
+            snippet = str(hit.get("snippet", "")).strip()
+            source_name = hit.get("title", "เอกสาร").replace(".md", "").replace(".txt", "")
+            
+            # 1. ป้องกันดักจับกรณีเนื้อหาเป็นเครื่องมือตั้งค่าโครงสร้างระบบ (JSON Schema)
+            if '"$schema"' in snippet or "JSON Schema" in snippet or "intent_mappings" in snippet:
+                continue
+                
+            # 2. ป้องกันย่อหน้านำมาตอบมีเฉพาะคำซ้ำกับหัวข้อเอกสารที่ดึงขึ้นมา
+            if snippet.lower() == f"## {source_name.lower()}":
+                continue
+            if len(snippet) <= len(source_name) + 4 and snippet.replace("#", "").strip() == source_name:
+                continue
+
+            # 3. จัดการกรณีเนื้อหาที่พบจัดฟอร์แมตเป็นโครงสร้างตารางข้อมูล
+            if "|" in snippet and "---" in snippet:
+                parsed_table = self._format_table_to_text(snippet)
+                valid_snippets.append(f"• รายละเอียดจากเอกสาร '{source_name}': {parsed_table}")
+                continue
+
+            # 4. เคลียร์อักขระและแท็กมาร์กดาวน์เพื่อให้ออกเสียงประโยคแชตได้อย่างเรียบเนียน
+            snippet = re.sub(r'#+\s+', '', snippet)  # ลบเครื่องหมายหัวข้อ (#)
+            snippet = re.sub(r'\[\[(.*?)\]\]', r'\1', snippet)  # แปลงลิงก์วิกิ [[Link]] เป็นคำอ่านธรรมดา
+            snippet = re.sub(r'```.*?```', '', snippet, flags=re.DOTALL)  # นำบล็อกตัวอย่างโค้ดระบบออก
+            snippet = re.sub(r'\s+', ' ', snippet).strip()  # เคลียร์ช่องสเปซช่องไฟเกิน
+            
+            if len(snippet) > 200:
+                snippet = snippet[:197] + "..."
+                
+            if snippet:
+                valid_snippets.append(f"• จากหัวข้อ '{source_name}': {snippet}")
+
+        # ฟังก์ชันสำรองฉุกเฉิน (Fallback) หากกลุ่มเนื้อหาหลักโดนสกัดล้างไปจนหมด
+        if not valid_snippets and hits:
+            fallback_hit = hits[0]
+            fallback_snippet = fallback_hit.get("snippet", "")
+            source_name = fallback_hit.get("title", "เอกสาร").replace(".md", "").replace(".txt", "")
+            
+            fallback_clean = re.sub(r'```.*?```', '', fallback_snippet, flags=re.DOTALL)
+            fallback_clean = re.sub(r'\s+', ' ', fallback_clean).strip()[:180] + "..."
+            return f"จากแหล่งข้อมูล '{source_name}' ระบุรายละเอียดไว้ว่า: {fallback_clean}"
+
+        return "\n".join(valid_snippets)
 
     def _apply_personality(self, text: str, hint: Dict, status: str) -> str:
         emoji_level = hint.get("emoji", self.personality["emoji_level"])

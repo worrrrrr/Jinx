@@ -109,8 +109,14 @@ class PerceptionEngine:
             intent = self._guess_question_type(lower_text)
             domain = "qa"
         
+        if intent in ("task:create", "task:edit") and any(
+            isinstance(e, str) and e.lower().endswith(tuple(self._code_extensions()))
+            for e in entities
+        ):
+            domain = "code"
+
         confidence = self._compute_confidence(intent, domain, entities, lower_text)
-        action = self._infer_action(intent, domain)
+        action = self._infer_action(intent, domain, entities)
         
         # คลีนภาษาและสกัดสูตรล่วงหน้า
         if domain == "math":
@@ -244,15 +250,33 @@ class PerceptionEngine:
             score = min(score + 0.1, 1.0)
         return round(min(score, 1.0), 2)
 
-    def _infer_action(self, intent: str, domain: str) -> str:
+    def _code_extensions(self) -> tuple:
+        return (".py", ".ts", ".tsx", ".js", ".json", ".yaml", ".yml", ".html", ".css")
+
+    def _infer_action(self, intent: str, domain: str, entities: Optional[List[str]] = None) -> str:
+        entities = entities or []
+        has_code_file = any(
+            isinstance(e, str) and e.lower().endswith(self._code_extensions()) for e in entities
+        )
+        has_md_file = any(
+            isinstance(e, str) and e.lower().endswith((".md", ".txt")) for e in entities
+        )
+
+        if intent == "task:create" and (domain == "code" or has_code_file):
+            return "write_code"
+        if intent == "task:edit" and (domain == "code" or has_code_file):
+            return "write_code"
+        if intent == "task:create" and has_md_file:
+            return "create_note"
+
         action_map = {
             ("task:solve", "math"): "compute_math",
-            ("task:edit", "file"): "update_file",
+            ("task:edit", "file"): "vault_write",
             ("task:delete", "file"): "delete_file",
             ("task:copy", "file"): "copy_file",
             ("task:move", "file"): "move_file",
             ("task:execute", "code"): "run_script",
-            ("task:debug", "code"): "debug_code",
+            ("task:debug", "code"): "read_code",
             ("task:search", "web"): "web_search",
             ("chat:greet", "conversation"): "respond_greeting",
             ("chat:chitchat", "conversation"): "respond_chitchat",

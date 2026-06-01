@@ -11,9 +11,15 @@ try:
     from tools import search as t_search
     from tools import utils as t_utils
     from tools import obsidian as t_obsidian
+    from tools import file as t_file
     TOOLS_AVAILABLE = True
 except ImportError:
     TOOLS_AVAILABLE = False
+
+WORKSPACE_TOOL_KEYS = frozenset({
+    "write_code", "create_code", "update_code", "read_code", "read_workspace",
+    "list_workspace", "list_dir", "apply_patch", "run_script", "debug_code",
+})
 
 
 class ExecutionEngine:
@@ -43,8 +49,12 @@ class ExecutionEngine:
             self.tools.update(t_math.get_tools())
             self.tools.update(t_search.get_tools())
             self.tools.update(t_obsidian.get_tools())
+            self.tools.update(t_file.get_tools())
             if hasattr(t_utils, "get_tools"):
                 self.tools.update(t_utils.get_tools())
+            # QA intents ใช้คลังความรู้โลคัล (ไม่ทับด้วย fallback mock)
+            self.tools.setdefault("answer_question", t_search.search_local_knowledge)
+            self.tools.setdefault("search_knowledge", t_search.search_local_knowledge)
         except Exception as e:
             # ตกเข้าสู่ระบบ Fallback กรณีตัวเครื่องมือภายนอกสะกดไวยากรณ์ผิดพลาด
             self._register_fallback_tools()
@@ -94,8 +104,11 @@ class ExecutionEngine:
         
         if handler:
             try:
-                # ระบบตรวจสอบความปลอดภัยเชิงรับสูงสุดก่อนส่งรันจริง
-                if self._is_dangerous(str(inp)) or any(self._is_dangerous(str(e)) for e in entities):
+                # ข้าม injection check สำหรับ file tool (รับโค้ดจริง)
+                skip_injection = handler_key in WORKSPACE_TOOL_KEYS
+                if not skip_injection and (
+                    self._is_dangerous(str(inp)) or any(self._is_dangerous(str(e)) for e in entities)
+                ):
                     return {
                         "status": "fail", 
                         "message": "ตรวจพบรูปแบบคำสั่งที่อาจไม่ปลอดภัยต่อระบบปฏิบัติการ",
@@ -195,4 +208,9 @@ class ExecutionEngine:
         return {"status": "success", "result": inp}
 
     def _qa_handler(self, action: str, inp: str, entities: list) -> Dict[str, Any]:
+        if TOOLS_AVAILABLE:
+            try:
+                return t_search.search_local_knowledge(action, inp, entities)
+            except Exception:
+                pass
         return {"status": "success", "result": f"คลังสำรองไม่พบข้อมูลจำเพาะสำหรับ '{inp}'"}

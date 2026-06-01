@@ -3,7 +3,7 @@
 import os
 import re
 import datetime
-from typing import Dict, Any, List, Callable
+from typing import Dict, Any, List, Callable, Optional
 
 # กำหนดพิกัดความปลอดภัยของ Obsidian Vault (data/knowledge)
 VAULT_DIR = os.path.join(

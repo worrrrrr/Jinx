@@ -119,15 +119,20 @@ class JinxBrain:
             # 4. การแก้สมการ (Symbolic ก่อน แล้วค่อย Numerical)
             sym_objects = [sympy.sympify(ex, locals=local_dict) for ex in final_exprs]
             
+            from tools.math import _humanize_solutions, format_solutions_readable
+
             # ลอง solve ปกติ (จะได้คำตอบครบ เช่น 27)
             result = sympy.solve(sym_objects, [x, y, z], dict=True)
-            
+
             # ถ้า solve ไม่ได้ (เช่น 3^x = x^9) ให้ใช้ nsolve
             if not result and len(sym_objects) == 1:
                 val = sympy.nsolve(sym_objects[0], x, 1)
-                return str([{x: float(val.evalf())}])
+                result = [{x: float(val.evalf())}]
 
-            return str(result)
+            if result:
+                return format_solutions_readable(_humanize_solutions(result))
+
+            return "ไม่พบคำตอบจากสมการ"
 
         except Exception as e:
             return f"Tool Error: {str(e)}"
