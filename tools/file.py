@@ -10,7 +10,7 @@ VAULT_DIR = os.path.join(PROJECT_ROOT, "data", "knowledge")
 CODE_EXTENSIONS = {".py", ".ts", ".tsx", ".js", ".json", ".yaml", ".yml", ".toml", ".html", ".css"}
 TEXT_EXTENSIONS = CODE_EXTENSIONS | {".md", ".txt", ".ini", ".cfg", ".env.example"}
 BLOCKED_PARTS = {".git", "__pycache__", ".venv", "venv", "node_modules", ".pytest_cache"}
-BLOCKED_FILES = {".env"}
+BLOCKED_FILES = {".env", "main.py"}
 
 CODE_FENCE_RE = re.compile(r"```(?:\w+)?\s*\n(.*?)```", re.DOTALL | re.IGNORECASE)
 FILENAME_RE = re.compile(

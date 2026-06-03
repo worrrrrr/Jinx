@@ -106,10 +106,13 @@ class Orchestrator:
             execution_output = self.execution.execute(plan_output)
             logger.debug(f"⚙️ Execution finished: status='{execution_output['status']}'")
 
-            if execution_output.get("status") == "success":
-                new_vars = extract_variables_from_result(execution_output.get("result"))
-                if new_vars:
-                    self.memory.store_variables(new_vars)
+            # 💡 เพิ่มเติมลอจิกช่วยดีบักคีย์คำสั่งตกค้าง
+            if execution_output.get("status") == "noop":
+                logger.warning(
+                    f"⚠️ System Warning: No active tool handler was executed for plan! "
+                    f"Intent: {plan_output.get('intent')}, Action: {plan_output.get('action')}. "
+                    f"Falling back to default response."
+                )
 
             self.memory.update_context("last_intent", perception_output.get("intent"))
             self.memory.update_context("last_domain", perception_output.get("domain"))

@@ -75,3 +75,8 @@ Router ใน `compute_math_handler()`: ตรวจจับ `<>!` และม
 - ตัวแปรคณิตศาสตร์ข้าม turn (เฉพาะตัวอักษรเดี่ยว a-z)
 
 `extract_variables_from_result()` ดึงตัวแปรจากผลลัพธ์ math tool โดยอัตโนมัติ `substitute_variables_in_text()` แทนค่าตัวแปรในสมการรอบถัดไป
+
+
+
+
+# ห้ามยุ่งกับไฟล์ที่ไม่ได้เกี่ยวกับที่สั่ง

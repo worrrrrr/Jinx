@@ -6,12 +6,14 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "astropy>=7.2.0",
+    "click>=8.2",
     "cnlunar>=0.2.4",
     "dotenv>=0.9.9",
     "groq>=1.4.0",
     "markdown>=3.7",
     "numpy>=2.0.0",
     "ollama>=0.3.0",
+    "prompt-toolkit>=3.0.52",
     "pyswisseph>=2.10.3.2",
     "pytest>=9.0.3",
     "rapidfuzz>=3.9.0",

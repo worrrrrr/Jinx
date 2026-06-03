@@ -1,4 +1,4 @@
-# engines/reasoning.py (อัปเดต PlanOutput และโครงสร้างส่งออกแผนงาน)
+# engines/reasoning.py
 
 import re
 from dataclasses import dataclass, asdict
@@ -6,7 +6,7 @@ from typing import Dict, Any, List
 
 @dataclass(frozen=True)
 class PlanOutput:
-    action: str  # 👈 เพิ่มฟิลด์ประสานงานคำสั่งหลักไปยังเครื่องมือย่อย
+    action: str  
     intent: str
     domain: str
     tasks: List[str]
@@ -22,8 +22,12 @@ class PlanOutput:
 
 
 class ReasoningEngine:
+    """
+    Reasoning Engine: รับสัญญานวิเคราะห์ชื่อมงคล มาจัดวางแผนงานให้พร้อมรันอย่างละเอียดสมบูรณ์แบบ
+    """
     def __init__(self):
         self.strategy_matrix = {
+            # ── 1. ระบบประมวลผลพื้นฐาน ──
             ("task:solve", "math"): ["validate_numbers", "parse_expression", "compute_math", "format_result"],
             ("task:edit", "file"): ["check_file_exists", "backup_file", "update_file_content", "verify_change"],
             ("task:delete", "file"): ["confirm_permission", "check_file_exists", "delete_file", "log_action"],
@@ -33,6 +37,16 @@ class ReasoningEngine:
             ("task:debug", "code"): ["parse_error_log", "identify_issue", "suggest_fix", "generate_patch"],
             ("task:search", "web"): ["validate_query", "fetch_results", "rank_relevance", "summarize"],
             
+            # ── 2. ระบบพยากรณ์และชื่อศาสตร์แยกเฉพาะ ──
+            # 🪐 ลงทะเบียนโครงสร้างแผนการคำนวณและประมวลผลชื่อศาสตร์มงคล 5 มิติ
+            ("task:name_analysis", "general"): ["validate_name_entities", "calculate_numerology", "calculate_ayatana", "analyze_thaksa", "format_name_report"],
+            
+            ("task:astrology", "general"): ["parse_birth_datetime", "run_bazi_astro", "run_thai_astro", "run_jyotish_astro", "run_western_astro", "compile_master_report"],
+            ("task:thai_astro", "general"): ["validate_thai_birth_data", "calculate_thai_chart", "format_thai_report"],
+            ("task:western_astro", "general"): ["parse_birth_data", "calculate_planets", "identify_aspects", "format_western_report"],
+            ("task:jyotish", "general"): ["calculate_vedic_chart", "determine_dasha_periods", "analyze_houses", "format_jyotish_report"],
+            
+            # ── 3. แชตสนทนาทั่วไป (Conversational small talk) ──
             ("chat:greet", "conversation"): ["detect_tone", "select_greeting", "personalize_response"],
             ("chat:farewell", "conversation"): ["detect_context", "select_farewell", "offer_future_help"],
             ("chat:gratitude", "conversation"): ["acknowledge_thanks", "humble_response", "offer_more"],
@@ -41,6 +55,7 @@ class ReasoningEngine:
             ("chat:emotion", "conversation"): ["detect_sentiment", "validate_feeling", "respond_empathy", "offer_support"],
             ("chat:joke", "conversation"): ["select_humor_type", "fetch_joke", "deliver_with_timing"],
             
+            # ── 4. ระบบตอบคำถาม (Knowledge QA) ──
             ("qa:what", "qa"): ["parse_question", "search_knowledge", "extract_definition", "format_answer"],
             ("qa:why", "qa"): ["parse_question", "find_cause", "explain_reasoning", "format_answer"],
             ("qa:how", "qa"): ["parse_question", "find_procedure", "step_by_step", "format_answer"],
@@ -59,8 +74,7 @@ class ReasoningEngine:
         ]
 
     def plan(self, perception: Dict[str, Any]) -> Dict[str, Any]:
-        # สกัดข้อมูลแผนงานหลัก
-        action = perception.get("action", "noop")  # 👈 ดึงคำสั่งจาก Perception
+        action = perception.get("action", "noop")  
         intent = perception.get("intent", "unknown")
         domain = perception.get("domain", "general")
         entities = perception.get("entities", [])
@@ -74,9 +88,8 @@ class ReasoningEngine:
         task_sequence = self._apply_context_rules(task_sequence, intent, domain, entities, topic, confidence)
         response_hint = self._generate_response_hint(intent, topic, len(entities) > 0)
         
-        # แนบคำสั่งรันหลักเข้าสู่กระบวนการ PlanOutput
         plan_output = PlanOutput(
-            action=action,  # 👈 จัดส่งลงในแผนงานมาตรฐาน
+            action=action,  
             intent=intent,
             domain=domain,
             tasks=task_sequence,

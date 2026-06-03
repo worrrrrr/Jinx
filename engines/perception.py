@@ -25,7 +25,7 @@ class PerceptionOutput:
 
 class PerceptionEngine:
     """
-    Perception Layer (ฉบับสมบูรณ์สูงสุด): รองรับการแปลโจทย์อธิบายภาษาไทยและภาษาอังกฤษเป็นสมการสากล
+    Perception Engine: ทำความเข้าใจเจตนา คัดแยกสัญญานเป้าหมาย และคัดกรองระบบชื่อศาสตร์แยกเฉพาะออกจากโหราศาสตร์ไทย
     """
     
     def __init__(self):
@@ -42,7 +42,14 @@ class PerceptionEngine:
             "task:search": ["ค้นหา", "หา", "search", "find", "query", "สืบค้น", "ขอดูข้อมูล", "ค้นหาข้อมูล"],
             "task:analyze": ["วิเคราะห์", "analyze", "ตรวจสอบ", "check", "examine", "investigate", "สรุป", "สถิติ", "ข้อมูล", "csv"],
             "task:html": ["html", "เว็บ", "หน้าเว็บ", "web page", "สร้างหน้า", "การ์ด", "card", "เว็บเพจ"],
-            "task:astrology": ["ดูดวง", "ดวง", "บาซี่", "bazi", "astrology", "ปีนักษัตร", "นักษัตร", "ชะตา", "หมอดู"],
+            
+            # 🪐 ลงทะเบียนกลุ่มคำเฉพาะของโมดูลชื่อศาสตร์มงคลและเลขศาสตร์
+            "task:name_analysis": ["วิเคราะห์ชื่อ", "ชื่อมงคล", "เลขศาสตร์ชื่อ", "ตั้งชื่อ", "วิเคราะห์ชื่อมงคล", ".name"],
+            
+            "task:western_astro": ["western", "western_astro", "ดูดวงฝรั่ง", "ฝรั่ง", "โหราศาสตร์สากล", "sun sign", "rising", "big three"],
+            "task:astrology": ["ดูดวง", "บาซี่", "bazi", "astrology", "ปีนักษัตร", "นักษัตร", "ชะตา", "หมอดู", "วิเคราะห์ดวง"],
+            "task:thai_astro": ["โหราศาสตร์ไทย", "พรหมชาติ", "นวางค์", "พระเคราะห์", "ฤกษ์", "เลขศาสตร์"],
+            "task:jyotish": ["jyotish", "vedic", "ดูดวงอินเดีย", "โหราศาสตร์อินเดีย", "ภพ", "dasha"],
             "task:tree": ["tree", "decision tree", "ทางเลือก", "ตัดสินใจ", "คำถามนำทาง", "แนะนำ"],
             "task:state": ["state", "machine", "สถานะ", "workflow", "event", "เดินเครื่อง"],
             "task:show": ["แสดง", "โชว์", "display", "show", "view", "list", "ขอดู"],
@@ -84,8 +91,8 @@ class PerceptionEngine:
         }
         
         self.chitchat_signals = [
-            r"^([สหว]|hello|hi|hey|ว่าไง).*",
-            r".*(ไหม|มั้ย|เหรอ|หรอ|นะ|จ้า|ครับ|ค่ะ)$",
+            r"^(สวัสดี|hello|hi|hey|ว่าไง).*",
+            r".*(ไหม|มั้ย|เหรอ|หรอ|นะครับ|นะคะ|จ้า|ครับ|ค่ะ)$",
             r".*(เบื่อ|เหงา|เหนื่อย|สุข|เศร้า|เครียด).*",
             r".*(วันนี้|เมื่อวาน|พรุ่งนี้|อากาศ|กิน).*",
             r"^(ฉัน|ผม|เรา|กู).*(อยาก|ชอบ|ไม่ชอบ|คิดว่า).*"
@@ -163,20 +170,24 @@ class PerceptionEngine:
     def _score_intent(self, text: str) -> str:
         best_intent = "unknown"
         max_score = 0
+        max_kw_len = 0
         for intent, kw_list in self.intent_keywords.items():
             score = 0
+            matched_max = 0
             for kw in kw_list:
                 matches = len(re.findall(re.escape(kw), text))
                 if matches > 0:
                     score += matches * (1 if len(kw) <= 2 else 2)
-            if score > max_score:
+                    matched_max = max(matched_max, len(kw))
+            if score > max_score or (score == max_score and matched_max > max_kw_len):
                 max_score = score
+                max_kw_len = matched_max
                 best_intent = intent
         return best_intent
 
     def _score_domain(self, text: str, entities: List[str], intent: str) -> str:
-        # ตรวจ intent ที่มาก่อนคณิตศาสตร์ (เช่น ดูดวงมีเลขแต่ไม่ใช่คณิต)
-        non_math_intents = {"task:astrology", "task:tree", "task:state", "task:html"}
+        # 🪐 ดึงคีย์เจตนาวิเคราะห์ชื่อสอดประสานกับโมดูลดวงหลักเพื่อไม่ให้หลุดไปรันวิเคราะห์คณิตศาสตร์
+        non_math_intents = {"task:astrology", "task:tree", "task:state", "task:html", "task:thai_astro", "task:jyotish", "task:western_astro", "task:name_analysis"}
         if intent in non_math_intents:
             return "general"
         if self._is_math_expression(text):
@@ -228,17 +239,11 @@ class PerceptionEngine:
         return list(set(entities))
 
     def _is_math_expression(self, text: str) -> bool:
-        """
-        ตรวจสอบคณิตศาสตร์เชิงสัญญลักษณ์ โดยจำแนกหลังผ่านฟังก์ชัน NLP Compiler
-        """
-        # ทดสอบประมวลผลแปลประโยคเป็นสมการคณิตศาสตร์ล่วงหน้า
         compiled = self._extract_math_formula(text)
-        
         clean = compiled.replace(" ", "")
         has_ops = bool(self.has_math_ops.search(clean))
         has_numbers = any(c.isdigit() for c in clean)
         has_vars = any(c.isalpha() for c in clean)
-        
         return has_ops and (has_numbers or has_vars) and len(clean) < 100
 
     def _is_chitchat(self, text: str) -> bool:
@@ -296,8 +301,19 @@ class PerceptionEngine:
             ("task:execute", "code"): "run_script",
             ("task:debug", "code"): "read_code",
             ("task:search", "web"): "web_search",
-            ("task:astrology", "general"): "bazi",
-            ("task:astrology", "web"): "bazi",
+            
+            # ── 🪐 ผูกค่าสัญญาณเจตนาไปเรียกโมดูลตรวจสอบประวัติวิเคราะห์ชื่อสถาปัตยกรรมใหม่ ──
+            ("task:name_analysis", "general"): "name_analysis",
+            ("task:name_analysis", "web"): "name_analysis",
+            
+            ("task:astrology", "general"): "comprehensive_astrology",
+            ("task:astrology", "web"): "comprehensive_astrology",
+            ("task:thai_astro", "general"): "thai_astro",
+            ("task:thai_astro", "web"): "thai_astro",
+            ("task:jyotish", "general"): "jyotish",
+            ("task:jyotish", "web"): "jyotish",
+            ("task:western_astro", "general"): "western_astro",
+            ("task:western_astro", "web"): "western_astro",
             ("qa:what", "general"): "vault_search",
             ("task:open", "general"): "vault_read",
             ("task:html", "general"): "generate_html",
@@ -327,7 +343,6 @@ class PerceptionEngine:
             if intent_key == intent or intent_key.split(":")[-1] == intent.split(":")[-1]:
                 keywords.extend(kw_list)
         if keywords:
-            # ใช้ word boundary (\b) ป้องกันการตัดคำบางส่วน เช่น "list" ใน "list_dir"
             pattern = "|".join(r"\b" + re.escape(kw) + r"\b" for kw in keywords)
             topic = re.sub(pattern, "", text, flags=re.IGNORECASE).strip()
             return topic if topic else text
@@ -337,13 +352,7 @@ class PerceptionEngine:
         return intent not in ["task:delete", "task:copy", "task:move"]
 
     def _extract_math_formula(self, text: str) -> str:
-        """
-        NLP to Math Compiler (ฉบับเสถียรภาพสูงสุด): รองรับการแยกวรรณยุกต์อักษรยืดหยุ่นของภาษาไทย
-        """
-        # 1. ปรับสมดุลข้อมูลเป็นตัวพิมพ์เล็ก
         clean = text.lower().strip()
-        
-        # 2. คัดกรองตัวอักษรหรือประโยคสร้อยที่ไม่ใช่เป้าหมายในการแก้สมการ
         strip_words = [
             "ถ้า", "เมื่อ", "กำหนดให้", "จงหา", "หาค่า", "คำนวณ", "ได้เท่าไหร่", "เท่ากับเท่าไหร่", "คืออะไร",
             "if", "when", "given", "find", "answer", "solve", "determine", "what is", "calculate", "หาค่าของ"
@@ -352,21 +361,16 @@ class PerceptionEngine:
             clean = re.sub(rf"\b{w}\b", "", clean)
             clean = clean.replace(w, "")
             
-        # 3. แปลงคำสั่งเปรียบเทียบเชิงอสมการและความสัมพันธ์แบบยืดหยุ่นสูง (Flexible Thai & English Comparators)
-        # รูปแบบ: A มากกว่า B [อักษรไทย/ช่องว่าง] C -> A - B = C
         clean = re.sub(r"([a-zA-Z0-9]+)\s*มากกว่า\s*([a-zA-Z0-9]+)\s*[\u0e00-\u0e7f\s]*\s*([a-zA-Z0-9.]+)", r"\1 - \2 = \3", clean)
         clean = re.sub(r"\b([a-zA-Z0-9]+)\s*more\s*than\s*([a-zA-Z0-9]+)\s*(?:equal|is|equals|equal\s*to|\s)*\s*([a-zA-Z0-9.]+)", r"\1 - \2 = \3", clean)
         
-        # รูปแบบ: A น้อยกว่า B [อักษรไทย/ช่องว่าง] C -> B - A = C
         clean = re.sub(r"([a-zA-Z0-9]+)\s*น้อยกว่า\s*([a-zA-Z0-9]+)\s*[\u0e00-\u0e7f\s]*\s*([a-zA-Z0-9.]+)", r"\2 - \1 = \3", clean)
         clean = re.sub(r"\b([a-zA-Z0-9]+)\s*less\s*than\s*([a-zA-Z0-9]+)\s*(?:equal|is|equals|equal\s*to|\s)*\s*([a-zA-Z0-9.]+)", r"\2 - \1 = \3", clean)
         
-       
         clean = re.sub(r"(?:และ|เเละ|เละ)", ",", clean)
         clean = re.sub(r"\band\b", ",", clean)
         clean = re.sub(r"\bเเละ\b", ",", clean)
         
-        # 5. แปลงเครื่องหมายคำนวณพื้นฐาน (Arithmetic Operators)
         clean = re.sub(r"\bเท่ากับ\b", "=", clean)
         clean = re.sub(r"\bเท่า\b", "=", clean)
         clean = re.sub(r"\b(?:is|equal|equals)\b", "=", clean)
@@ -388,14 +392,8 @@ class PerceptionEngine:
         clean = re.sub(r"\bdivide\b", "/", clean)
         clean = re.sub(r"\bdivided by\b", "/", clean)
 
-        # 6. ล้างตัวแปรสร้อยปลายข้อความที่มีลักษณะลอย (เช่น " xy=24 x,y")
         clean = re.sub(r"\s+[a-zA-Z](?:\s*,\s*[a-zA-Z\s])*$", "", clean)
-        
-        # 7. คัดอักษรภาษาไทยที่ตกค้างออกทั้งหมดเพื่อให้เหลือเฉพาะสมการสากล
         clean = re.sub(r"[\u0e00-\u0e7f]", "", clean)
-        
-        # 8. ปรับแต่งเว้นวรรค
         clean = re.sub(r"\s+", " ", clean).strip()
         clean = re.sub(r"\s*,\s*", ", ", clean)
-        
         return clean
