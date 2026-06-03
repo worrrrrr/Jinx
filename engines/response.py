@@ -40,15 +40,15 @@ class ResponseEngine:
             ],
             "chat:greet": [
                 "สวัสดีครับ! มีอะไรให้ผมช่วยวันนี้บอกได้เลยนะครับ 🙏",
-                "หวัดดีครับ! พร้อมช่วยเหลือเสมอ 😊",
+                "สวัสดีครับ! พร้อมช่วยเหลือเสมอ 😊",
                 "สวัสดี! วันนี้ต้องการให้ช่วยเรื่องอะไรดีครับ?",
-                "ไงครับ! ผมพร้อมฟังเสมอ 💬"
+                "สวัสดีครับ! ผมพร้อมฟังเสมอครับ 💬"
             ],
             "chat:farewell": [
                 "ไว้คุยกันใหม่นะครับ! บ๊ายบาย 🙏",
-                "ขอให้วันนี้เป็นวันที่ดีนะครับ! 😊",
+                "ไว้เจอกันใหม่นะครับ ขอให้เป็นวันที่ดี! 😊",
                 "พักผ่อนให้เพียงพอนะครับ ไว้เจอกันใหม่! 💤",
-                "บ๊ายบายครับ! มีอะไรเรียกใช้ได้เลยนะครับ ✨"
+                "บ๊ายบายครับ! ไว้คุยกันใหม่นะครับ ✨"
             ],
             "chat:gratitude": [
                 "ยินดีครับ! มีอะไรอีกบอกได้เลยนะ 😊",
@@ -104,7 +104,7 @@ class ResponseEngine:
             "tone": "friendly",
             "emoji_level": "medium",
             "language": "th",
-            "max_length": 500  # ปรับความยาวเพื่อให้ครอบคลุมการอธิบายข้อมูล RAG
+            "max_length": 2000  # ปรับความยาวเพื่อให้ครอบคลุม BaZi อธิบายละเอียด
         }
         
         self.emojis = {
@@ -119,6 +119,10 @@ class ResponseEngine:
         }
 
     def format(self, execution_output: Dict[str, Any], perception: Dict[str, Any] = None) -> str:
+        # ถ้า execution ส่ง direct_response มา (เช่นจาก LLM) ให้คืนข้อความนั้นเลย
+        if execution_output.get("direct_response"):
+            return str(execution_output.get("result", ""))
+
         status = execution_output.get("status", "success")
         result = execution_output.get("result", "")
         message = execution_output.get("message", "Unknown error")
@@ -277,8 +281,7 @@ class ResponseEngine:
         if isinstance(value, str):
             if "ไม่พบข้อมูลที่ตรงกับคำค้นหา" in value:
                 return value
-            clean = re.sub(r'<[^>]+>', '', value)
-            return clean.strip()[:250]
+            return value.strip()[:2000]
             
         return str(value)
 

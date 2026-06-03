@@ -1,0 +1,11 @@
+{
+  "name": "Coffee Machine",
+  "start": "idle",
+  "transitions": [
+    {"from": "idle", "event": "insert_coin", "to": "has_coin"},
+    {"from": "has_coin", "event": "select_drink", "to": "brewing"},
+    {"from": "brewing", "event": "done", "to": "dispensing"},
+    {"from": "dispensing", "event": "take_cup", "to": "idle"},
+    {"from": "*", "event": "cancel", "to": "idle"}
+  ]
+}

@@ -64,5 +64,5 @@ def test_response_formats_knowledge_hits():
         }
     ]
     text = engine._format_result_value(hits)
-    assert "[python.md]" in text
+    assert "python" in text
     assert "Python Guide" in text

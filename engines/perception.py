@@ -40,7 +40,11 @@ class PerceptionEngine:
             "task:solve": ["คำนวณ", "แก้", "solve", "บวก", "ลบ", "คูณ", "หาร", "เท่ากับ", "สมการ", "ผลลัพ", "หาค่า", "เท่าไร", "เท่าไหร่", "ได้เท่าไหร่", "กี่"],
             "task:edit": ["แก้ไข", "ปรับปรุง", "edit", "update", "modify", "fix", "เปลี่ยน", "patch"],
             "task:search": ["ค้นหา", "หา", "search", "find", "query", "สืบค้น", "ขอดูข้อมูล", "ค้นหาข้อมูล"],
-            "task:analyze": ["วิเคราะห์", "analyze", "ตรวจสอบ", "check", "examine", "investigate", "สรุป"],
+            "task:analyze": ["วิเคราะห์", "analyze", "ตรวจสอบ", "check", "examine", "investigate", "สรุป", "สถิติ", "ข้อมูล", "csv"],
+            "task:html": ["html", "เว็บ", "หน้าเว็บ", "web page", "สร้างหน้า", "การ์ด", "card", "เว็บเพจ"],
+            "task:astrology": ["ดูดวง", "ดวง", "บาซี่", "bazi", "astrology", "ปีนักษัตร", "นักษัตร", "ชะตา", "หมอดู"],
+            "task:tree": ["tree", "decision tree", "ทางเลือก", "ตัดสินใจ", "คำถามนำทาง", "แนะนำ"],
+            "task:state": ["state", "machine", "สถานะ", "workflow", "event", "เดินเครื่อง"],
             "task:show": ["แสดง", "โชว์", "display", "show", "view", "list", "ขอดู"],
             "task:open": ["เปิด", "read", "open"],
             "task:create": ["สร้าง", "ทำ", "new", "create", "write", "generate", "เขียน"],
@@ -95,6 +99,16 @@ class PerceptionEngine:
         intent = self._score_intent(lower_text)
         entities = self._extract_entities(clean_text)
         domain = self._score_domain(lower_text, entities, intent)
+        
+        # Override: ถ้ามี "html" และ intent เป็น task:create ให้ใช้ task:html แทน
+        if intent == "task:create" and "html" in lower_text:
+            intent = "task:html"
+            domain = "general"
+        
+        # Override: "list_dir" → task:show + domain file
+        if "list_dir" in lower_text:
+            intent = "task:show"
+            domain = "file"
         
         # ตรวจสอบเพื่อแยกเป้าหมายคณิตศาสตร์
         if intent == "unknown" and self._is_math_expression(clean_text):
@@ -161,6 +175,10 @@ class PerceptionEngine:
         return best_intent
 
     def _score_domain(self, text: str, entities: List[str], intent: str) -> str:
+        # ตรวจ intent ที่มาก่อนคณิตศาสตร์ (เช่น ดูดวงมีเลขแต่ไม่ใช่คณิต)
+        non_math_intents = {"task:astrology", "task:tree", "task:state", "task:html"}
+        if intent in non_math_intents:
+            return "general"
         if self._is_math_expression(text):
             return "math"
         if intent.startswith("task:solve"):
@@ -278,9 +296,17 @@ class PerceptionEngine:
             ("task:execute", "code"): "run_script",
             ("task:debug", "code"): "read_code",
             ("task:search", "web"): "web_search",
-            ("chat:greet", "conversation"): "respond_greeting",
-            ("chat:chitchat", "conversation"): "respond_chitchat",
-            ("chat:emotion", "conversation"): "respond_empathy",
+            ("task:astrology", "general"): "bazi",
+            ("task:astrology", "web"): "bazi",
+            ("qa:what", "general"): "vault_search",
+            ("task:open", "general"): "vault_read",
+            ("task:html", "general"): "generate_html",
+            ("task:html", "web"): "generate_html",
+            ("task:analyze", "web"): "analyze_data",
+            ("task:analyze", "general"): "analyze_data",
+            ("task:tree", "general"): "decision_tree",
+            ("task:state", "general"): "state_machine",
+            ("task:show", "file"): "list_dir",
             ("qa:what", "qa"): "answer_definition",
             ("qa:how", "qa"): "answer_procedure",
             ("qa:why", "qa"): "answer_reason",
@@ -301,7 +327,8 @@ class PerceptionEngine:
             if intent_key == intent or intent_key.split(":")[-1] == intent.split(":")[-1]:
                 keywords.extend(kw_list)
         if keywords:
-            pattern = "|".join(map(re.escape, keywords))
+            # ใช้ word boundary (\b) ป้องกันการตัดคำบางส่วน เช่น "list" ใน "list_dir"
+            pattern = "|".join(r"\b" + re.escape(kw) + r"\b" for kw in keywords)
             topic = re.sub(pattern, "", text, flags=re.IGNORECASE).strip()
             return topic if topic else text
         return text.strip()

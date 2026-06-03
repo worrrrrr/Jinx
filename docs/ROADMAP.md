@@ -20,12 +20,13 @@
 
 # Current Status
 
-Stage: Foundation
+Stage: Foundation ✅ — Core Pipeline เสร็จสมบูรณ์
 
-Progress: In Development
+Progress: กำลังขยาย Knowledge Vault + Test Coverage
 
 Architecture:
 
+```
 User
 ↓
 Perception
@@ -37,184 +38,109 @@ Execution
 Response
 ↓
 User
+```
 
 ---
 
-# Phase 1 - Core Runtime
+# Phase 1 — Core Runtime ✅
 
-Goal:
-
-สร้าง Runtime ที่สามารถรับคำสั่งและเรียก Tool ได้
+Goal: สร้าง Runtime ที่สามารถรับคำสั่งและเรียก Tool ได้
 
 Tasks:
 
 [x] Project Structure
-
 [x] Knowledge Vault
-
 [x] Core Documentation
-
-[ ] Perception Engine
-
-[ ] Reasoning Engine
-
-[ ] Execution Engine
-
-[ ] Response Engine
-
-[ ] Orchestrator
-
-Success Criteria:
-
-* รับ Input ได้
-* วิเคราะห์ Intent ได้
-* เรียก Tool ได้
-* ส่งผลลัพธ์กลับได้
+[x] Perception Engine — intent detection, Thai NLP, math extraction
+[x] Reasoning Engine — strategy selection, context rules
+[x] Execution Engine — tool routing, security blocking
+[x] Response Engine — template selection, formatting
+[x] Orchestrator — pipeline integration
 
 ---
 
-# Phase 2 - Knowledge System
+# Phase 2 — Knowledge System ✅
 
-Goal:
-
-เชื่อม Runtime เข้ากับ Knowledge Vault
+Goal: เชื่อม Runtime เข้ากับ Knowledge Vault
 
 Tasks:
 
-[ ] Markdown Loader
-
-[ ] File Scanner
-
-[ ] Search Engine
-
-[ ] Fuzzy Matching
-
-[ ] Context Extraction
-
-[ ] Knowledge Ranking
-
-Success Criteria:
-
-* ค้นหาไฟล์ได้
-* ดึงข้อมูลได้
-* จัดอันดับข้อมูลได้
+[x] Markdown Loader — อ่านไฟล์ .md จาก vault
+[x] File Scanner — list ไฟล์ใน vault
+[x] Search Engine — fuzzy matching ด้วย rapidfuzz
+[x] Fuzzy Matching — ค้นหาแม้พิมพ์ผิด
+[x] Context Extraction — ดึง snippet จากไฟล์
+[x] Knowledge Ranking — เรียงคะแนนความเกี่ยวข้อง
 
 ---
 
-# Phase 3 - Tool Ecosystem
+# Phase 3 — Tool Ecosystem ⬜
 
-Goal:
-
-สร้างชุดเครื่องมือหลักของระบบ
+Goal: สร้างชุดเครื่องมือหลักของระบบ
 
 Tasks:
 
-[ ] Calculator Tool
-
-[ ] Symbolic Math Tool
-
-[ ] File Tool
-
-[ ] Markdown Tool
-
-[ ] Search Tool
-
-[ ] HTML Tool
-
-[ ] Data Analysis Tool
-
-Success Criteria:
-
-* Tool ทุกตัวมี Test
-* Tool ทุกตัวเรียกผ่าน Execution ได้
+[x] Calculator Tool — tools/math.py (numeric eval)
+[x] Symbolic Math Tool — tools/math.py (SymPy + Z3)
+[x] File Tool — tools/file.py (read/write/list/patch/run)
+[x] Search Tool — tools/search.py (fuzzy knowledge search)
+[x] Obsidian Tool — tools/obsidian.py (create/append/link notes)
+[x] Vault Utils — tools/utils.py (vault read/write/list)
+[x] Ba Zi Tool — tools/bazi.py (Chinese astrology, standalone)
+[x] Arch Generator — tools/arch_generator.py (scaffolding, standalone)
+[ ] HTML Tool — สร้างเว็บจากคำอธิบาย
+[ ] Data Analysis Tool — วิเคราะห์ข้อมูล (CSV, JSON)
 
 ---
 
-# Phase 4 - Memory
+# Phase 4 — Memory ⬜
 
-Goal:
-
-เพิ่มความสามารถในการจดจำ
+Goal: เพิ่มความสามารถในการจดจำ
 
 Tasks:
 
-[ ] Session Memory
-
-[ ] User Preferences
-
-[ ] Fact Storage
-
-[ ] Cache Layer
-
-Success Criteria:
-
-* จำ Context การสนทนาได้
-* เก็บข้อมูลสำคัญได้
+[x] Session Memory — core/memory.py (history + variables)
+[ ] User Preferences — จดจำค่าที่ผู้ใช้ตั้ง
+[ ] Fact Storage — เก็บความจริงข้าม session
+[ ] Cache Layer — ลดการคำนวณซ้ำ
 
 ---
 
-# Phase 5 - Evaluation
+# Phase 5 — Evaluation ⬜
 
-Goal:
-
-ตรวจสอบคุณภาพของระบบ
+Goal: ตรวจสอบคุณภาพของระบบ
 
 Tasks:
 
-[ ] Tool Tests
-
-[ ] Engine Tests
-
-[ ] Integration Tests
-
-[ ] Benchmark Suite
-
-[ ] Self Evaluation
-
-Success Criteria:
-
-* ทุก Component มีการทดสอบ
-* สามารถระบุจุดผิดพลาดได้
+[x] Tool Tests — math, file, search มี unit tests
+[x] Integration Tests — orchestator E2E scenarios
+[x] Benchmark Suite — llm_compare.py + benchmark_cases.json
+[ ] Engine Tests — unit tests สำหรับ perception, reasoning, execution, response
+[ ] Self Evaluation — ระบบตรวจสอบคำตอบตัวเอง
 
 ---
 
-# Phase 6 - LLM Integration
+# Phase 6 — LLM Integration ⬜
 
-Goal:
-
-เพิ่ม LLM เป็น Optional Layer
+Goal: เพิ่ม LLM เป็น Optional Layer
 
 Tasks:
 
-[ ] Ollama Integration
-
-[ ] Groq Integration
-
+[x] Ollama Integration — core/llm_core.py::OllamaProvider
+[x] Groq Integration — core/llm_core.py::GroqProvider
+[x] Claude Integration — core/llm_core.py::ClaudeProvider
 [ ] Gemini Integration
-
-[ ] Claude Integration
-
-[ ] Answer Comparison
-
-[ ] LLM Review
-
-Success Criteria:
-
-* Runtime ทำงานได้โดยไม่ต้องใช้ LLM
-* LLM ใช้เป็นที่ปรึกษาได้
+[ ] Answer Comparison — เทียบผล tool vs LLM
+[ ] LLM Review — ใช้ LLM ตรวจสอบคำตอบ
 
 ---
 
 # Future
 
 [ ] Knowledge Graph
-
 [ ] Multi-Agent Collaboration
-
 [ ] Autonomous Planning
-
 [ ] Self Improvement
-
 [ ] Personal Operating System
 
 ---

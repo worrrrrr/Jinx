@@ -180,6 +180,9 @@ def workspace_list(action: str, inp: str, entities: List[str]) -> Dict[str, Any]
     elif inp:
         m = re.search(r"(?:ใน|in|folder|โฟลเดอร์)\s+([^\s]+)", inp, re.IGNORECASE)
         sub = m.group(1) if m else inp.strip()
+        # ถ้า inp ลงท้ายด้วย " ." หรือ " . " ให้ใช้ "." เป็น target
+        if sub and re.search(r"\s\.\s*$", sub):
+            sub = "."
 
     target = sub or "."
     safe_path, err = resolve_workspace_path(target if target != "." else ".")

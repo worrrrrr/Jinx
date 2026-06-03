@@ -19,6 +19,8 @@ def get_tools() -> Dict[str, Callable]:
         "create_note": create_obsidian_note,
         "append_note": append_obsidian_note,
         "link_notes": link_obsidian_notes,
+        "vault_read": vault_read_handler,
+        "vault_search": vault_search_handler,
     }
 
 
@@ -129,6 +131,76 @@ def link_obsidian_notes(action: str, inp: str, entities: List[str]) -> Dict[str,
         }
     except Exception as e:
         return {"status": "fail", "message": f"ไม่สามารถสร้างลิงก์ได้: {str(e)}"}
+
+
+# ==========================================
+# Enhanced Vault Tools (Phase 2e)
+# ==========================================
+
+def vault_read_handler(action: str, inp: str, entities: List[str]) -> Dict[str, Any]:
+    """
+    อ่านเนื้อหาไฟล์จาก data/knowledge/
+    """
+    filename = _extract_md_filename(entities, inp)
+    safe_path = _get_safe_path(filename)
+    if not safe_path:
+        return {"status": "fail", "message": "ปฏิเสธการเข้าถึง: พาธไม่ปลอดภัย"}
+    if not os.path.exists(safe_path):
+        return {"status": "fail", "message": f"ไม่พบไฟล์ '{filename}' ใน vault"}
+    try:
+        with open(safe_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        title = os.path.splitext(filename)[0]
+        preview = content if len(content) <= 3000 else content[:3000] + "\n... (ตัดทอน)"
+        return {
+            "status": "success",
+            "result": preview,
+            "filename": filename,
+            "title": title,
+            "lines": content.count("\n") + (1 if content else 0),
+        }
+    except OSError as e:
+        return {"status": "fail", "message": f"อ่านไฟล์ไม่สำเร็จ: {str(e)}"}
+
+
+def vault_search_handler(action: str, inp: str, entities: List[str]) -> Dict[str, Any]:
+    """
+    ค้นหาข้อความในไฟล์ vault ด้วย rapidfuzz (fuzzy matching)
+    """
+    query = inp or (" ".join(entities) if entities else "")
+    if not query:
+        return {"status": "fail", "message": "ไม่ระบุคำค้นหา"}
+
+    from rapidfuzz import fuzz, process
+
+    if not os.path.isdir(VAULT_DIR):
+        return {"status": "success", "result": "Vault ว่าง (ไม่มีไฟล์)", "matches": []}
+
+    results = []
+    for fname in os.listdir(VAULT_DIR):
+        if not fname.endswith(".md"):
+            continue
+        fpath = os.path.join(VAULT_DIR, fname)
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                text = f.read()
+            score = fuzz.partial_ratio(query.lower(), text.lower())
+            if score >= 50:
+                title = os.path.splitext(fname)[0]
+                results.append({"file": title, "filename": fname, "score": score})
+        except OSError:
+            continue
+
+    results.sort(key=lambda r: r["score"], reverse=True)
+    top = results[:10]
+
+    if not top:
+        return {"status": "success", "result": f"ไม่พบข้อมูลที่เกี่ยวข้องกับ '{query}'", "matches": []}
+
+    lines = [f"ค้นหา '{query}' พบ {len(top)} รายการ:"]
+    for r in top:
+        lines.append(f"  • [[{r['file']}]] (ความแม่นยำ {r['score']}%)")
+    return {"status": "success", "result": "\n".join(lines), "matches": top}
 
 
 # ==========================================

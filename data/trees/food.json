@@ -1,0 +1,63 @@
+{
+  "name": "แนะนำอาหาร",
+  "start": "start",
+  "nodes": [
+    {
+      "id": "start",
+      "question": "คุณชอบอาหารประเภทไหน?",
+      "choices": [
+        {"id": "thai", "label": "อาหารไทย", "keywords": ["ไทย", "thai"], "next": "thai_q"},
+        {"id": "japanese", "label": "อาหารญี่ปุ่น", "keywords": ["ญี่ปุ่น", "japanese"], "next": "japanese_q"},
+        {"id": "italian", "label": "อาหารอิตาลี", "keywords": ["อิตาลี", "italian"], "next": "italian_q"}
+      ]
+    },
+    {
+      "id": "thai_q",
+      "question": "ชอบรสจัดหรือไม่จัด?",
+      "choices": [
+        {"id": "spicy", "label": "จัด", "keywords": ["จัด", "เผ็ด", "spicy"], "next": "thai_spicy"},
+        {"id": "mild", "label": "ไม่จัด", "keywords": ["ไม่จัด", "mild", "อ่อน"], "next": "thai_mild"}
+      ]
+    },
+    {
+      "id": "thai_spicy",
+      "result": "แนะนำ: ต้มยำกุ้ง หรือ ผัดกระเพราไก่ 😋"
+    },
+    {
+      "id": "thai_mild",
+      "result": "แนะนำ: แกงจืด หรือ ข้าวผัด🍚"
+    },
+    {
+      "id": "japanese_q",
+      "question": "ชอบร้อนหรือเย็น?",
+      "choices": [
+        {"id": "hot", "label": "ร้อน", "keywords": ["ร้อน", "hot", "อุ่น"], "next": "japanese_hot"},
+        {"id": "cold", "label": "เย็น", "keywords": ["เย็น", "cold", "cool"], "next": "japanese_cold"}
+      ]
+    },
+    {
+      "id": "japanese_hot",
+      "result": "แนะนำ: ราเมนร้อน🍜"
+    },
+    {
+      "id": "japanese_cold",
+      "result": "แนะนำ: ซูชิ🍣"
+    },
+    {
+      "id": "italian_q",
+      "question": "ชอบเส้นหรือพิซซ่า?",
+      "choices": [
+        {"id": "pasta", "label": "เส้น", "keywords": ["เส้น", "pasta"], "next": "italian_pasta"},
+        {"id": "pizza", "label": "พิซซ่า", "keywords": ["พิซซ่า", "pizza"], "next": "italian_pizza"}
+      ]
+    },
+    {
+      "id": "italian_pasta",
+      "result": "แนะนำ: สปาเก็ตตี้คาโบนาร่า🍝"
+    },
+    {
+      "id": "italian_pizza",
+      "result": "แนะนำ: พิซซ่ามาร์เกอริต้า🍕"
+    }
+  ]
+}

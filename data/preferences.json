@@ -1,0 +1,7 @@
+{
+  "language": "th",
+  "emoji_level": "medium",
+  "tone": "friendly",
+  "max_history": 10,
+  "max_tokens": 3000
+}

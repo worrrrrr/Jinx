@@ -17,7 +17,6 @@ def run_realworld_test():
     jinx = Orchestrator()
     
     # ปรับรูปแบบการแสดงผลของ Response ให้เหมาะสมสำหรับการทดสอบ
-    jinx.response.set_personality(name="Jinx", emoji_level="high")
 
     # ชุดทดสอบสถานการณ์จริง (Real-world Scenario Dataset)
     scenarios = [
@@ -56,6 +55,10 @@ def run_realworld_test():
         },{
             "category": "KNOWLEDGE QUERY",
             "query": " Jinx คืออะไร "
+        }
+        ,{
+            "category": "ASTROLOGY QUERY",
+            "query": " ดูดวง 20/8/1992 16.49 ซินแซ"
         }
     ]
 

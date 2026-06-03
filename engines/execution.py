@@ -12,6 +12,11 @@ try:
     from tools import utils as t_utils
     from tools import obsidian as t_obsidian
     from tools import file as t_file
+    from tools import html_gen as t_html
+    from tools import data_analysis as t_data
+    from tools import decision_tree as t_tree
+    from tools import state_manager as t_state
+    from tools import bazi as t_bazi
     TOOLS_AVAILABLE = True
 except ImportError:
     TOOLS_AVAILABLE = False
@@ -27,8 +32,9 @@ class ExecutionEngine:
     Execution Layer (ฉบับอัปเกรด): รันเครื่องมือตามแผนงาน พร้อมส่งต่อสัญญาณนำทางความตรรกศาสตร์
     """
     
-    def __init__(self):
+    def __init__(self, llm_core=None):
         self.tools: Dict[str, Callable] = {}
+        self.llm_core = llm_core
         
         if TOOLS_AVAILABLE:
             self._register_external_tools()
@@ -50,11 +56,18 @@ class ExecutionEngine:
             self.tools.update(t_search.get_tools())
             self.tools.update(t_obsidian.get_tools())
             self.tools.update(t_file.get_tools())
+            self.tools.update(t_html.get_tools())
+            self.tools.update(t_data.get_tools())
+            self.tools.update(t_tree.get_tools())
+            self.tools.update(t_state.get_tools())
+            self.tools.update(t_bazi.get_tools())
             if hasattr(t_utils, "get_tools"):
                 self.tools.update(t_utils.get_tools())
             # QA intents ใช้คลังความรู้โลคัล (ไม่ทับด้วย fallback mock)
             self.tools.setdefault("answer_question", t_search.search_local_knowledge)
             self.tools.setdefault("search_knowledge", t_search.search_local_knowledge)
+            # Chat handlers — fallback ในกรณี action map ส่งมา
+            self.tools.setdefault("handle_conversation", self._chat_handler)
         except Exception as e:
             # ตกเข้าสู่ระบบ Fallback กรณีตัวเครื่องมือภายนอกสะกดไวยากรณ์ผิดพลาด
             self._register_fallback_tools()
@@ -170,9 +183,10 @@ class ExecutionEngine:
         try:
             safe_ns = {
                 "__builtins__": None,
-                **{f"__{k}": getattr(math, k) for k in ["sqrt", "sin", "cos", "tan", "log", "log10", "exp", "abs"]},
+                "abs": abs,
+                **{k: getattr(math, k) for k in ["sqrt", "sin", "cos", "tan", "log", "log10", "exp"]},
             }
-            for func in ["sqrt", "sin", "cos", "tan", "log", "exp"]:
+            for func in ["sqrt", "sin", "cos", "tan", "log", "exp", "abs"]:
                 clean = clean.replace(f"__{func}(", f"{func}(")
             
             result = eval(clean, safe_ns)
@@ -205,6 +219,21 @@ class ExecutionEngine:
         }
 
     def _chat_handler(self, action: str, inp: str, entities: list) -> Dict[str, Any]:
+        # ถ้ามี LLM พร้อมใช้ — ให้ LLM ตอบกลับสำหรับ chat intent
+        if self.llm_core and self.llm_core.available:
+            for provider in self.llm_core.providers.values():
+                if provider.ready:
+                    try:
+                        response = provider.chat(
+                            prompt=inp,
+                            temperature=0.7,
+                            max_tokens=500
+                        )
+                        if response:
+                            return {"status": "success", "result": response, "direct_response": True}
+                    except Exception:
+                        continue
+        # fallback: ส่งข้อความเดิมกลับไปให้ response engine จัดการ template
         return {"status": "success", "result": inp}
 
     def _qa_handler(self, action: str, inp: str, entities: list) -> Dict[str, Any]:

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "m001",
+    "category": "math",
+    "question": "9.8 - 9.11",
+    "expected": ["0.69"]
+  },
+
+  {
+    "id": "m002",
+    "category": "math",
+    "question": "3^x=x^9",
+    "expected": ["27", "1.1508"]
+  },
+
+  {
+    "id": "m003",
+    "category": "algebra",
+    "question": "x มากกว่า y อยู่ 5 และ x*y=24",
+    "expected": ["8", "3","-3", "-8"]
+  },
+
+  {
+    "id": "c001",
+    "category": "coding",
+    "question": "เขียน Python Hello World",
+    "expected": ["print"]
+  },
+
+  {
+    "id": "g001",
+    "category": "general",
+    "question": "ประเทศไทยมีกี่จังหวัด",
+    "expected": ["77"]
+  },
+  {
+    "id": "p001",
+    "category": "prompt",
+    "question": "จงเขียน prompt ที่คิดว่าจำเป็นที่สุดในยุคนี้",
+    "expected": ["คุณเป็นโปรแกรมเมอร์"]
+  }
+]

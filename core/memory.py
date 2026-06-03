@@ -1,8 +1,16 @@
 # core/memory.py
 
 import collections
+import json
+import os
 import re
 from typing import Dict, Any, List, Optional
+
+
+PERSISTENCE_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "data", "session_memory.json"
+)
 
 
 class SessionMemory:
@@ -10,7 +18,9 @@ class SessionMemory:
     Short-Term Context & Variable Memory: ระบบจดจำประวัติสนทนาและจำค่าตัวแปรคณิตศาสตร์
     """
     
-    def __init__(self, max_history: int = 10):
+    def __init__(self, max_history: int = 10, persist_path: Optional[str] = None):
+        self.persist_path = persist_path
+        
         # คิวประวัติการสนทนา (จำกัดความยาวเพื่อประหยัดหน่วยความจำ)
         self.history: collections.deque = collections.deque(maxlen=max_history)
         
@@ -19,6 +29,37 @@ class SessionMemory:
         
         # สถานะการตอบกลับล่าสุดและข้อมูลบริบท (Context States)
         self.context: Dict[str, Any] = {}
+        
+        # โหลดประวัติจากไฟล์ถ้ามี
+        self._load_persistent()
+
+    def _load_persistent(self):
+        if not self.persist_path or not os.path.exists(self.persist_path):
+            return
+        try:
+            with open(self.persist_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            for turn in data.get("history", []):
+                self.history.append(turn)
+            self.variables.update(data.get("variables", {}))
+            self.context.update(data.get("context", {}))
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    def _save_persistent(self):
+        if not self.persist_path:
+            return
+        os.makedirs(os.path.dirname(self.persist_path), exist_ok=True)
+        data = {
+            "history": list(self.history),
+            "variables": {k: v for k, v in self.variables.items() if isinstance(v, (int, float, str))},
+            "context": self.context,
+        }
+        try:
+            with open(self.persist_path, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+        except OSError:
+            pass
 
     def add_turn(self, user_message: str, agent_response: str):
         """
@@ -28,6 +69,7 @@ class SessionMemory:
             "user": user_message.strip(),
             "jinx": agent_response.strip()
         })
+        self._save_persistent()
 
     def store_variables(self, new_vars: Dict[str, Any]):
         """
@@ -40,6 +82,7 @@ class SessionMemory:
             )
             if var_name:
                 self.variables[var_name] = _normalize_var_value(v)
+        self._save_persistent()
 
     def get_variable(self, name: str) -> Optional[Any]:
         """
@@ -52,6 +95,7 @@ class SessionMemory:
         อัปเดตค่าสถานะบริบท เช่น สถานะพิกัดไฟล์ หรือคำค้นหาล่าสุด
         """
         self.context[key] = value
+        self._save_persistent()
 
     def get_context(self, key: str, default: Optional[Any] = None) -> Any:
         return self.context.get(key, default)
@@ -77,6 +121,7 @@ class SessionMemory:
         self.history.clear()
         self.variables.clear()
         self.context.clear()
+        self._save_persistent()
 
 
 def _var_name_from_key(key: Any) -> Optional[str]:

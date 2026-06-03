@@ -53,7 +53,7 @@ def search_local_knowledge(action: str, inp: str, entities: List[str] = None) ->
     # ดึงคีย์เวิร์ดสำคัญจากเอนทิตีหรือข้อความเพื่อช่วยในการสืบค้นหลัก
     keywords = set(entities) if entities else set()
     if query:
-        keywords.update(re.findall(r"\b\w+\b", query.lower()))
+        keywords.update(query.lower().split())
     
     if not os.path.exists(knowledge_dir):
         # สร้างโฟลเดอร์ออโต้หากระบบยังไม่มี เพื่อพร้อมรับการวางไฟล์ข้อมูล
@@ -78,10 +78,19 @@ def search_local_knowledge(action: str, inp: str, entities: List[str] = None) ->
                         # แบ่งเนื้อหาออกเป็นย่อหน้าย่อย ๆ เพื่อประหยัดพื้นที่ Token และดึงข้อมูลได้เจาะจง
                         paragraphs = [p.strip() for p in content.split("\n\n") if p.strip()]
                         
+                        file_lower = file.lower()
                         for idx, para in enumerate(paragraphs):
                             # ตรวจหาจุดแมตช์เชิงคำค้นหาหรือเอนทิตีที่เกี่ยวข้อง
                             para_lower = para.lower()
                             match_score = sum(1 for kw in keywords if kw in para_lower)
+                            
+                            # โบนัสถ้าคำค้นตรงกับชื่อไฟล์ (เฉพาะคำที่ไม่ใช่คำถามทั่วไป)
+                            for kw in keywords:
+                                if kw in ("คืออะไร", "คือ", "อะไร", "มีอะไรบ้าง", "ภาษา", "อะไรบ้าง", "query"):
+                                    continue
+                                if kw in file_lower:
+                                    match_score += 2
+                                    break
                             
                             if match_score > 0:
                                 snippet_clean = re.sub(r"\s+", " ", para)
@@ -94,12 +103,11 @@ def search_local_knowledge(action: str, inp: str, entities: List[str] = None) ->
                 except Exception:
                     continue
 
-    # เรียงลำดับย่อหน้าที่มีคะแนนความสอดคล้องกับหัวข้อคำถามสูงสุด
-    matched_hits.sort(key=lambda x: x["score"], reverse=True)
-    
+    # เรียงตามคะแนน ถ้าเท่ากันให้เรียงตามชื่อไฟล์เพื่อผลลัพธ์ที่เสถียร
+    matched_hits.sort(key=lambda x: (-x["score"], x["title"], x.get("source", "")))
     return {
         "status": "success",
-        "result": matched_hits[:3], # ส่งกลับย่อยอดพารากราฟที่ดีที่สุด 3 ลำดับแรก
+        "result": matched_hits[:5],  # ส่งกลับสูงสุด 5 รายการ
         "query": query
     }
 

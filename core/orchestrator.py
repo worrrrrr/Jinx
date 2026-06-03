@@ -3,11 +3,19 @@
 import logging
 import time
 from typing import Dict, Any, Optional
+import os
 from core.memory import (
     SessionMemory,
     extract_variables_from_result,
     substitute_variables_in_text,
 )
+
+_SESSION_PERSIST = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "data", "session_memory.json"
+)
+from core.preferences import UserPreferences
+from core.llm_core import JinxLLMCore
 from engines.perception import PerceptionEngine
 from engines.reasoning import ReasoningEngine
 from engines.execution import ExecutionEngine
@@ -27,13 +35,30 @@ class Orchestrator:
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.config = config or {}
         
+        # โหลด Preferences ของผู้ใช้จากไฟล์ (persistent)
+        self.prefs = UserPreferences()
+        
+        # โหลด LLM (Ollama local) เป็น optional component
+        self.llm_core = JinxLLMCore()
+        if self.llm_core.available:
+            logger.info(f"✅ LLM ready: {', '.join(self.llm_core.provider_names)}")
+
         # เริ่มต้นการทำงานของทั้ง 4 Engines หลัก
         self.perception = PerceptionEngine()
         self.reasoning = ReasoningEngine()
-        self.execution = ExecutionEngine()
+        self.execution = ExecutionEngine(llm_core=self.llm_core)
         self.response = ResponseEngine()
         
-        # ตรวจสอบและสวมทับสไตล์ส่วนตัวของ Jinx จาก Config
+        # สวมทับสไตล์จาก Preferences
+        self.response.set_personality(
+            name="Jinx",
+            language=self.prefs.get("language", "th"),
+            tone=self.prefs.get("tone", "friendly"),
+            emoji_level=self.prefs.get("emoji_level", "medium"),
+            max_length=int(self.prefs.get("max_tokens", 500)),
+        )
+        
+        # ตรวจสอบและสวมทับสไตล์ส่วนตัวของ Jinx จาก Config (override preferences)
         personality_config = self.config.get("personality", {})
         if personality_config:
             self.response.set_personality(**personality_config)
@@ -41,8 +66,8 @@ class Orchestrator:
         # สร้างรหัสจำเพาะการเชื่อมต่อของเซสชัน (Session Tracking)
         self.session_id = f"jinx_{int(time.time())}"
 
-        max_history = int(self.config.get("memory_max_history", 10))
-        self.memory = SessionMemory(max_history=max_history)
+        max_history = int(self.prefs.get("max_history", self.config.get("memory_max_history", 10)))
+        self.memory = SessionMemory(max_history=max_history, persist_path=_SESSION_PERSIST)
         
         # ระบบจัดเก็บสถิติเชิงปริมาณ (Telemetry metrics)
         self._stats = {
