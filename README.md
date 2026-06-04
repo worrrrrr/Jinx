@@ -1,7 +1,7 @@
 ---
 title: Jinx Agent
 emoji: 🧠
-colorFrom: magenta
+colorFrom: blue
 colorTo: indigo
 sdk: docker
 app_file: api_server.py
