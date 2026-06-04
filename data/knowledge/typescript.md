@@ -1,6 +1,11 @@
-# TypeScript — JavaScript + ระบบชนิดข้อมูล (Types)
+---
+title: [[typescript]] — [[javascript]] + ระบบชนิดข้อมูล (Types)
+tags: [knowledge, vault]
+aliases: [typescript]
+---
+# [[typescript]] — [[javascript]] + ระบบชนิดข้อมูล (Types)
 
-TypeScript เป็น superset ของ JavaScript ที่เพิ่มระบบ type ช่วยให้จับบั๊กได้ตั้งแต่ตอนเขียนโค้ด
+[[typescript]] เป็น superset ของ [[javascript]] ที่เพิ่มระบบ type ช่วยให้จับบั๊กได้ตั้งแต่ตอนเขียนโค้ด
 
 ## ติดตั้งและใช้งาน
 ```bash

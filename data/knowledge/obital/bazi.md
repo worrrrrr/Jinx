@@ -1,9 +1,14 @@
+---
+title: หลังคำนวณ wood, fire, earth, metal, water
+tags: [knowledge, vault, obital]
+aliases: [bazi]
+---
 ได้ครับ! เราจะทำ **“ตารางแมปธาตุ → Cognitive Functions แบบเต็ม”** ที่ครอบคลุมทุกระดับตั้งแต่ขาดไปจนถึงเกิน เพื่อให้คุณเอาไปใช้ใน Rule Engine ได้โดยตรง
 
 ---
 
 ## 🗂️ 1. เกณฑ์วัดระดับธาตุ (Wu Xing Level)
-ก่อนแมป ผมกำหนดช่วงคร่าว ๆ สำหรับระบบ BaZi (อิงจาก 5 ธาตุรวม 8-12 หน่วย)
+ก่อนแมป ผมกำหนดช่วงคร่าว ๆ สำหรับระบบ [[bazi]] (อิงจาก 5 ธาตุรวม 8-12 หน่วย)
 
 | ระดับ | คะแนนธาตุ |
 |-------|----------|
@@ -105,14 +110,14 @@ else:                    # เกิน
     scholar += 6         # Ni/Ti แข็งแบบ rigid
 ```
 
-จากนั้นค่อยใช้ Ten Gods, Day Master, และกฎพิเศษ (เช่น โลหะตัดไม้) มาช่วยตัดสิน MBTI/Enneagram
+จากนั้นค่อยใช้ Ten Gods, Day Master, และกฎพิเศษ (เช่น โลหะตัดไม้) มาช่วยตัดสิน [[mbti]]/Enneagram
 
 ---
 
 ## ✅ 8. สรุป
 - ตารางนี้ให้คำอธิบาย **“แต่ละธาตุที่ระดับต่าง ๆ ส่งผลต่อ Cognitive Function และบุคลิกภาพอย่างไร”**  
 - มันช่วยให้ Rule Engine ของเรา **“รู้ว่าเมื่อไรต้องบวก/ลบคะแนน”** จากธาตุเพียงอย่างเดียว  
-- และที่สำคัญ — มันอธิบายได้ว่าทำไมบางคนที่มีธาตุเท่ากัน แต่มีระดับต่างกัน ถึงได้ MBTI ต่างกัน  
+- และที่สำคัญ — มันอธิบายได้ว่าทำไมบางคนที่มีธาตุเท่ากัน แต่มีระดับต่างกัน ถึงได้ [[mbti]] ต่างกัน  
 
 ถ้าอยากให้ผมเอาตรรกะนี้ไปเขียนใน `synthesize_mbti_enneagram` ให้เสร็จสรรพ ก็บอกได้นะครับ 😊
 
@@ -122,7 +127,7 @@ else:                    # เกิน
 
 ## ประวัติศาสตร์ พัฒนาการ และรากฐานปรัชญาของอภิปรัชญาปาจื่อ
 
-ศาสตร์ปาจื่อ (八字 - BaZi) หรือวิชาสี่เสาแห่งโชคชะตา (Four Pillars of Destiny) คือระบบอภิปรัชญาจีนโบราณที่ออกแบบมาเพื่อวิเคราะห์รหัสพลังงาน โครงสร้างจิตวิทยา และวิถีชีวิตของบุคคล.1 คำว่าปาจื่อแปลตรงตัวว่า "แปดอักษร" ซึ่งเป็นตัวแทนของพลังงานในขณะแรกรับลมหายใจเข้าสู่โลก.3 ระบบวิชานี้มีพัฒนาการยาวนานเคียงคู่กับประวัติศาสตร์จีน โดยมีรากฐานเชื่อมโยงอย่างแนบแน่นกับปรัชญาเต๋า ทฤษฎีหยิน-หยาง ทฤษฎีห้าธาตุ (เบญจธาตุ) ตลอดจนการแพทย์แผนจีนโบราณและศาสตร์ฮวงจุ้ย.1 การก่อตัวของทฤษฎีเบญจธาตุเริ่มต้นตั้งแต่ช่วงยุคชุนชิวหรือยุคใบไม้ผลิและใบไม้ร่วง (770–476 ปีก่อนคริสตกาล) ก่อนที่จะได้รับการพัฒนาต่อยอดจนกลายมาเป็นระบบการคำนวณชะตาชีวิตอย่างเป็นรูปธรรมในเวลาต่อมา.5
+ศาสตร์ปาจื่อ (八字 - [[bazi]]) หรือวิชาสี่เสาแห่งโชคชะตา (Four Pillars of Destiny) คือระบบอภิปรัชญาจีนโบราณที่ออกแบบมาเพื่อวิเคราะห์รหัสพลังงาน โครงสร้างจิตวิทยา และวิถีชีวิตของบุคคล.1 คำว่าปาจื่อแปลตรงตัวว่า "แปดอักษร" ซึ่งเป็นตัวแทนของพลังงานในขณะแรกรับลมหายใจเข้าสู่โลก.3 ระบบวิชานี้มีพัฒนาการยาวนานเคียงคู่กับประวัติศาสตร์จีน โดยมีรากฐานเชื่อมโยงอย่างแนบแน่นกับปรัชญาเต๋า ทฤษฎีหยิน-หยาง ทฤษฎีห้าธาตุ (เบญจธาตุ) ตลอดจนการแพทย์แผนจีนโบราณและศาสตร์ฮวงจุ้ย.1 การก่อตัวของทฤษฎีเบญจธาตุเริ่มต้นตั้งแต่ช่วงยุคชุนชิวหรือยุคใบไม้ผลิและใบไม้ร่วง (770–476 ปีก่อนคริสตกาล) ก่อนที่จะได้รับการพัฒนาต่อยอดจนกลายมาเป็นระบบการคำนวณชะตาชีวิตอย่างเป็นรูปธรรมในเวลาต่อมา.5
 
 โครงสร้างดั้งเดิมของระบบสี่เสาได้รับการจัดระเบียบและบันทึกไว้อย่างเป็นทางการในช่วงราชวงศ์ถังและราชวงศ์ซ่ง โดยนักปราชญ์และข้าราชสำนักผู้เชี่ยวชาญด้านการคำนวณ.1 คัมภีร์ที่ถือเป็นหลักศิลาจารึกสำคัญชิ้นแรกของศาสตร์นี้คือ ยวนไห่จื่อผิง (渊海子平) ในสมัยราชวงศ์ซ่ง ซึ่งรวบรวมหลักการคำนวณดวงชะตาโดยใช้สี่เสาหลัก กิ่งฟ้า ก้านดิน และความสัมพันธ์ของเบญจธาตุเข้าด้วยกันอย่างเป็นระบบ.6 ต่อมาในสมัยราชวงศ์ชิง คัมภีร์จื่อผิงเจินเฉวียน (子平真詮) ได้รับการประพันธ์ขึ้นเพื่อกำหนดกรอบการประเมินโครงสร้างแผนผังโชคชะตาและการจำแนกประเภทพลังงานอย่างครอบคลุม.6
 
@@ -240,7 +245,7 @@ else:                    # เกิน
 
 เพื่อนำแผนผังกลับคืนสู่สภาวะสมดุล การค้นหา "ยงซิ้ง" (Yong Shen / Useful God) ซึ่งเป็นตัวยาที่เข้ามาบำบัดรักษาโรคในแผนผังจึงมีความสำคัญสูงสุด.15 ในขณะที่ "กี๋ซิ้ง" (Ji Shen / Unfavorable God) คือกลุ่มพลังงานที่จะเข้ามาซ้ำเติมสภาวะโรคให้รุนแรงยิ่งขึ้น.23
 
-ในระบบร่วมสมัย (Contemporary BaZi) นักวิเคราะห์มักมุ่งเน้นความสนใจไปที่การหาค่ากำลังของดิถีธาตุเพื่อระบุตัวยงซิ้งและกี๋ซิ้งโดยตรง.23 อย่างไรก็ดี ในเชิงทฤษฎีคลาสสิกดั้งเดิม (Classical Zi Ping) ปราชญ์โบราณจะมุ่งเน้นพิจารณาไปที่โครงสร้างของ "เดือนสั่งการ" หรือ "ผู้บัญชาการฐานเดือน" (Month Commander / 月令) เป็นสำคัญ.23 ระบบดั้งเดิมประเมินว่าตัวยงซิ้งที่แท้จริงคือเทพผู้ครองฐานเดือนเกิด ซึ่งอาจจะเป็นได้ทั้งเทพที่เป็นมงคลหรือเทพที่ให้โทษแก่ดิถีธาตุ.23 จากนั้นจึงตรวจสอบคุณภาพของยงซิ้งว่ามีคุณลักษณะ "มีไมตรี" (有情 - Having Affection) และ "มีกำลัง" (有力 - Having Strength) หรือไม่.23
+ในระบบร่วมสมัย (Contemporary [[bazi]]) นักวิเคราะห์มักมุ่งเน้นความสนใจไปที่การหาค่ากำลังของดิถีธาตุเพื่อระบุตัวยงซิ้งและกี๋ซิ้งโดยตรง.23 อย่างไรก็ดี ในเชิงทฤษฎีคลาสสิกดั้งเดิม (Classical Zi Ping) ปราชญ์โบราณจะมุ่งเน้นพิจารณาไปที่โครงสร้างของ "เดือนสั่งการ" หรือ "ผู้บัญชาการฐานเดือน" (Month Commander / 月令) เป็นสำคัญ.23 ระบบดั้งเดิมประเมินว่าตัวยงซิ้งที่แท้จริงคือเทพผู้ครองฐานเดือนเกิด ซึ่งอาจจะเป็นได้ทั้งเทพที่เป็นมงคลหรือเทพที่ให้โทษแก่ดิถีธาตุ.23 จากนั้นจึงตรวจสอบคุณภาพของยงซิ้งว่ามีคุณลักษณะ "มีไมตรี" (有情 - Having Affection) และ "มีกำลัง" (有力 - Having Strength) หรือไม่.23
 
 - มีไมตรี (Having Affection): การที่องค์ประกอบอื่นๆ ในแผนผังเข้ามาคอยควบคุมพลังงานเสียหรือเปลี่ยนรูปเทพให้โทษให้กลายเป็นสิ่งมีประโยชน์แก่เจ้าชะตา.23
     
@@ -342,13 +347,13 @@ else:                    # เกิน
 
 #### ผลงานที่อ้างอิง
 
-1. Bazi: Your Guide to Destiny Insights | PDF | Chinese Zodiac - Scribd, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.scribd.com/document/970617553/BaZi-Guide-to-the-Four-Pillars-1](https://www.scribd.com/document/970617553/BaZi-Guide-to-the-Four-Pillars-1)
+1. [[bazi]]: Your Guide to Destiny Insights | PDF | Chinese Zodiac - Scribd, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.scribd.com/document/970617553/[[bazi]]-Guide-to-the-Four-Pillars-1](https://www.scribd.com/document/970617553/[[bazi]]-Guide-to-the-Four-Pillars-1)
     
 2. Four Pillars of Destiny - Wikipedia, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://en.wikipedia.org/wiki/Four_Pillars_of_Destiny](https://en.wikipedia.org/wiki/Four_Pillars_of_Destiny)
     
-3. What is BaZi (Four Pillars of Destiny)? A Practical Explanation Beyond “Fortune Telling” : r/China - Reddit, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.reddit.com/r/China/comments/1riv5qv/what_is_bazi_four_pillars_of_destiny_a_practical/](https://www.reddit.com/r/China/comments/1riv5qv/what_is_bazi_four_pillars_of_destiny_a_practical/)
+3. What is [[bazi]] (Four Pillars of Destiny)? A Practical Explanation Beyond “Fortune Telling” : r/China - Reddit, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.reddit.com/r/China/comments/1riv5qv/what_is_bazi_four_pillars_of_destiny_a_practical/](https://www.reddit.com/r/China/comments/1riv5qv/what_is_bazi_four_pillars_of_destiny_a_practical/)
     
-4. Beginner's Guide to Bazi - Imperial Harvest, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://imperialharvest.com/blog/beginners-guide-to-bazi-reading/](https://imperialharvest.com/blog/beginners-guide-to-bazi-reading/)
+4. Beginner's Guide to [[bazi]] - Imperial Harvest, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://imperialharvest.com/blog/beginners-guide-to-[[bazi]]-reading/](https://imperialharvest.com/blog/beginners-guide-to-[[bazi]]-reading/)
     
 5. Five Elements and Chinese Astrology Ba Zi Charts | Armonia Health LLC, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://armoniahealth.com/2026/02/chinese-astrology-5-elements-and-ba-zi-charts/](https://armoniahealth.com/2026/02/chinese-astrology-5-elements-and-ba-zi-charts/)
     
@@ -356,13 +361,13 @@ else:                    # เกิน
     
 7. ดวงจีนปาจื้อ, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.wealthdecor.com/content/29296/%E0%B8%94%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%B5%E0%B8%99%E0%B8%9B%E0%B8%B2%E0%B8%88%E0%B8%B7%E0%B9%89%E0%B8%AD-](https://www.wealthdecor.com/content/29296/%E0%B8%94%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%B5%E0%B8%99%E0%B8%9B%E0%B8%B2%E0%B8%88%E0%B8%B7%E0%B9%89%E0%B8%AD-)
     
-8. Heavenly Stems in BaZi: Your Public vs. Private Self | Ethereal Entries - Medium, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://medium.com/ethereal-entries/the-script-you-show-the-world-the-heavenly-stems-b920f09e8411](https://medium.com/ethereal-entries/the-script-you-show-the-world-the-heavenly-stems-b920f09e8411)
+8. Heavenly Stems in [[bazi]]: Your Public vs. Private Self | Ethereal Entries - Medium, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://medium.com/ethereal-entries/the-script-you-show-the-world-the-heavenly-stems-b920f09e8411](https://medium.com/ethereal-entries/the-script-you-show-the-world-the-heavenly-stems-b920f09e8411)
     
 9. เคล็ดวิชาดวงจีน #1— 8 เรือน - Medium, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://medium.com/@QiMenAlchemy/%E0%B9%80%E0%B8%84%E0%B8%A5%E0%B9%87%E0%B8%94%E0%B8%A7%E0%B8%B4%E0%B8%8A%E0%B8%B2%E0%B8%94%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%B5%E0%B8%99-1-8-%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B8%AD%E0%B8%99-62a02bb9a063](https://medium.com/@QiMenAlchemy/%E0%B9%80%E0%B8%84%E0%B8%A5%E0%B9%87%E0%B8%94%E0%B8%A7%E0%B8%B4%E0%B8%8A%E0%B8%B2%E0%B8%94%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%B5%E0%B8%99-1-8-%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B8%AD%E0%B8%99-62a02bb9a063)
     
 10. Ba Zi/Earthly Branches - Wikibooks, open books for an open world, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://en.wikibooks.org/wiki/Ba_Zi/Earthly_Branches](https://en.wikibooks.org/wiki/Ba_Zi/Earthly_Branches)
     
-11. Bazi 101: The Beginner's Guide - Way Fengshui Group, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.wayfengshui.com/bazi-101-the-beginners-guide/](https://www.wayfengshui.com/bazi-101-the-beginners-guide/)
+11. [[bazi]] 101: The Beginner's Guide - Way Fengshui Group, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.wayfengshui.com/[[bazi]]-101-the-beginners-guide/](https://www.wayfengshui.com/[[bazi]]-101-the-beginners-guide/)
     
 12. 2026 Heavenly Stems and Earthly Branches Guide | 5 Key Points Beginner's Cheat Sheet, Must-Read for Newcomers!, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://discoveringrncp.hk/en/%E5%A4%A9%E5%B9%B2%E5%9C%B0%E6%94%AF](https://discoveringrncp.hk/en/%E5%A4%A9%E5%B9%B2%E5%9C%B0%E6%94%AF)
     
@@ -372,41 +377,41 @@ else:                    # เกิน
     
 15. ดวงจีน 113 | PDF - Scribd, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.scribd.com/document/707058107/%E0%B8%94%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%B5%E0%B8%99-113](https://www.scribd.com/document/707058107/%E0%B8%94%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%B5%E0%B8%99-113)
     
-16. BAZI ปาจื้อ การทำนายตามหลักดาวพยากรณ์ - FENG - SHUI - X, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.fengshuix.com/fengshui-content/chinese-bazi-stars](https://www.fengshuix.com/fengshui-content/chinese-bazi-stars)
+16. [[bazi]] ปาจื้อ การทำนายตามหลักดาวพยากรณ์ - FENG - SHUI - X, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.fengshuix.com/fengshui-content/chinese-[[bazi]]-stars](https://www.fengshuix.com/fengshui-content/chinese-[[bazi]]-stars)
     
 17. The Real Difference Between Strong and Weak Day Masters - Nova ..., เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://novamastersconsulting.com/the-real-difference-between-strong-and-weak-day-masters/](https://novamastersconsulting.com/the-real-difference-between-strong-and-weak-day-masters/)
     
-18. How to Know if You Have a Strong or Weak Bazi Chart - Hoseiki Jewelry, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://hoseiki.com/blogs/news/how-to-know-if-you-have-a-strong-or-weak-bazi-chart](https://hoseiki.com/blogs/news/how-to-know-if-you-have-a-strong-or-weak-bazi-chart)
+18. How to Know if You Have a Strong or Weak [[bazi]] Chart - Hoseiki Jewelry, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://hoseiki.com/blogs/news/how-to-know-if-you-have-a-strong-or-weak-[[bazi]]-chart](https://hoseiki.com/blogs/news/how-to-know-if-you-have-a-strong-or-weak-[[bazi]]-chart)
     
-19. Bazi: Thoughts on Weak/Strong - BaziCaterpillar - Medium, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://bazibutterfly.medium.com/bazi-thoughts-on-weak-strong-d128df86bde](https://bazibutterfly.medium.com/bazi-thoughts-on-weak-strong-d128df86bde)
+19. [[bazi]]: Thoughts on Weak/Strong - BaziCaterpillar - Medium, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://bazibutterfly.medium.com/[[bazi]]-thoughts-on-weak-strong-d128df86bde](https://bazibutterfly.medium.com/[[bazi]]-thoughts-on-weak-strong-d128df86bde)
     
-20. Can You Make Big Money? | Weak Day Master Bazi Reading & Analysis - YouTube, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.youtube.com/watch?v=tobPZ8olhYk](https://www.youtube.com/watch?v=tobPZ8olhYk)
+20. Can You Make Big Money? | Weak Day Master [[bazi]] Reading & Analysis - YouTube, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.youtube.com/watch?v=tobPZ8olhYk](https://www.youtube.com/watch?v=tobPZ8olhYk)
     
 21. 05 BZM2 Mastering Ur Future - Analysing Character and The Useful God 2 - Scribd, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.scribd.com/document/726963933/05-BZM2-mastering-ur-future-Analysing-Character-and-The-Useful-God-2](https://www.scribd.com/document/726963933/05-BZM2-mastering-ur-future-Analysing-Character-and-The-Useful-God-2)
     
-22. Is Your Day Master Strong or Weak? | Bazi Birth Chart Reading - YouTube, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.youtube.com/watch?v=qKQ_vCjOdkU](https://www.youtube.com/watch?v=qKQ_vCjOdkU)
+22. Is Your Day Master Strong or Weak? | [[bazi]] Birth Chart Reading - YouTube, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.youtube.com/watch?v=qKQ_vCjOdkU](https://www.youtube.com/watch?v=qKQ_vCjOdkU)
     
 23. Category: YongShen 用神 - davidyek, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.davidyek.com/yifengshui/category/yongshen-2999231070](https://www.davidyek.com/yifengshui/category/yongshen-2999231070)
     
 24. 捉用神- TO CATCH THE USEFUL GOD - DAVIDYEK, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.davidyek.com/yifengshui/-to-catch-the-useful-god](https://www.davidyek.com/yifengshui/-to-catch-the-useful-god)
     
-25. Ten Gods Analysis in Bazi | PDF | Wellness | Science & Mathematics - Scribd, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.scribd.com/document/248634493/Ten-Gods-Intro](https://www.scribd.com/document/248634493/Ten-Gods-Intro)
+25. Ten Gods Analysis in [[bazi]] | PDF | Wellness | Science & Mathematics - Scribd, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.scribd.com/document/248634493/Ten-Gods-Intro](https://www.scribd.com/document/248634493/Ten-Gods-Intro)
     
-26. Bazi 101: Understanding the Ten Deities in Bazi Analysis - Way ..., เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.wayfengshui.com/bazi-101-understanding-the-ten-deities-in-bazi-analysis/](https://www.wayfengshui.com/bazi-101-understanding-the-ten-deities-in-bazi-analysis/)
+26. [[bazi]] 101: Understanding the Ten Deities in [[bazi]] Analysis - Way ..., เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.wayfengshui.com/[[bazi]]-101-understanding-the-ten-deities-in-[[bazi]]-analysis/](https://www.wayfengshui.com/[[bazi]]-101-understanding-the-ten-deities-in-[[bazi]]-analysis/)
     
-27. Introduction to the 10 Gods in BaZi - Nova Masters Consulting, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://novamastersconsulting.com/introduction-to-the-10-gods-in-bazi/](https://novamastersconsulting.com/introduction-to-the-10-gods-in-bazi/)
+27. Introduction to the 10 Gods in [[bazi]] - Nova Masters Consulting, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://novamastersconsulting.com/introduction-to-the-10-gods-in-[[bazi]]/](https://novamastersconsulting.com/introduction-to-the-10-gods-in-[[bazi]]/)
     
-28. Understanding Bazi's 10 Gods | PDF | Water | Wealth - Scribd, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.scribd.com/document/339663464/BAZI-10-Gods](https://www.scribd.com/document/339663464/BAZI-10-Gods)
+28. Understanding [[bazi]]'s 10 Gods | PDF | Water | Wealth - Scribd, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.scribd.com/document/339663464/[[bazi]]-10-Gods](https://www.scribd.com/document/339663464/[[bazi]]-10-Gods)
     
-29. Understanding the Five Star Roles in BaZi - Nova Masters Consulting, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://novamastersconsulting.com/understanding-the-five-star-roles-in-bazi/](https://novamastersconsulting.com/understanding-the-five-star-roles-in-bazi/)
+29. Understanding the Five Star Roles in [[bazi]] - Nova Masters Consulting, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://novamastersconsulting.com/understanding-the-five-star-roles-in-[[bazi]]/](https://novamastersconsulting.com/understanding-the-five-star-roles-in-[[bazi]]/)
     
-30. How to Tell If You're in a “Good” Luck Pillar in BaZi - Nova Masters ..., เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://novamastersconsulting.com/how-to-tell-if-youre-in-a-good-luck-pillar-in-bazi/](https://novamastersconsulting.com/how-to-tell-if-youre-in-a-good-luck-pillar-in-bazi/)
+30. How to Tell If You're in a “Good” Luck Pillar in [[bazi]] - Nova Masters ..., เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://novamastersconsulting.com/how-to-tell-if-youre-in-a-good-luck-pillar-in-[[bazi]]/](https://novamastersconsulting.com/how-to-tell-if-youre-in-a-good-luck-pillar-in-[[bazi]]/)
     
 31. Ba Zi/Luck Pillar - Wikibooks, open books for an open world, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://en.wikibooks.org/wiki/Ba_Zi/Luck_Pillar](https://en.wikibooks.org/wiki/Ba_Zi/Luck_Pillar)
     
-32. BaZi Luck Pillars: Why Decades Feel Different | Ethereal Entries - Medium, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://medium.com/ethereal-entries/bazi-luck-pillars-why-your-30s-felt-like-a-funeral-and-your-40s-might-feel-like-spring-cb67c077c346](https://medium.com/ethereal-entries/bazi-luck-pillars-why-your-30s-felt-like-a-funeral-and-your-40s-might-feel-like-spring-cb67c077c346)
+32. [[bazi]] Luck Pillars: Why Decades Feel Different | Ethereal Entries - Medium, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://medium.com/ethereal-entries/[[bazi]]-luck-pillars-why-your-30s-felt-like-a-funeral-and-your-40s-might-feel-like-spring-cb67c077c346](https://medium.com/ethereal-entries/[[bazi]]-luck-pillars-why-your-30s-felt-like-a-funeral-and-your-40s-might-feel-like-spring-cb67c077c346)
     
-33. ดวงจีน ปาจื้อ BAZI (八字) คืออะไร?? - FENG - SHUI - X, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.fengshuix.com/fengshui-content/what-is-bazi-destiny-analysis](https://www.fengshuix.com/fengshui-content/what-is-bazi-destiny-analysis)
+33. ดวงจีน ปาจื้อ [[bazi]] (八字) คืออะไร?? - FENG - SHUI - X, เข้าถึงเมื่อ มิถุนายน 3, 2026 [https://www.fengshuix.com/fengshui-content/what-is-[[bazi]]-destiny-analysis](https://www.fengshuix.com/fengshui-content/what-is-[[bazi]]-destiny-analysis)
     
 
 **

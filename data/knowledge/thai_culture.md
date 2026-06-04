@@ -1,3 +1,8 @@
+---
+title: ภาษาไทย — วัฒนธรรมไทย (Thai Culture)
+tags: [knowledge, vault]
+aliases: [thai_culture]
+---
 # ภาษาไทย — วัฒนธรรมไทย (Thai Culture)
 
 ## วันสำคัญทางศาสนาและประเพณี

@@ -1,7 +1,12 @@
-# 📖 คลังความหมาย Emoji สำหรับ Jinx AI
+---
+title: 📖 คลังความหมาย [[emoji]] สำหรับ Jinx AI
+tags: [knowledge, vault]
+aliases: [emoji]
+---
+# 📖 คลังความหมาย [[emoji]] สำหรับ Jinx AI
 
-ตารางนี้ใช้แมป Emoji → Intent, Domain, Action, TopicHint, และตัวเลือกเสริมต่างๆ  
-เรียงลำดับจาก Emoji ยาวสุดไปสั้นสุด เพื่อให้ regex จับได้ถูกต้อง
+ตารางนี้ใช้แมป [[emoji]] → [[intent]], Domain, Action, TopicHint, และตัวเลือกเสริมต่างๆ  
+เรียงลำดับจาก [[emoji]] ยาวสุดไปสั้นสุด เพื่อให้ regex จับได้ถูกต้อง
 
 > **คำอธิบายคอลัมน์**  
 > - `Emoji` : ลำดับอิโมจิที่ผู้ใช้พิมพ์นำหน้า  
@@ -16,7 +21,7 @@
 
 ## 🧮 กลุ่มคำนวณและคณิตศาสตร์
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
 | 🔢📝 | solve | math | solve_with_steps | equation_solving | true | คำนวณพร้อมแสดงวิธีทำทีละขั้น |
 | 🔢 | solve | math | compute | calculation | false | คำนวณอย่างเดียว (ไม่ต้องแสดงวิธี) |
@@ -29,7 +34,7 @@
 
 ## 🌐 กลุ่มค้นหาและเว็บ
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
 | 🔍 | search | web | retrieve | search_query | false | ค้นหาข้อมูลทั่วไป |
 | 🌐🔍 | search | web | deep_search | web_search | false | ค้นหาแบบเจาะลึก (deep search) |
@@ -41,7 +46,7 @@
 
 ## 📝 กลุ่มสร้างและเขียน
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
 | ✍️📝 | create | code | write_code | code_generation | false | เขียนโค้ดให้ |
 | ✍️📄 | create | file | write_document | document_creation | false | สร้างเอกสาร / โน้ต |
@@ -53,7 +58,7 @@
 
 ## 🤖 กลุ่มระบบและควบคุมบอท
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
 | 🤖 | execute | system | run_bot | assistant | false | เรียกใช้บอท |
 | 🗑️ | delete | file | remove | deletion | false | ลบไฟล์ / ข้อมูล |
@@ -67,7 +72,7 @@
 
 ## 📞 กลุ่มสื่อสาร
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
 | 📤 | send | communication | dispatch | message | false | ส่งข้อความ |
 | 📞 | call | communication | dial | phone_call | false | โทรศัพท์ |
@@ -79,7 +84,7 @@
 
 ## 🗂️ กลุ่มจัดการไฟล์และความรู้
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
 | 📂🗑️ | delete | file | remove_folder | folder_deletion | false | ลบโฟลเดอร์ |
 | 📄✏️ | create | file | edit_file | file_edit | false | แก้ไขไฟล์ |
@@ -91,7 +96,7 @@
 
 ## ⏰ กลุ่มเตือนความจำและเวลา
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
 | ⏰🔔 | remind | utility | set_reminder | time_event | false | ตั้งเตือนเวลา |
 | 📅 | schedule | utility | plan | calendar_event | false | จัดการปฏิทิน / นัดหมาย |
@@ -102,7 +107,7 @@
 
 ## 🎨 กลุ่มสร้างสรรค์และความบันเทิง
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
 | 🎨 | create | design | draw | art | false | วาดรูป |
 | 🎵 | play | media | play_music | song | false | เล่นเพลง |
@@ -112,9 +117,9 @@
 
 ---
 
-## 💬 กลุ่มอารมณ์และการสนทนาทั่วไป (ใช้เป็น intent หลักหรือเสริม)
+## 💬 กลุ่มอารมณ์และการสนทนาทั่วไป (ใช้เป็น [[intent]] หลักหรือเสริม)
 
-| Emoji | Intent | Domain | Action | TopicHint | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | Note |
 |-------|--------|--------|--------|-----------|------|
 | 😊 | query | general | express_happy | happy_feeling | ดีใจ / ชอบใจ |
 | 😢 | query | general | express_sad | sad_feeling | เศร้า / เสียใจ |
@@ -129,9 +134,9 @@
 
 ---
 
-## 🧩 Emoji ที่มีความหมายพิเศษ (ใช้ร่วมกับคำสั่งอื่น)
+## 🧩 [[emoji]] ที่มีความหมายพิเศษ (ใช้ร่วมกับคำสั่งอื่น)
 
-| Emoji | ฟังก์ชันเสริม | ตัวอย่างการใช้ |
+| [[emoji]] | ฟังก์ชันเสริม | ตัวอย่างการใช้ |
 |-------|----------------|----------------|
 | 🔁 | ทำซ้ำ / รันอีกครั้ง | `🔁 🔢📝 2+2` → คำนวณซ้ำ |
 | 🔀 | สุ่ม / เปลี่ยนลำดับ | `🔀 🎵` → สุ่มเพลง |
@@ -142,19 +147,19 @@
 
 ## 📌 หมายเหตุการใช้งาน
 
-1. **Emoji ซ้อนกันได้** – ผู้ใช้สามารถพิมพ์ `🔢📝 3^x=x^9` หรือ `🔍🔢 10*20` ได้ (ระบบจะจับคู่จากยาวสุดก่อน)
-2. **ถ้าไม่เจอ Emoji ที่แมป** – ระบบจะ fallback ไปใช้ keyword matching ปกติ
-3. **กรณีมีหลาย Emoji ในข้อความ** – จะจับเฉพาะชุดแรกที่ขึ้นต้นเท่านั้น (ส่วนที่เหลือถือเป็นส่วนหนึ่งของพารามิเตอร์)
+1. **[[emoji]] ซ้อนกันได้** – ผู้ใช้สามารถพิมพ์ `🔢📝 3^x=x^9` หรือ `🔍🔢 10*20` ได้ (ระบบจะจับคู่จากยาวสุดก่อน)
+2. **ถ้าไม่เจอ [[emoji]] ที่แมป** – ระบบจะ fallback ไปใช้ keyword matching ปกติ
+3. **กรณีมีหลาย [[emoji]] ในข้อความ** – จะจับเฉพาะชุดแรกที่ขึ้นต้นเท่านั้น (ส่วนที่เหลือถือเป็นส่วนหนึ่งของพารามิเตอร์)
 4. **การแสดงวิธีทำ (`ShowSteps`)** – ใช้ในกลุ่ม solve เป็นหลัก ถ้าเป็น true engine ต้องแสดงรายละเอียดการแก้ปัญหา
 5. **สามารถเพิ่มแถวใหม่ได้ทุกเมื่อ** – ระบบโหลดไฟล์นี้ตอนเริ่มต้น ถ้าอยากโหลดใหม่แบบ real-time ให้ implement hot-reload
 
 ---
 
-## 🔧 ตัวอย่างการเพิ่ม Emoji ใหม่ (สำหรับนักพัฒนา)
+## 🔧 ตัวอย่างการเพิ่ม [[emoji]] ใหม่ (สำหรับนักพัฒนา)
 
-ถ้าต้องการเพิ่ม Emoji `🧪🔬` สำหรับการทดลองทางวิทยาศาสตร์ ให้เพิ่มหนึ่งแถวในตาราง:
+ถ้าต้องการเพิ่ม [[emoji]] `🧪🔬` สำหรับการทดลองทางวิทยาศาสตร์ ให้เพิ่มหนึ่งแถวในตาราง:
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
 | 🧪🔬 | solve | science | experiment | lab_calculation | true | คำนวณผลทดลอง |
 
@@ -166,23 +171,23 @@
 อัปเดตล่าสุด: 2026-05-31
 
 
-## MBTI Face Emoji Mapping (สำหรับจับบุคลิกผู้ใช้)
+## [[mbti]] Face [[emoji]] Mapping (สำหรับจับบุคลิกผู้ใช้)
 
-| Emoji | Intent | Domain | Action | TopicHint | ShowSteps | Note |
+| [[emoji]] | [[intent]] | Domain | Action | TopicHint | ShowSteps | Note |
 |-------|--------|--------|--------|-----------|-----------|------|
-| 🧐 | personality | mbti | set_user_type | INTJ | false | ตั้งว่าผู้ใช้เป็น INTJ |
-| 🤓 | personality | mbti | set_user_type | INTP | false | ตั้งว่าผู้ใช้เป็น INTP |
-| 😤 | personality | mbti | set_user_type | ENTJ | false | ตั้งว่าผู้ใช้เป็น ENTJ |
-| 😏 | personality | mbti | set_user_type | ENTP | false | ตั้งว่าผู้ใช้เป็น ENTP |
-| 🥺 | personality | mbti | set_user_type | INFJ | false | ตั้งว่าผู้ใช้เป็น INFJ |
-| 😇 | personality | mbti | set_user_type | INFP | false | ตั้งว่าผู้ใช้เป็น INFP |
-| 🤗 | personality | mbti | set_user_type | ENFJ | false | ตั้งว่าผู้ใช้เป็น ENFJ |
-| 😜 | personality | mbti | set_user_type | ENFP | false | ตั้งว่าผู้ใช้เป็น ENFP |
-| 😐 | personality | mbti | set_user_type | ISTJ | false | ตั้งว่าผู้ใช้เป็น ISTJ |
-| 🥰 | personality | mbti | set_user_type | ISFJ | false | ตั้งว่าผู้ใช้เป็น ISFJ |
-| 😠 | personality | mbti | set_user_type | ESTJ | false | ตั้งว่าผู้ใช้เป็น ESTJ |
-| 😊 | personality | mbti | set_user_type | ESFJ | false | ตั้งว่าผู้ใช้เป็น ESFJ |
-| 😎 | personality | mbti | set_user_type | ISTP | false | ตั้งว่าผู้ใช้เป็น ISTP |
-| 😌 | personality | mbti | set_user_type | ISFP | false | ตั้งว่าผู้ใช้เป็น ISFP |
-| 😈 | personality | mbti | set_user_type | ESTP | false | ตั้งว่าผู้ใช้เป็น ESTP |
-| 🤪 | personality | mbti | set_user_type | ESFP | false | ตั้งว่าผู้ใช้เป็น ESFP |
+| 🧐 | personality | [[mbti]] | set_user_type | INTJ | false | ตั้งว่าผู้ใช้เป็น INTJ |
+| 🤓 | personality | [[mbti]] | set_user_type | INTP | false | ตั้งว่าผู้ใช้เป็น INTP |
+| 😤 | personality | [[mbti]] | set_user_type | ENTJ | false | ตั้งว่าผู้ใช้เป็น ENTJ |
+| 😏 | personality | [[mbti]] | set_user_type | ENTP | false | ตั้งว่าผู้ใช้เป็น ENTP |
+| 🥺 | personality | [[mbti]] | set_user_type | INFJ | false | ตั้งว่าผู้ใช้เป็น INFJ |
+| 😇 | personality | [[mbti]] | set_user_type | INFP | false | ตั้งว่าผู้ใช้เป็น INFP |
+| 🤗 | personality | [[mbti]] | set_user_type | ENFJ | false | ตั้งว่าผู้ใช้เป็น ENFJ |
+| 😜 | personality | [[mbti]] | set_user_type | ENFP | false | ตั้งว่าผู้ใช้เป็น ENFP |
+| 😐 | personality | [[mbti]] | set_user_type | ISTJ | false | ตั้งว่าผู้ใช้เป็น ISTJ |
+| 🥰 | personality | [[mbti]] | set_user_type | ISFJ | false | ตั้งว่าผู้ใช้เป็น ISFJ |
+| 😠 | personality | [[mbti]] | set_user_type | ESTJ | false | ตั้งว่าผู้ใช้เป็น ESTJ |
+| 😊 | personality | [[mbti]] | set_user_type | ESFJ | false | ตั้งว่าผู้ใช้เป็น ESFJ |
+| 😎 | personality | [[mbti]] | set_user_type | ISTP | false | ตั้งว่าผู้ใช้เป็น ISTP |
+| 😌 | personality | [[mbti]] | set_user_type | ISFP | false | ตั้งว่าผู้ใช้เป็น ISFP |
+| 😈 | personality | [[mbti]] | set_user_type | ESTP | false | ตั้งว่าผู้ใช้เป็น ESTP |
+| 🤪 | personality | [[mbti]] | set_user_type | ESFP | false | ตั้งว่าผู้ใช้เป็น ESFP |

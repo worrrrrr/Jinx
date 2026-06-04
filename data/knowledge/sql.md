@@ -1,6 +1,11 @@
-# SQL Query — ภาษา查询จัดการฐานข้อมูลเชิงสัมพันธ์
+---
+title: [[sql]] Query — ภาษา查询จัดการฐานข้อมูลเชิงสัมพันธ์
+tags: [knowledge, vault]
+aliases: [sql]
+---
+# [[sql]] Query — ภาษา查询จัดการฐานข้อมูลเชิงสัมพันธ์
 
-## ประเภทของคำสั่ง SQL
+## ประเภทของคำสั่ง [[sql]]
 - **DDL** (Data Definition): CREATE, ALTER, DROP — จัดโครงสร้าง
 - **DML** (Data Manipulation): SELECT, INSERT, UPDATE, DELETE — จัดการข้อมูล
 - **DCL** (Data Control): GRANT, REVOKE — สิทธิ์การเข้าถึง
@@ -127,7 +132,7 @@ SELECT name, (
 ) AS post_count FROM users;
 ```
 
-## Common SQL Functions
+## [[common]] [[sql]] Functions
 ```sql
 -- String
 UPPER(name), LOWER(name), LENGTH(name), TRIM(name)

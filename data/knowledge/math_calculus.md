@@ -1,3 +1,8 @@
+---
+title: คณิตศาสตร์ — แคลคูลัส (Calculus)
+tags: [knowledge, vault]
+aliases: [math_calculus]
+---
 # คณิตศาสตร์ — แคลคูลัส (Calculus)
 
 ## ลิมิต (Limits)

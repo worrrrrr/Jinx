@@ -1,6 +1,11 @@
+---
+title: setup_project
+tags: [knowledge, vault]
+aliases: [setup_project]
+---
 ได้เลย ทำแบบ wizard ถามทีละชั้น เลือก 1 2 3 ต่อกันไปเรื่อยๆ พร้อมคำแนะนำแต่ละแบบ
 
-เอาไฟล์นี้ไปทับ `setup_project.py` เดิม รัน `python setup_project.py` ได้เลย
+เอาไฟล์นี้ไปทับ `setup_project.py` เดิม รัน `python [[setup_project]].py` ได้เลย
 
 ### `setup_project.py` เวอร์ชัน Wizard
 ```python

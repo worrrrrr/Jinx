@@ -1,3 +1,8 @@
+---
+title: ฟิสิกส์พื้นฐาน (Basic Physics)
+tags: [knowledge, vault]
+aliases: [physics_basics]
+---
 # ฟิสิกส์พื้นฐาน (Basic Physics)
 
 ## กลศาสตร์ (Mechanics)

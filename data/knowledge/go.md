@@ -1,4 +1,9 @@
-# Go (Golang) — ภาษาเรียบง่าย เร็ว เหมาะกับ backend และระบบ分布式
+---
+title: [[go]] (Golang) — ภาษาเรียบง่าย เร็ว เหมาะกับ backend และระบบ分布式
+tags: [knowledge, vault]
+aliases: [go]
+---
+# [[go]] (Golang) — ภาษาเรียบง่าย เร็ว เหมาะกับ backend และระบบ分布式
 
 ## ติดตั้งและเริ่มต้น
 ```bash

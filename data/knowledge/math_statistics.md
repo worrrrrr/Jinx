@@ -1,3 +1,8 @@
+---
+title: คณิตศาสตร์ — สถิติและความน่าจะเป็น (Statistics & Probability)
+tags: [knowledge, vault]
+aliases: [math_statistics]
+---
 # คณิตศาสตร์ — สถิติและความน่าจะเป็น (Statistics & Probability)
 
 ## สถิติเบื้องต้น

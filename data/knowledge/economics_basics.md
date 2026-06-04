@@ -1,3 +1,8 @@
+---
+title: ความรู้ทั่วไป — เศรษฐศาสตร์พื้นฐาน (Basic Economics)
+tags: [knowledge, vault]
+aliases: [economics_basics]
+---
 # ความรู้ทั่วไป — เศรษฐศาสตร์พื้นฐาน (Basic Economics)
 
 ## อุปสงค์และอุปทาน (Supply & Demand)

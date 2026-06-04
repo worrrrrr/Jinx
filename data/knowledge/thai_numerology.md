@@ -1,4 +1,9 @@
-# Thai Numerology Knowledge Base
+---
+title: Thai [[numerology]] Knowledge Base
+tags: [knowledge, vault]
+aliases: [thai_numerology]
+---
+# Thai [[numerology]] Knowledge Base
 
 ---
 
@@ -205,7 +210,7 @@ THAI_NAME_WORDS = {
     "อินทร์": ("พระอินทร์ ผู้เป็นใหญ่ในสวรรค์", 20),
 }
 ```
-# คลังความรู้เลขศาสตร์และอักขระมงคลไทย (Thai Numerology Knowledge Base)
+# คลังความรู้เลขศาสตร์และอักขระมงคลไทย (Thai [[numerology]] Knowledge Base)
 
 ไฟล์นี้เก็บข้อมูลอ้างอิงสำหรับค่าตัวเลข พลังอายตนะ 6 และความหมายเลขศาสตร์ดวงดาว 
 หลีกเลี่ยงการแก้ไขโค้ดโดยตรงเมื่อต้องการปรับปรุงคำอธิบายความหมาย
@@ -260,7 +265,7 @@ THAI_NAME_WORDS = {
 
 ---
 
-## 4. ความหมายตัวเลขศาสตร์หลัก (Key Numerology Meanings)
+## 4. ความหมายตัวเลขศาสตร์หลัก (Key [[numerology]] Meanings)
 
 | ตัวเลข | พลังดวงดาว | ความหมายเชิงย่อ | คำอธิบายเชิงลึก |
 | :---: | :--- | :--- | :--- |

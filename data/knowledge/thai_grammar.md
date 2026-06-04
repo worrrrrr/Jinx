@@ -1,3 +1,8 @@
+---
+title: ภาษาไทย — ไวยากรณ์และการใช้ภาษา (Thai Grammar)
+tags: [knowledge, vault]
+aliases: [thai_grammar]
+---
 # ภาษาไทย — ไวยากรณ์และการใช้ภาษา (Thai Grammar)
 
 ## ลักษณะของภาษาไทย

@@ -1,3 +1,8 @@
+---
+title: ความรู้ทั่วไป — ประวัติศาสตร์โลก (World History)
+tags: [knowledge, vault]
+aliases: [world_history]
+---
 # ความรู้ทั่วไป — ประวัติศาสตร์โลก (World History)
 
 ## ยุคก่อนประวัติศาสตร์

@@ -1,3 +1,8 @@
+---
+title: การเขียนโปรแกรม — เว็บ (Web Basics)
+tags: [knowledge, vault]
+aliases: [web_basics]
+---
 # การเขียนโปรแกรม — เว็บ (Web Basics)
 
 ## HTTP (Hypertext Transfer Protocol)
@@ -49,7 +54,7 @@
 - Flexbox: จัดเรียง element แบบ 1 มิติ (แถว/คอลัมน์)
 - Grid: จัดเรียง element แบบ 2 มิติ
 
-### JavaScript
+### [[javascript]]
 - ภาษาโปรแกรมฝั่ง client (รันใน browser)
 - DOM manipulation: เปลี่ยนแปลงหน้าเว็บแบบ dynamic
 - Event handling: จัดการ click, submit, keyboard
@@ -59,7 +64,7 @@
 ## Backend
 
 ### Server-side Programming
-- **Web Framework**: Express (Node.js), Django/Flask (Python), Spring Boot (Java), ASP.NET (C#)
+- **Web Framework**: Express (Node.js), Django/Flask ([[python]]), Spring Boot (Java), ASP.NET (C#)
 - **Route**: การจับคู่ URL กับ handler function
 - **Middleware**: ฟังก์ชันที่ทำงานระหว่าง request และ response
 - **Session**: เก็บสถานะผู้ใช้ชั่วคราว (มักใช้ cookie + session ID)
@@ -86,6 +91,6 @@
 
 - **HTTPS**: HTTP + SSL/TLS — เข้ารหัสข้อมูลระหว่าง client-server
 - **XSS (Cross-Site Scripting)**: แทรก script ไม่พึงประสงค์ → ต้อง sanitize input
-- **SQL Injection**: แทรก SQL ผ่าน input → ใช้ parameterized query
+- **[[sql]] Injection**: แทรก [[sql]] ผ่าน input → ใช้ parameterized query
 - **CSRF (Cross-Site Request Forgery)**: หลอกให้ผู้ใช้กระทำโดยไม่ตั้งใจ → ใช้ CSRF token
 - **Content Security Policy (CSP)**: header ควบคุม resource ที่ browser โหลด

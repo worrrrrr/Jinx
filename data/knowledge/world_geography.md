@@ -1,3 +1,8 @@
+---
+title: ความรู้ทั่วไป — ภูมิศาสตร์โลก (World Geography)
+tags: [knowledge, vault]
+aliases: [world_geography]
+---
 # ความรู้ทั่วไป — ภูมิศาสตร์โลก (World Geography)
 
 ## โครงสร้างโลก
