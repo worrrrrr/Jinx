@@ -79,7 +79,8 @@ class OllamaProvider(LLMProvider):
         prompt: str,
         temperature: float = 0.3,
         max_tokens: int = 200,
-        system: Optional[str] = None
+        system: Optional[str] = None,
+        think: bool = False
     ):
 
         if not self._ready:

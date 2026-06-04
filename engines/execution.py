@@ -29,6 +29,7 @@ REQUIRED_TOOLS_CONFIG = [
     ("state_manager", "t_state"),
     ("bazi", "t_bazi"),
     ("name_analysis", "t_name_analysis"),  # 🔗 โมดูลวิเคราะห์ชื่อศาสตร์โบราณ 5 มิติ
+    ("synthesis", "t_synthesis"),          # 🔗 โมดูลสังเคราะห์ 4 ศาสตร์ดวงชะตาเทียบเคียงเปรียบเทียบ
 ]
 
 # รายชื่อเครื่องมือเสริมที่มีความเกี่ยวข้องกับปฏิทินดาราศาสตร์ระดับสูง
@@ -120,6 +121,9 @@ class ExecutionEngine:
             
             if LOADED_TOOLS.get("t_name_analysis") and hasattr(LOADED_TOOLS["t_name_analysis"], "get_tools"):
                 self.tools.update(LOADED_TOOLS["t_name_analysis"].get_tools())
+
+            if LOADED_TOOLS.get("t_synthesis") and hasattr(LOADED_TOOLS["t_synthesis"], "get_tools"):
+                self.tools.update(LOADED_TOOLS["t_synthesis"].get_tools())
 
             if LOADED_TOOLS.get("t_thai_astro") and hasattr(LOADED_TOOLS["t_thai_astro"], "get_tools"):
                 self.tools.update(LOADED_TOOLS["t_thai_astro"].get_tools())
@@ -462,20 +466,23 @@ class ExecutionEngine:
         }
 
     def _chat_handler(self, action: str, inp: str, entities: list) -> Dict[str, Any]:
-        if self.llm_core and self.llm_core.available:
-            for provider in self.llm_core.providers.values():
-                if provider.ready:
-                    try:
-                        response = provider.chat(
-                            prompt=inp,
-                            temperature=0.7,
-                            max_tokens=500
-                        )
-                        if response:
-                            return {"status": "success", "result": response, "direct_response": True}
-                    except Exception as e:
-                        logger.warning(f"Failed chatting with provider: {e}")
-                        continue
+        if self.llm_core and hasattr(self.llm_core, "providers"):
+            
+            # เช่น "ollama:jinx:latest" หรือ "groq:llama-3.3-70b-versatile"
+            target_provider = "ollama:gpt-oss:120b-cloud" 
+            
+            provider = self.llm_core.providers.get(target_provider)
+            
+            if provider and provider.ready:
+                try:
+                    return {
+                        "status": "success", 
+                        "result": provider.chat(prompt=inp, think=False), # ใส่ think=False ที่นี่ด้วย
+                        "direct_response": True
+                    }
+                except Exception as e:
+                    logger.error(f"Error calling {target_provider}: {e}")
+            
         return {"status": "success", "result": inp}
 
     def _qa_handler(self, action: str, inp: str, entities: list) -> Dict[str, Any]:

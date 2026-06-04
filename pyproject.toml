@@ -9,6 +9,7 @@ dependencies = [
     "click>=8.2",
     "cnlunar>=0.2.4",
     "dotenv>=0.9.9",
+    "duckduckgo-search>=8.1.1",
     "groq>=1.4.0",
     "markdown>=3.7",
     "numpy>=2.0.0",
