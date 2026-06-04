@@ -1,23 +1,28 @@
-# Intent ของมนุษย์ (Human Intent)
+---
+title: [[intent]] ของมนุษย์ (Human [[intent]])
+tags: [knowledge, vault]
+aliases: [Human Intent]
+---
+# [[intent]] ของมนุษย์ (Human [[intent]])
 
 ## Executive Summary
 
-**Intent (เจตจำนง/ความตั้งใจ)** คือแรงขับเคลื่อนเบื้องหลังทุกการกระทำ คำพูด หรือการค้นหาของมนุษย์ ในบริบทของ [[System Architecture]] และ [[AI Interaction]] การเข้าใจ Intent ไม่ใช่แค่การอ่านข้อความ (Literal text) แต่คือการถอดรหัสเพื่อหา **"เป้าหมายที่แท้จริง" (Underlying Goal)** ที่ซ่อนอยู่ใต้พฤติกรรมนั้น
+**[[intent]] (เจตจำนง/ความตั้งใจ)** คือแรงขับเคลื่อนเบื้องหลังทุกการกระทำ คำพูด หรือการค้นหาของมนุษย์ ในบริบทของ [[System Architecture]] และ [[AI Interaction]] การเข้าใจ [[intent]] ไม่ใช่แค่การอ่านข้อความ (Literal text) แต่คือการถอดรหัสเพื่อหา **"เป้าหมายที่แท้จริง" (Underlying Goal)** ที่ซ่อนอยู่ใต้พฤติกรรมนั้น
 
 ## Key Insights
 
-- **Text $\neq$ Intent:** สิ่งที่มนุษย์พิมพ์หรือพูด มักเป็นเพียงวิธีการ (Means) ไม่ใช่เป้าหมายสูงสุด (End goal)
+- **Text $\neq$ [[intent]]:** สิ่งที่มนุษย์พิมพ์หรือพูด มักเป็นเพียงวิธีการ (Means) ไม่ใช่เป้าหมายสูงสุด (End goal)
     
-- **Context Dependency:** Intent เปลี่ยนแปลงตามบริบท (เวลา, สถานที่, อารมณ์, และประวัติการใช้งาน) ระบบที่ขาด [[Context Awareness]] จะตีความ Intent ผิดพลาด
+- **Context Dependency:** [[intent]] เปลี่ยนแปลงตามบริบท (เวลา, สถานที่, อารมณ์, และประวัติการใช้งาน) ระบบที่ขาด [[Context Awareness]] จะตีความ [[intent]] ผิดพลาด
     
-- **Actionability:** การเข้าใจ Intent ที่สมบูรณ์แบบ ต้องนำไปสู่การคัดเลือก Action หรือ Response ที่มีประสิทธิภาพที่สุด (Lowest Friction)
+- **Actionability:** การเข้าใจ [[intent]] ที่สมบูรณ์แบบ ต้องนำไปสู่การคัดเลือก Action หรือ Response ที่มีประสิทธิภาพที่สุด (Lowest Friction)
     
 
 ## Core Concepts & Classification
 
-ในการออกแบบระบบจำแนกเจตจำนง (Intent Classification) สามารถแบ่ง Intent หลักของมนุษย์ออกเป็น 4 ประเภท (อ้างอิงตามหลัก Search & Interaction Intent):
+ในการออกแบบระบบจำแนกเจตจำนง ([[intent]] Classification) สามารถแบ่ง [[intent]] หลักของมนุษย์ออกเป็น 4 ประเภท (อ้างอิงตามหลัก Search & Interaction [[intent]]):
 
-### 1. Informational Intent (ต้องการรู้)
+### 1. Informational [[intent]] (ต้องการรู้)
 
 - **Core:** มนุษย์ต้องการคำตอบ ความรู้ หรือคำอธิบายเพื่อลดความไม่รู้ (Uncertainty)
     
@@ -26,7 +31,7 @@
 - **System Handling:** คืนค่าข้อมูลที่กระชับ ถูกต้อง และตรงประเด็น (Knowledge Retrieval)
     
 
-### 2. Navigational Intent (ต้องการไป)
+### 2. Navigational [[intent]] (ต้องการไป)
 
 - **Core:** มนุษย์มีจุดหมายปลายทางที่แน่ชัดในใจอยู่แล้ว ทั้งในโลกจริงหรือโลกดิจิทัล
     
@@ -35,7 +40,7 @@
 - **System Handling:** ส่งผู้ใช้ไปยังจุดหมายโดยตรง ลดขั้นตอนการเปลี่ยนหน้า (Routing/Deep Linking)
     
 
-### 3. Transactional Intent (ต้องการทำ/ซื้อ)
+### 3. Transactional [[intent]] (ต้องการทำ/ซื้อ)
 
 - **Core:** มนุษย์ต้องการทำธุรกรรม หรือทำภารกิจให้สำเร็จ (Action-oriented)
     
@@ -53,11 +58,11 @@
 - **System Handling:** นำเสนอข้อมูลในรูปแบบ [[Data Matrix]] หรือตารางเปรียบเทียบที่เห็นภาพชัดเจน
     
 
-## Engineering the Intent Architecture
+## Engineering the [[intent]] Architecture
 
-เบื้องหลังการทำงานของ AI และระบบค้นหาในการจับ Intent ประกอบด้วย Pipeline สำคัญ:
+เบื้องหลังการทำงานของ AI และระบบค้นหาในการจับ [[intent]] ประกอบด้วย Pipeline สำคัญ:
 
-Python
+[[python]]
 
 ```
 def process_user_input(user_input, user_context):
@@ -75,14 +80,14 @@ def process_user_input(user_input, user_context):
     return execute_system_action(predicted_intent, resolved_context)
 ```
 
-- **[[Natural Language Understanding (NLU)]]:** ใช้ในขั้นตอนการทำ Intent Classification และ Entity Extraction (สกัดตัวแปรที่จำเป็น)
+- **[[Natural Language Understanding (NLU)]]:** ใช้ในขั้นตอนการทำ [[intent]] Classification และ Entity Extraction (สกัดตัวแปรที่จำเป็น)
     
 - **[[Vector Embeddings]]:** แปลงข้อความของมนุษย์ให้อยู่ในรูปแบบพิกัดทางคณิตศาสตร์ เพื่อหาความใกล้เคียงทางความหมาย (Semantic Similarity) มากกว่าการจับคู่คำพ้องเสียง (Keyword Matching)
-# Systemic Architecture of Human Intent: 30 Conceptual Archetypes
+# Systemic Architecture of Human [[intent]]: 30 Conceptual Archetypes
 
 ## Executive Summary
 
-การจำแนก Intent ในระดับ System Architecture และ Cognitive Computing เพื่อใช้ในการทำ Matrix Mapping, Vector Space Search และ NLU Modeling โดยแบ่งออกเป็น 30 รูปแบบเชิงลึกตามมิติพฤติกรรม จิตวิทยา และโครงสร้างข้อมูล
+การจำแนก [[intent]] ในระดับ System Architecture และ Cognitive Computing เพื่อใช้ในการทำ Matrix Mapping, Vector Space Search และ NLU Modeling โดยแบ่งออกเป็น 30 รูปแบบเชิงลึกตามมิติพฤติกรรม จิตวิทยา และโครงสร้างข้อมูล
 
 ## 1. Core Cognitive & Architectural Intents
 
@@ -162,7 +167,7 @@ def process_user_input(user_input, user_context):
 
 ### [[9. Generative Intent]] (ต้องการสร้างสิ่งใหม่จากศูนย์)
 
-- **Context:** ผู้ใช้มีแนวคิดคร่าวๆ (Prompt/Seed) แต่ต้องการ Asset หรือ Code ที่สมบูรณ์
+- **Context:** ผู้ใช้มีแนวคิดคร่าวๆ ([[prompt]]/Seed) แต่ต้องการ Asset หรือ Code ที่สมบูรณ์
     
 - **Key Takeaways:** Output ที่เป็น Structural Text, Code Base, หรือ Object-Oriented Blueprint
     
@@ -368,7 +373,7 @@ def process_user_input(user_input, user_context):
 
 ## Implementation Template for NLU Systems
 
-เมื่อสถาปนิกต้องการนำ 30 Intents นี้ไปใช้ในระบบ [[Intent Classifier]] สามารถใช้ JSON Schema นี้เป็นพิมพ์เขียวในการทำ Named Entity Recognition (NER) และ Intent Mapping:
+เมื่อสถาปนิกต้องการนำ 30 Intents นี้ไปใช้ในระบบ [[Intent Classifier]] สามารถใช้ JSON Schema นี้เป็นพิมพ์เขียวในการทำ Named Entity Recognition (NER) และ [[intent]] Mapping:
 
 JSON
 

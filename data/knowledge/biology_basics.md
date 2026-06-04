@@ -1,3 +1,8 @@
+---
+title: ชีววิทยาพื้นฐาน (Basic Biology)
+tags: [knowledge, vault]
+aliases: [biology_basics]
+---
 # ชีววิทยาพื้นฐาน (Basic Biology)
 
 ## เซลล์ (Cells)

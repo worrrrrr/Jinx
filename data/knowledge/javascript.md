@@ -1,4 +1,9 @@
-# JavaScript — ภาษาโปรแกรมฝั่งไคลเอนต์และเซิร์ฟเวอร์
+---
+title: [[javascript]] — ภาษาโปรแกรมฝั่งไคลเอนต์และเซิร์ฟเวอร์
+tags: [knowledge, vault]
+aliases: [javascript]
+---
+# [[javascript]] — ภาษาโปรแกรมฝั่งไคลเอนต์และเซิร์ฟเวอร์
 
 ## ชนิดข้อมูลพื้นฐาน (Primitive Types)
 - **String**: `"hello"`, `'world'`, `` `template` ``
@@ -72,7 +77,7 @@ export default class Calculator { /* ... */ }
 import Calculator, { add } from "./math.js";
 ```
 
-## Common Array Methods
+## [[common]] Array Methods
 ```javascript
 const nums = [1, 2, 3, 4, 5];
 nums.map(x => x * 2);           // [2, 4, 6, 8, 10]

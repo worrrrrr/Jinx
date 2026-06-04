@@ -1,6 +1,11 @@
-# Rust — ภาษาโปรแกรมระบบ ปลอดภัยและเร็ว
+---
+title: [[rust]] — ภาษาโปรแกรมระบบ ปลอดภัยและเร็ว
+tags: [knowledge, vault]
+aliases: [rust]
+---
+# [[rust]] — ภาษาโปรแกรมระบบ ปลอดภัยและเร็ว
 
-Rust เน้นความปลอดภัยของหน่วยความจำ (memory safety) โดยไม่ต้องใช้ garbage collector
+[[rust]] เน้นความปลอดภัยของหน่วยความจำ (memory safety) โดยไม่ต้องใช้ garbage collector
 
 ## ติดตั้ง
 ```bash
@@ -39,7 +44,7 @@ let s2: String = String::from("owned string");  // heap, growable
 let slice = &s2[0..5];          // slice
 ```
 
-## Ownership — หัวใจของ Rust
+## Ownership — หัวใจของ [[rust]]
 ```rust
 // กฎ 3 ข้อ:
 // 1. ค่าแต่ละค่ามี owner หนึ่งเดียว

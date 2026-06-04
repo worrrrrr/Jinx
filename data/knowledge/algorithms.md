@@ -1,4 +1,9 @@
-# การเขียนโปรแกรม — ขั้นตอนวิธี (Algorithms)
+---
+title: การเขียนโปรแกรม — ขั้นตอนวิธี ([[algorithms]])
+tags: [knowledge, vault]
+aliases: [algorithms]
+---
+# การเขียนโปรแกรม — ขั้นตอนวิธี ([[algorithms]])
 
 ## การค้นหา (Searching)
 
@@ -104,7 +109,7 @@
 - ลองทุกความเป็นไปได้ ถ้าไม่ได้ผลก็ย้อนกลับ
 - เช่น N-Queens, Sudoku solver
 
-## อัลกอริทึมกราฟ (Graph Algorithms)
+## อัลกอริทึมกราฟ (Graph [[algorithms]])
 
 ### Dijkstra's Algorithm
 - หา shortest path จาก node หนึ่งไปยังทุก node (น้ำหนักไม่ติดลบ)

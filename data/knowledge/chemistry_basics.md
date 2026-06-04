@@ -1,3 +1,8 @@
+---
+title: เคมีพื้นฐาน (Basic Chemistry)
+tags: [knowledge, vault]
+aliases: [chemistry_basics]
+---
 # เคมีพื้นฐาน (Basic Chemistry)
 
 ## โครงสร้างอะตอม (Atomic Structure)
@@ -63,7 +68,7 @@
 ### ประเภทของปฏิกิริยา
 1. **การสังเคราะห์ (Synthesis)**: A + B → AB
 2. **การสลายตัว (Decomposition)**: AB → A + B
-3. **การแทนที่เดี่ยว (Single Displacement)**: AB + C → AC + B
+3. **การแทนที่เดี่ยว (Single Displacement)**: AB + C → [[ac]] + B
 4. **การแทนที่คู่ (Double Displacement)**: AB + CD → AD + CB
 5. **การเผาไหม้ (Combustion)**: สาร + O₂ → CO₂ + H₂O
 

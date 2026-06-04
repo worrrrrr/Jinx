@@ -1,3 +1,8 @@
+---
+title: การเขียนโปรแกรม — ฐานข้อมูล (Database Basics)
+tags: [knowledge, vault]
+aliases: [database_basics]
+---
 # การเขียนโปรแกรม — ฐานข้อมูล (Database Basics)
 
 ## ฐานข้อมูลเชิงสัมพันธ์ (Relational Database)
@@ -19,7 +24,7 @@
 - **2NF**: 1NF + ทุก non-key column ขึ้นกับ primary key ทั้งหมด
 - **3NF**: 2NF + ไม่มี transitive dependency (column ที่ไม่ใช่ key ขึ้นกับ non-key column อื่น)
 
-## SQL (Structured Query Language)
+## [[sql]] (Structured Query Language)
 
 ### DDL (Data Definition Language)
 ```sql
@@ -77,7 +82,7 @@ HAVING count > 5;
 - ช้าลงตอน INSERT/UPDATE
 - ประเภท: B-tree, Hash, Full-text
 
-## NoSQL (Not Only SQL)
+## NoSQL (Not Only [[sql]])
 
 ### Document Store (MongoDB, CouchDB)
 - เก็บข้อมูลเป็น JSON/BSON document
@@ -130,6 +135,6 @@ HAVING count > 5;
 
 ### ORM (Object-Relational Mapping)
 - แมปตาราง DB ไปยัง object ใน code
-- เช่น: SQLAlchemy (Python), Prisma (Node.js), Hibernate (Java)
-- ข้อดี: ไม่ต้องเขียน SQL โดยตรง, ป้องกัน SQL injection
+- เช่น: SQLAlchemy ([[python]]), Prisma (Node.js), Hibernate (Java)
+- ข้อดี: ไม่ต้องเขียน [[sql]] โดยตรง, ป้องกัน [[sql]] injection
 - ข้อเสีย: query ซับซ้อนอาจช้า ต้องปรับ tuning

@@ -1,3 +1,8 @@
+---
+title: ภาษาไทย — ประวัติศาสตร์ไทย (Thai History)
+tags: [knowledge, vault]
+aliases: [thai_history]
+---
 # ภาษาไทย — ประวัติศาสตร์ไทย (Thai History)
 
 ## อาณาจักรก่อนสุโขทัย

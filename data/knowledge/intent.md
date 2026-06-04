@@ -1,6 +1,11 @@
-# Jinx Intent Knowledge Base
+---
+title: Jinx [[intent]] Knowledge Base
+tags: [knowledge, vault]
+aliases: [intent]
+---
+# Jinx [[intent]] Knowledge Base
 
-| Intent            | Keywords (Thai)                                   | Keywords (English)                                      | Description                                                                        |
+| [[intent]]            | Keywords (Thai)                                   | Keywords (English)                                      | Description                                                                        |
 | :---------------- | :------------------------------------------------ | :------------------------------------------------------ | :--------------------------------------------------------------------------------- |
 | **solve**         | คำนวณ, แก้, บวก, ลบ                               | solve, calculate                                        | ใช้สำหรับงานคณิตศาสตร์                                                             |
 | **edit**          | แก้ไข, ปรับปรุง, เปลี่ยน                          | edit, update, modify                                    | ใช้สำหรับแก้ไขไฟล์หรือข้อมูล                                                       |
@@ -47,13 +52,13 @@
 | **confirm**       | ใช่, ถูกต้อง, จริงด้วย, ใช่เลย                    | yes, correct, that's right, confirm                     | ใช้สำหรับยืนยันความถูกต้องหรือตอบตกลง                                              |
 | **deny**          | ไม่, ไม่ใช่, ผิด, ไม่เอา                          | no, incorrect, deny, not that                           | ใช้สำหรับปฏิเสธหรือบอกว่าไม่ถูกต้อง                                                |
 | **compliment**    | ชม, เก่งจัง, เจ๋ง, ดีมาก                          | compliment, praise, well done, nice                     | ใช้สำหรับชมเชยผู้ใช้หรือสิ่งที่ผู้ใช้ทำ                                            |
-| **personalize**   | เรียกชื่อ, เรียกอะไรดี, ปรับตามผู้ใช้, ฉันชื่อ... | call me, my name is, address me as, use my name         | ใช้สำหรับให้บอทเรียกผู้ใช้ตามชื่อหรือคำที่ผู้ใช้ต้องการ (เช่น พี่, น้อง, ครู, หมอ) |
+| **personalize**   | เรียกชื่อ, เรียกอะไรดี, ปรับตามผู้ใช้, ฉันชื่อ... | call me, my [[name]] is, address me as, use my [[name]]         | ใช้สำหรับให้บอทเรียกผู้ใช้ตามชื่อหรือคำที่ผู้ใช้ต้องการ (เช่น พี่, น้อง, ครู, หมอ) |
 | **small_talk**    | เป็นไงบ้าง, ทำอะไรอยู่, ว่างไหม                   | how are you, what's up, how's it going                  | ใช้สำหรับถามสารทุกข์สุขดิบหรือทักทายแบบไม่เป็นทางการ                               |
 | **apologize**     | ขอโทษ, โทษที, sorry, ขออภัย                       | sorry, apologize, my bad                                | ใช้สำหรับขอโทษเมื่อบอททำผิดหรือเข้าใจผิด                                           |
 
 ## Core Concepts (15 Additional Jinx Intents)
 
-|**Intent**|**Keywords (Thai)**|**Keywords (English)**|**Descriptions**|
+|**[[intent]]**|**Keywords (Thai)**|**Keywords (English)**|**Descriptions**|
 |---|---|---|---|
 |**configure**|ตั้งค่า, คอนฟิก, กำหนดค่า, ปรับแต่งระบบ|configure, set, setup, config, settings|ใช้สำหรับจัดการ Configuration หรือ Environment Variables ของระบบ|
 |**rollback**|ย้อนกลับ, รีเวิร์ต, ถอยกลับ, เอาเวอร์ชันเก่า|rollback, revert, undo, downgrade|ใช้เมื่อระบบเกิดข้อผิดพลาดและต้องการย้อน State กลับไปจุดที่เสถียร|
@@ -71,7 +76,7 @@
 |**feedback**|ส่งคำติชม, รายงานปัญหา, แนะนำฟีเจอร์|feedback, report issue, user review, suggest feature|ใช้รับความเห็นผู้ใช้เพื่อนำเข้าสู่กระบวนการปรับปรุงระบบ (Feedback Loop)|
 |**escalate**|ขอคุยกับคน, ส่งต่อให้เจ้าหน้าที่, เรียกหัวหน้า|escalate, transfer to human, call agent, higher support|ใช้เมื่อระบบ NLU ไม่สามารถตอบสนองต่อไปได้ และต้องการเปลี่ยนผ่านไปหาคน|
 
-## Python Implementation: Updating JSON Schema
+## [[python]] Implementation: Updating JSON Schema
 
 พิมพ์เขียวโครงสร้างข้อมูลสำหรับอัปเดตลงบอร์ดความรู้หรือส่งเข้าโมเดล [[NLU Engineering]] ในรูปแบบ JSON Config เพื่อรองรับ 15 Intents ใหม่นี้:
 

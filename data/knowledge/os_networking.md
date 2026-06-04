@@ -1,3 +1,8 @@
+---
+title: การเขียนโปรแกรม — ระบบปฏิบัติการและเครือข่าย (OS & Networking)
+tags: [knowledge, vault]
+aliases: [os_networking]
+---
 # การเขียนโปรแกรม — ระบบปฏิบัติการและเครือข่าย (OS & Networking)
 
 ## ระบบปฏิบัติการ (Operating System)
@@ -18,7 +23,7 @@
 ### Process States
 New → Ready → Running → Waiting → Terminated
 
-### Scheduling Algorithms
+### Scheduling [[algorithms]]
 - **FCFS (First Come First Serve)**: มาตามลำดับ
 - **SJF (Shortest Job First)**: งานสั้นมาก่อน
 - **Round Robin**: วนรอบให้เวลางานละเท่าๆ กัน
@@ -81,8 +86,8 @@ New → Ready → Running → Waiting → Terminated
 - **Private IP**: ใช้ใน LAN (10.x.x.x, 172.16-31.x.x, 192.168.x.x)
 - **Subnet Mask**: บอกส่วน network vs host
 
-### DNS (Domain Name System)
-- แปลง domain name (google.com) → IP address
+### DNS (Domain [[name]] System)
+- แปลง domain [[name]] (google.com) → IP address
 - **Hierarchical**: . → .com → google.com → www.google.com
 - Record types: A (IPv4), AAAA (IPv6), CNAME (alias), MX (mail), NS (nameserver)
 

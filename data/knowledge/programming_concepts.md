@@ -1,3 +1,8 @@
+---
+title: การเขียนโปรแกรม — แนวคิดพื้นฐาน (Programming Concepts)
+tags: [knowledge, vault]
+aliases: [programming_concepts]
+---
 # การเขียนโปรแกรม — แนวคิดพื้นฐาน (Programming Concepts)
 
 ## ตัวแปรและชนิดข้อมูล (Variables & Data Types)
@@ -5,13 +10,13 @@
 ### ชนิดข้อมูลพื้นฐาน
 - **Integer (จำนวนเต็ม)**: 1, -5, 1000
 - **Float (ทศนิยม)**: 3.14, -0.001, 2.0
-- **String (ข้อความ)**: "hello", 'Python'
+- **String (ข้อความ)**: "hello", '[[python]]'
 - **Boolean (ตรรกะ)**: True, False
 - **None/Null**: ค่าว่าง
 
 ### โครงสร้างข้อมูลพื้นฐาน
 - **Array / List**: ลำดับของข้อมูล [1, 2, 3]
-- **Dictionary / Map / Object**: คู่คีย์-ค่า {"name": "Jinx"}
+- **Dictionary / Map / Object**: คู่คีย์-ค่า {"[[name]]": "Jinx"}
 - **Set**: เซตที่ไม่มีสมาชิกซ้ำ {1, 2, 3}
 - **Tuple**: ลำดับที่แก้ไขไม่ได้ (1, 2, 3)
 

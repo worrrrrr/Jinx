@@ -1,4 +1,9 @@
-# AI Automation Project Strategy
+---
+title: [[AI Automation Project Strategy]]
+tags: [knowledge, vault, Clippings]
+aliases: [AI Automation Project Strategy]
+---
+# [[AI Automation Project Strategy]]
 
 > [!ABSTRACT] Summary
 > 

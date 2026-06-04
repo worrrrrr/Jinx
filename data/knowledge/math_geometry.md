@@ -1,3 +1,8 @@
+---
+title: คณิตศาสตร์ — เรขาคณิต (Geometry)
+tags: [knowledge, vault]
+aliases: [math_geometry]
+---
 # คณิตศาสตร์ — เรขาคณิต (Geometry)
 
 ## เรขาคณิตพื้นฐาน

@@ -1,3 +1,8 @@
+---
+title: คณิตศาสตร์ — พีชคณิต (Algebra)
+tags: [knowledge, vault]
+aliases: [math_algebra]
+---
 # คณิตศาสตร์ — พีชคณิต (Algebra)
 
 ## นิพจน์พีชคณิต (Algebraic Expressions)
