@@ -1,10 +1,15 @@
-# ใช้ Python 3.10 เป็นฐาน
+# ใช้ Python 3.10-slim
 FROM python:3.10-slim
 
-# ตั้งค่า Working Directory
-WORKDIR /app
+# สร้าง User ใหม่เพื่อให้รันบน Hugging Face ได้อย่างปลอดภัย
+RUN useradd -m -u 1000 user
+USER user
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH
 
-# ติดตั้ง System Dependencies ที่จำเป็นสำหรับ Library เฉพาะทาง
+WORKDIR $HOME/app
+
+# ติดตั้ง Dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libssl-dev \
@@ -13,22 +18,19 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# คัดลอกไฟล์ requirements.txt และติดตั้ง Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# คัดลอก requirements และติดตั้ง
+COPY --chown=user requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# คัดลอกโค้ดทั้งหมดเข้า Container
-COPY . .
+# คัดลอกโค้ดทั้งหมด
+COPY --chown=user . .
 
-# สร้างโฟลเดอร์สำหรับเก็บ Log และ Database เฉพาะกิจ
+# สร้างโฟลเดอร์สำหรับข้อมูล
 RUN mkdir -p logs data/storage
 
-# ตั้งค่า Environment Variables เบื้องต้น
-ENV PYTHONUNBUFFERED=1
-ENV JINX_ENV=production
+# เปิด Port 7860 (Hugging Face Spaces บังคับใช้ port นี้)
+EXPOSE 7860
 
-# เปิด Port สำหรับ FastAPI
-EXPOSE 8000
-
-# รัน API Server เป็นโปรแกรมหลัก
+# รัน API Server (ชี้ไปที่ port 7860)
 CMD ["python", "api_server.py"]

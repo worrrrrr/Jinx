@@ -14,6 +14,7 @@ class Config:
     PRIMARY_MODEL = os.getenv("PRIMARY_MODEL", "llama3")
     FALLBACK_MODEL = os.getenv("FALLBACK_MODEL", "gpt-3.5-turbo")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY", "llama-3.3-70b-versatile")
 
     # Storage & Database
     DB_TYPE = os.getenv("DB_TYPE", "sqlite") # หรือ 'postgresql' ในโปรดักชั่น

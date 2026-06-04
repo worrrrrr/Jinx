@@ -1,5 +1,9 @@
 # JINX
-
+---
+title: Jinx Agent
+sdk: docker
+app_file: api_server.py
+---
 Personal AI Runtime
 
 ---

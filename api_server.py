@@ -1,65 +1,49 @@
-import uvicorn
-from fastapi import FastAPI, HTTPException, BackgroundTasks
-from pydantic import BaseModel
-from datetime import datetime
-from core.orchestrator import Orchestrator
+import os
+import gradio as gr
 import logging
+from core.orchestrator import Orchestrator
 
-# ตั้งค่า Logging แบบ Production
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler("logs/api.log"), logging.StreamHandler()]
-)
-logger = logging.getLogger("JinxAPI")
+# ตั้งค่า Logging ให้เห็นในหน้า Console ของ Hugging Face
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("JinxGradio")
 
-app = FastAPI(title="Jinx Agent API", version="2.0.0")
-jinx = Orchestrator()
+# โหลดสมอง Jinx
+try:
+    jinx = Orchestrator()
+    logger.info("✅ Orchestrator loaded successfully")
+except Exception as e:
+    logger.error(f"❌ Failed to load Orchestrator: {e}")
+    jinx = None
 
-# Data Model สำหรับรับ Request
-class ChatRequest(BaseModel):
-    user_id: str
-    message: str
-    context: dict = {}
-
-# Data Model สำหรับส่ง Response
-class ChatResponse(BaseModel):
-    status: str
-    timestamp: str
-    response: str
-    metadata: dict
-
-@app.get("/health")
-def health_check():
-    return {"status": "healthy", "engine": "Jinx Cognitive Engine"}
-
-@app.post("/chat", response_model=ChatResponse)
-async def chat_endpoint(request: ChatRequest):
+def chat_interface(message, history):
+    """ฟังก์ชันหลักที่เชื่อมหน้าจอเข้ากับสมอง Jinx"""
+    if jinx is None:
+        return "⚠️ ระบบ Orchestrator ไม่พร้อมใช้งาน กรุณาตรวจสอบ Log"
     try:
-        logger.info(f"Received message from {request.user_id}: {request.message}")
-        
-        # ส่ง Input เข้า Orchestrator หลักของ Jinx
-        start_time = datetime.now()
-        result = jinx.run(request.message)
-        latency = (datetime.now() - start_time).total_seconds() * 1000
-
-        return ChatResponse(
-            status="success",
-            timestamp=datetime.now().isoformat(),
-            response=result,
-            metadata={
-                "latency_ms": round(latency, 2),
-                "user_id": request.user_id
-            }
-        )
+        # เรียกใช้ jinx.run() ตามโครงสร้างที่คุณเขียนใน core/orchestrator.py
+        response = jinx.run(message)
+        return response
     except Exception as e:
-        logger.error(f"Error processing request: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Internal Brain Error")
+        logger.error(f"Error during run: {e}")
+        return f"เกิดข้อผิดพลาด: {str(e)}"
 
-@app.post("/memory/reset")
-def reset_memory(user_id: str):
-    jinx.reset_memory()
-    return {"message": f"Memory for session reset successfully"}
+# สร้างหน้าจอ UI ด้วย Gradio (ตัวนี้จะสร้างหน้า Chat และปุ่ม View API ให้โดยอัตโนมัติ)
+with gr.Blocks(theme=gr.themes.Soft()) as demo:
+    gr.Markdown("# ✨ JINX AGENT")
+    gr.Markdown("Cognitive Architecture - ระบบวิเคราะห์สังเคราะห์และโหราศาสตร์")
+    
+    chat_box = gr.ChatInterface(
+        fn=chat_interface,
+        title=None, # ใส่ใน Markdown ด้านบนแทน
+        retry_btn="ลองใหม่",
+        undo_btn="ย้อนกลับ",
+        clear_btn="ล้างแชท"
+    )
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Hugging Face บังคับพอร์ต 7860
+    port = int(os.environ.get("PORT", 7860))
+    logger.info(f"🚀 Starting Gradio on port {port}")
+    
+    # รันหน้าจอ UI
+    demo.launch(server_name="0.0.0.0", server_port=port)
