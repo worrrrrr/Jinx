@@ -6,6 +6,12 @@ __pycache__/
 *.pyd
 .venv/
 venv/
+```markdown
+# Logs and temporary files
+*.log
+*.tmp
+
+# Environment variables
 .env
 .env.local
 *.env.*
@@ -37,4 +43,25 @@ Thumbs.db
 # Editors
 .vscode/
 .idea/
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git/modules/
+.DS_Store
 ```
