@@ -1,0 +1,187 @@
+{
+  "name": "Content Creator Strategy",
+  "description": "วางแผนการสร้างคอนเทนต์ออนไลน์ YouTube, TikTok, Social Media",
+  "questions": [
+    {
+      "id": "platform",
+      "question": "คุณต้องการสร้างคอนเทนต์บนแพลตฟอร์มใด?",
+      "options": [
+        {
+          "label": "YouTube (Long-form)",
+          "description": "วิดีโอยาว 8-30 นาที รายได้จาก Ads"
+        },
+        {
+          "label": "YouTube Shorts / TikTok",
+          "description": "วิดีโอสั้น <60 วินาที ไวรัลง่าย"
+        },
+        {
+          "label": "Instagram (Reels + Posts)",
+          "description": "ภาพและวิดีโอสั้น เน้นความสวยงาม"
+        },
+        {
+          "label": "Facebook Page",
+          "description": "เข้าถึงผู้ชมวัยทำงาน ads ยิงง่าย"
+        },
+        {
+          "label": "Twitch / Live Streaming",
+          "description": "ไลฟ์สด สร้าง Community แข็งแกร่ง"
+        },
+        {
+          "label": "Podcast (Audio)",
+          "description": "เสียงอย่างเดียว ฟังระหว่างทำอย่างอื่น"
+        }
+      ],
+      "tips": "เริ่มต้น: เลือก 1-2 แพลตฟอร์มหลัก แล้วขยายภายหลัง"
+    },
+    {
+      "id": "content_niche",
+      "question": "คอนเทนต์ของคุณเกี่ยวกับอะไร?",
+      "options": [
+        {
+          "label": "การศึกษา / How-to",
+          "description": "สอนทักษะ ให้ความรู้ Tutorial"
+        },
+        {
+          "label": "บันเทิง / Comedy",
+          "description": "ตลก เล่นละคร สเก็ตช์"
+        },
+        {
+          "label": "รีวิวสินค้า / Unboxing",
+          "description": "รีวิว Gadgets, เครื่องสำอาง, อาหาร"
+        },
+        {
+          "label": "Vlog / Lifestyle",
+          "description": "ชีวิตประจำวัน ท่องเที่ยว กินเที่ยว"
+        },
+        {
+          "label": "ข่าว / Commentary",
+          "description": "วิเคราะห์ข่าว ให้ความเห็นประเด็นร้อน"
+        },
+        {
+          "label": "Gaming",
+          "description": "เล่นเกม แคสเกม Walkthrough"
+        }
+      ],
+      "tips": "เลือกสิ่งที่คุณรักและถนัด + มีคนสนใจ (Intersection)"
+    },
+    {
+      "id": "target_audience",
+      "question": "กลุ่มเป้าหมายของคุณคือใคร?",
+      "options": [
+        {
+          "label": "เด็กและวัยรุ่น (Gen Z)",
+          "description": "อายุ 13-24 ปี ชอบความรวดเร็ว สนุก"
+        },
+        {
+          "label": "วัยทำงานตอนต้น (Millennials)",
+          "description": "อายุ 25-40 ปี สนใจการพัฒนาตนเอง"
+        },
+        {
+          "label": "วัยทำงานตอนปลาย / ผู้บริหาร",
+          "description": "อายุ 40+ ปี สนใจธุรกิจ การลงทุน"
+        },
+        {
+          "label": "พ่อแม่ / ครอบครัว",
+          "description": "สนใจ parenting, ครอบครัว, เด็ก"
+        },
+        {
+          "label": "เฉพาะทาง (Niche)",
+          "description": "กลุ่มเล็กๆ แต่สนใจลึก เช่น Audiophile, Mechanic Keyboard"
+        }
+      ],
+      "tips": "ยิ่งเจาะจง ยิ่งสร้าง Loyalty ได้ง่าย"
+    },
+    {
+      "id": "production_equipment",
+      "question": "คุณมีอุปกรณ์อะไรบ้าง?",
+      "options": [
+        {
+          "label": "สมาร์ทโฟนเท่านั้น",
+          "description": "เริ่มต้นด้วยสิ่งที่ มีอยู่แล้ว"
+        },
+        {
+          "label": "กล้อง Mirrorless / DSLR",
+          "description": "คุณภาพภาพดี Depth of Field สวย"
+        },
+        {
+          "label": "เว็บแคม + ไมค์แยก",
+          "description": "เหมาะกับการพูดหน้ากล้องบนโต๊ะ"
+        },
+        {
+          "label": "อุปกรณ์ครบ (กล้อง, ไฟ, ไมค์)",
+          "description": "พร้อมผลิตคอนเทนต์คุณภาพสูง"
+        },
+        {
+          "label": "จ้าง Production House",
+          "description": "-outsourcing การผลิตให้มืออาชีพ"
+        }
+      ],
+      "tips": "สำคัญที่สุด: เสียงต้องชัด > ภาพสวย > เนื้อหาดี"
+    },
+    {
+      "id": "editing_software",
+      "question": "คุณจะตัดต่อวิดีโอด้วยโปรแกรมอะไร?",
+      "options": [
+        {
+          "label": "CapCut (Mobile/Desktop)",
+          "description": "ง่าย ฟรี เหมาะสำหรับ Shorts/Reels"
+        },
+        {
+          "label": "DaVinci Resolve",
+          "description": "ฟรี ระดับ Hollywood สีและการตัดต่อเทพ"
+        },
+        {
+          "label": "Adobe Premiere Pro",
+          "description": "มาตรฐานอุตสาหกรรม ต้องจ่ายรายเดือน"
+        },
+        {
+          "label": "Final Cut Pro",
+          "description": "สำหรับ Mac ซื้อครั้งเดียวจบ"
+        },
+        {
+          "label": "จ้าง Editor",
+          "description": "โฟกัสที่การสร้างสรรค์เนื้อหาเท่านั้น"
+        }
+      ],
+      "tips": "เริ่มต้น: CapCut | พัฒนา: DaVinci Resolve (ฟรี!)"
+    },
+    {
+      "id": "monetization",
+      "question": "คุณวางแผนสร้างรายได้อย่างไร?",
+      "options": [
+        {
+          "label": "Ads Revenue (AdSense)",
+          "description": "รายได้จากโฆษณาบนแพลตฟอร์ม"
+        },
+        {
+          "label": "Sponsorship / Brand Deal",
+          "description": "แบรนด์จ้างรีวิวหรือพูดถึงสินค้า"
+        },
+        {
+          "label": "Affiliate Marketing",
+          "description": "แปะลิงก์ซื้อของได้ Commission"
+        },
+        {
+          "label": "Membership / Patreon",
+          "description": "แฟนคลับจ่ายรายเดือนเพื่อคอนเทนต์พิเศษ"
+        },
+        {
+          "label": "ขายสินค้าของตัวเอง",
+          "description": "Merchandise, Course, E-book"
+        },
+        {
+          "label": "ยังไม่คิดเรื่องเงิน",
+          "description": "เน้นสร้างฐานแฟนก่อน"
+        }
+      ],
+      "tips": "อย่าพึ่งพาแหล่งรายได้เดียว Diversify ตั้งแต่เนิ่นๆ"
+    }
+  ],
+  "final_recommendations": [
+    " konsisten เป็นสิ่งสำคัญ โพสต์สม่ำเสมอ",
+    "ศึกษา Algorithm ของแต่ละแพลตฟอร์ม",
+    "ตอบคอมเมนต์ สร้าง Engagement กับผู้ชม",
+    "วิเคราะห์ Analytics เพื่อปรับปรุงคอนเทนต์",
+    "Collab กับ Creator คนอื่นๆ เพื่อขยายฐานแฟน"
+  ]
+}

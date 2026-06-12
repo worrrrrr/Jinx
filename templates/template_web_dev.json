@@ -1,0 +1,175 @@
+{
+  "name": "Web Development Project",
+  "description": "พัฒนาเว็บไซต์ Full-stack, Frontend, Backend",
+  "questions": [
+    {
+      "id": "project_type",
+      "question": "คุณต้องการสร้างเว็บไซต์ประเภทใด?",
+      "options": [
+        {
+          "label": "Landing Page / Portfolio",
+          "description": "หน้าเดียว แสดงข้อมูลบริษัทหรือส่วนตัว"
+        },
+        {
+          "label": "E-commerce",
+          "description": "เว็บขายของ มีตะกร้าสินค้า การชำระเงิน"
+        },
+        {
+          "label": "Web Application (SaaS)",
+          "description": "แอปพลิเคชันบนเว็บ มีระบบ Login, Dashboard"
+        },
+        {
+          "label": "Blog / CMS",
+          "description": "เว็บบทความ มีระบบจัดการเนื้อหา"
+        },
+        {
+          "label": "Real-time App",
+          "description": "แชท, Notification, Live Updates"
+        }
+      ],
+      "tips": "เลือกตามความต้องการหลัก: ขายของ=E-commerce, บริการ=SaaS, เนื้อหา=CMS"
+    },
+    {
+      "id": "frontend_framework",
+      "question": "คุณจะเลือก Frontend Framework อะไร?",
+      "options": [
+        {
+          "label": "React + Next.js",
+          "description": "ยอดนิยม SEO ดี มี Server-side Rendering"
+        },
+        {
+          "label": "Vue + Nuxt",
+          "description": "เรียนรู้ง่าย โครงสร้างชัดเจน"
+        },
+        {
+          "label": "Angular",
+          "description": "ครบวงจร เหมาะกับ Enterprise"
+        },
+        {
+          "label": "Svelte + SvelteKit",
+          "description": "เบา เร็ว เขียนโค้ดน้อย"
+        },
+        {
+          "label": "Vanilla JS / HTML / CSS",
+          "description": "ไม่ต้องใช้ Framework เหมาะกับเว็บเล็ก"
+        }
+      ],
+      "tips": "แนะนำ: Next.js สำหรับ SEO และ Performance | Svelte สำหรับความเร็ว"
+    },
+    {
+      "id": "backend_language",
+      "question": "คุณจะเลือก Backend Language อะไร?",
+      "options": [
+        {
+          "label": "Node.js (Express/NestJS)",
+          "description": "ใช้ JavaScript ได้ทั้ง Frontend/Backend"
+        },
+        {
+          "label": "Python (FastAPI/Django)",
+          "description": "เขียนง่าย มี Library ครบ เหมาะสำหรับ AI/ML"
+        },
+        {
+          "label": "Go (Gin/Echo)",
+          "description": "เร็วมาก เหมาะกับ High Performance"
+        },
+        {
+          "label": "PHP (Laravel)",
+          "description": "รวดเร็วในการพัฒนา Hosting ราคาถูก"
+        },
+        {
+          "label": "Ruby on Rails",
+          "description": "Convention over Configuration พัฒนาไว"
+        }
+      ],
+      "tips": "แนะนำ: FastAPI (Python) สำหรับ AI Integration | Node.js สำหรับ Real-time"
+    },
+    {
+      "id": "database",
+      "question": "คุณจะเลือก Database แบบใด?",
+      "options": [
+        {
+          "label": "PostgreSQL",
+          "description": "Relational DB ที่ทรงพลัง แนะนำ!"
+        },
+        {
+          "label": "MySQL / MariaDB",
+          "description": "คลาสสิก ใช้กันแพร่หลาย"
+        },
+        {
+          "label": "MongoDB",
+          "description": "NoSQL ยืดหยุ่นสูง เก็บข้อมูลแบบ Document"
+        },
+        {
+          "label": "SQLite",
+          "description": "เบา ไม่ต้องติดตั้ง Server เหมาะกับ Prototype"
+        },
+        {
+          "label": "Supabase / Firebase",
+          "description": "Backend as a Service มี Auth, Database ให้พร้อม"
+        }
+      ],
+      "tips": "แนะนำ: PostgreSQL สำหรับความน่าเชื่อถือ | MongoDB สำหรับข้อมูลที่ไม่เป็นโครงสร้าง"
+    },
+    {
+      "id": "authentication",
+      "question": "คุณจะจัดการระบบ Authentication อย่างไร?",
+      "options": [
+        {
+          "label": "NextAuth / Auth.js",
+          "description": "ง่าย รองรับ OAuth หลาย Provider"
+        },
+        {
+          "label": "Clerk / Auth0",
+          "description": "Service สำเร็จรูป ปลอดภัย ฟีเจอร์ครบ"
+        },
+        {
+          "label": "JWT Custom Implementation",
+          "description": "ทำเองทั้งหมด ควบคุมได้เต็มที่"
+        },
+        {
+          "label": "Session-based (Cookie)",
+          "description": "คลาสสิก ปลอดภัยสำหรับ Web App"
+        },
+        {
+          "label": "ไม่ใช้ (Public Only)",
+          "description": "เว็บไม่ต้อง Login"
+        }
+      ],
+      "tips": "แนะนำ: Clerk/Auth0 สำหรับความเร็ว | NextAuth สำหรับความยืดหยุ่น"
+    },
+    {
+      "id": "deployment",
+      "question": "คุณจะ Deploy เว็บไซต์ที่ไหน?",
+      "options": [
+        {
+          "label": "Vercel",
+          "description": "เหมาะที่สุดสำหรับ Next.js ฟรี tier ดี"
+        },
+        {
+          "label": "Netlify",
+          "description": "ง่าย รองรับ Static + Serverless Functions"
+        },
+        {
+          "label": "Railway / Render",
+          "description": "Deploy Backend + Database ได้ในที่เดียว"
+        },
+        {
+          "label": "AWS / GCP / Azure",
+          "description": "ระดับ Enterprise ควบคุมได้ทุกอย่าง"
+        },
+        {
+          "label": "Docker + VPS",
+          "description": "เช่า Server ติดตั้งเอง คุ้มค่าระยะยาว"
+        }
+      ],
+      "tips": "Frontend: Vercel/Netlify | Full-stack: Railway/Render | Enterprise: Cloud"
+    }
+  ],
+  "final_recommendations": [
+    "ใช้ TypeScript เพื่อลด Bug จาก Type Error",
+    "ทำ Responsive Design ตั้งแต่เริ่มต้น",
+    "ใส่ใจเรื่อง SEO (Meta tags, Sitemap)",
+    "ใช้ CI/CD เพื่อ Deploy อัตโนมัติ",
+    "ติดตาม Performance ด้วย Lighthouse"
+  ]
+}

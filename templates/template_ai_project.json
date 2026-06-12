@@ -1,0 +1,163 @@
+{
+  "name": "AI Project Architecture",
+  "description": "ออกแบบระบบ AI เช่น Agent, RAG, Neuro-Symbolic",
+  "questions": [
+    {
+      "id": "project_type",
+      "question": "คุณต้องการสร้างระบบ AI ประเภทใด?",
+      "options": [
+        {
+          "label": "AI Agent",
+          "description": "ตัวแทนอัจฉริยะที่ตัดสินใจและลงมือทำเองได้ เหมาะกับงานอัตโนมัติ"
+        },
+        {
+          "label": "RAG (Retrieval-Augmented Generation)",
+          "description": "ระบบตอบคำถามจากฐานความรู้ของคุณเอง ลดการมั่วข้อมูล"
+        },
+        {
+          "label": "Neuro-Symbolic AI",
+          "description": "ผสม Neural Network กับ Logic Rules สำหรับความแม่นยำสูง"
+        },
+        {
+          "label": "Fine-tuned LLM",
+          "description": "ปรับแต่งโมเดลภาษาให้เชี่ยวชาญด้านเฉพาะ"
+        }
+      ],
+      "tips": "เลือกตามความต้องการ: Agent=ทำงานแทน, RAG=ตอบคำถามจากข้อมูล, Neuro-Symbolic=เหตุผลซับซ้อน"
+    },
+    {
+      "id": "llm_backend",
+      "question": "คุณจะใช้งาน LLM (Large Language Model) อย่างไร?",
+      "options": [
+        {
+          "label": "Ollama (Local)",
+          "description": "รันโมเดลบนเครื่องตัวเอง ฟรี เป็นส่วนตัว แต่ต้องใช้ GPU แรง"
+        },
+        {
+          "label": "OpenAI API",
+          "description": "GPT-4, GPT-3.5 แม่นยำสูง จ่ายตามการใช้งาน"
+        },
+        {
+          "label": "Anthropic Claude API",
+          "description": "Claude 3 เก่งเรื่องเหตุผลและเอกสารยาว"
+        },
+        {
+          "label": "Google Gemini API",
+          "description": "Gemini Pro/Ultra ผสานกับ Google Ecosystem"
+        },
+        {
+          "label": "Hugging Face Inference",
+          "description": "โมเดลโอเพนซอร์สหลากหลาย ราคาประหยัด"
+        }
+      ],
+      "tips": "แนะนำ: เริ่มต้นด้วย Ollama (Llama 3, Mistral) เพื่อทดสอบ แล้วค่อยย้ายไป Cloud API เมื่อต้องการความเสถียร"
+    },
+    {
+      "id": "architecture_pattern",
+      "question": "คุณต้องการรูปแบบสถาปัตยกรรมแบบใด?",
+      "options": [
+        {
+          "label": "Monolithic (รวมทั้งหมด)",
+          "description": "โค้ดทั้งหมดอยู่ในโปรเจกต์เดียว ง่ายต่อการเริ่มต้น"
+        },
+        {
+          "label": "Microservices (แยกส่วนชัดเจน)",
+          "description": "แยกแต่ละฟังก์ชันเป็นบริการอิสระ ขยายระบบง่าย"
+        },
+        {
+          "label": "Pipeline Pattern",
+          "description": "ประมวลผลเป็นขั้นตอน เช่น Retrieve → Process → Generate"
+        },
+        {
+          "label": "Event-Driven",
+          "description": "ตอบสนองต่อเหตุการณ์ เหมาะสำหรับระบบ Real-time"
+        }
+      ],
+      "tips": "เริ่มต้นด้วย Monolithic หรือ Pipeline ก่อน แล้วค่อยแยกเป็น Microservices เมื่อระบบใหญ่ขึ้น"
+    },
+    {
+      "id": "api_framework",
+      "question": "คุณจะสร้าง API ด้วย Framework อะไร?",
+      "options": [
+        {
+          "label": "FastAPI",
+          "description": "เร็วที่สุด รองรับ Async มี Auto Docs (Swagger) แนะนำ!"
+        },
+        {
+          "label": "Flask",
+          "description": "เรียบง่าย เหมาะกับโปรเจกต์เล็ก"
+        },
+        {
+          "label": "Django + DRF",
+          "description": "ครบวงจร มี Admin Panel ในตัว"
+        },
+        {
+          "label": "Node.js + Express",
+          "description": "ใช้ JavaScript ทั้ง Frontend และ Backend"
+        }
+      ],
+      "tips": "แนะนำ FastAPI สำหรับ AI Project เพราะเร็วและรองรับ Async ได้ดี"
+    },
+    {
+      "id": "vector_database",
+      "question": "(สำหรับ RAG) คุณจะเก็บ Vector Embeddings ในฐานข้อมูลใด?",
+      "options": [
+        {
+          "label": "ChromaDB",
+          "description": "เบา ง่าย เหมาะกับการพัฒนาและทดสอบ"
+        },
+        {
+          "label": "Pinecone",
+          "description": "Cloud Service พร้อมใช้ ไม่ต้องจัดการเอง"
+        },
+        {
+          "label": "Weaviate",
+          "description": "มี Hybrid Search (Keyword + Vector)"
+        },
+        {
+          "label": "Qdrant",
+          "description": "เร็วมาก เขียนด้วย Rust รองรับ Filter ดี"
+        },
+        {
+          "label": "ไม่ใช้ (Skip)",
+          "description": "โปรเจกต์นี้ไม่ต้องการ Vector Database"
+        }
+      ],
+      "tips": "เริ่มต้นด้วย ChromaDB (Local) หรือ Pinecone (Cloud) ง่ายที่สุด"
+    },
+    {
+      "id": "deployment",
+      "question": "คุณจะ Deploy ระบบที่ไหน?",
+      "options": [
+        {
+          "label": "Docker + Local Server",
+          "description": "ควบคุมได้เต็มที่ แต่ต้องดูแลเอง"
+        },
+        {
+          "label": "Hugging Face Spaces",
+          "description": "ฟรี ง่าย เหมาะสำหรับ Demo"
+        },
+        {
+          "label": "AWS/GCP/Azure",
+          "description": "ระดับ Enterprise ขยายระบบได้ไม่จำกัด"
+        },
+        {
+          "label": "Railway / Render",
+          "description": "Platform as a Service ง่ายกว่า Cloud เต็มรูปแบบ"
+        },
+        {
+          "label": "Vercel / Netlify",
+          "description": "เหมาะสำหรับ Frontend + Serverless Functions"
+        }
+      ],
+      "tips": "Demo: Hugging Face Spaces | Production: Railway/Render หรือ Cloud"
+    }
+  ],
+  "final_recommendations": [
+    "เริ่มจาก Prototype เล็กๆ ก่อนขยายระบบ",
+    "ใช้ Docker เพื่อความสม่ำเสมอของสภาพแวดล้อม",
+    "เขียน Unit Test ตั้งแต่เริ่มต้น",
+    "ติดตาม Cost ของ API อย่างใกล้ชิด",
+    "เตรียมแผนสำรองเมื่อ API ล่มหรือช้า"
+  ]
+}

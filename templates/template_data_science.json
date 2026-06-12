@@ -1,0 +1,175 @@
+{
+  "name": "Data Science Project",
+  "description": "วิเคราะห์ข้อมูล, สร้างโมเดล ML, Visualization",
+  "questions": [
+    {
+      "id": "project_goal",
+      "question": "เป้าหมายหลักของโปรเจกต์คืออะไร?",
+      "options": [
+        {
+          "label": "Exploratory Data Analysis (EDA)",
+          "description": "สำรวจข้อมูล หา Pattern และ Insight"
+        },
+        {
+          "label": "Predictive Modeling",
+          "description": "สร้างโมเดลทำนาย เช่น Classification, Regression"
+        },
+        {
+          "label": "Clustering / Segmentation",
+          "description": "จัดกลุ่มข้อมูลที่ไม่มีการ Label"
+        },
+        {
+          "label": "Time Series Forecasting",
+          "description": "พยากรณ์แนวโน้มตามเวลา เช่น ยอดขาย, ราคาหุ้น"
+        },
+        {
+          "label": "Natural Language Processing",
+          "description": "ประมวลผลข้อความ เช่น Sentiment, Topic Modeling"
+        }
+      ],
+      "tips": "กำหนดเป้าหมายให้ชัดก่อนเลือก Algorithm"
+    },
+    {
+      "id": "data_source",
+      "question": "ข้อมูลของคุณมาจากแหล่งใด?",
+      "options": [
+        {
+          "label": "CSV / Excel Files",
+          "description": "ไฟล์ท้องถิ่น结构简单"
+        },
+        {
+          "label": "SQL Database",
+          "description": "ฐานข้อมูลเชิงสัมพันธ์"
+        },
+        {
+          "label": "API (REST/GraphQL)",
+          "description": "ดึงข้อมูลจาก Web Service"
+        },
+        {
+          "label": "Web Scraping",
+          "description": "เก็บข้อมูลจากเว็บไซต์"
+        },
+        {
+          "label": "Real-time Stream",
+          "description": "ข้อมูลแบบ Real-time เช่น Kafka, WebSocket"
+        }
+      ],
+      "tips": "เตรียมแผนการทำความสะอาดข้อมูลล่วงหน้า (Missing values, Outliers)"
+    },
+    {
+      "id": "tools_environment",
+      "question": "คุณจะทำงานใน Environment แบบใด?",
+      "options": [
+        {
+          "label": "Jupyter Notebook / JupyterLab",
+          "description": "Interactive ยอดนิยมสำหรับ Data Science"
+        },
+        {
+          "label": "Google Colab / Kaggle",
+          "description": "Cloud-based มี GPU/TPU ฟรี"
+        },
+        {
+          "label": "VS Code + Python Script",
+          "description": "เหมาะกับการทำ Production-ready Code"
+        },
+        {
+          "label": "Databricks",
+          "description": "Collaborative Platform สำหรับ Big Data"
+        },
+        {
+          "label": "RStudio",
+          "description": "สำหรับผู้ใช้ R Language"
+        }
+      ],
+      "tips": "แนะนำ: Jupyter สำหรับ Exploration | VS Code สำหรับ Production"
+    },
+    {
+      "id": "ml_framework",
+      "question": "คุณจะเลือก Machine Learning Framework อะไร?",
+      "options": [
+        {
+          "label": "Scikit-learn",
+          "description": "คลาสสิก ง่าย เหมาะกับ Traditional ML"
+        },
+        {
+          "label": "XGBoost / LightGBM / CatBoost",
+          "description": "Gradient Boosting แม่นยำสูง ชนะการแข่งขันบ่อย"
+        },
+        {
+          "label": "TensorFlow / Keras",
+          "description": "Deep Learning ครบวงจร"
+        },
+        {
+          "label": "PyTorch",
+          "description": "ยืดหยุ่น เหมาะกับ Research และ Deep Learning"
+        },
+        {
+          "label": "Hugging Face Transformers",
+          "description": "Pre-trained Models สำหรับ NLP และ Vision"
+        }
+      ],
+      "tips": "Tabular Data: XGBoost/LightGBM | Deep Learning: PyTorch | NLP: Transformers"
+    },
+    {
+      "id": "visualization",
+      "question": "คุณจะสร้าง Visualization ด้วยเครื่องมืออะไร?",
+      "options": [
+        {
+          "label": "Matplotlib",
+          "description": "พื้นฐาน ยืดหยุ่นสูง"
+        },
+        {
+          "label": "Seaborn",
+          "description": "สวยงามกว่า Matplotlib เขียนง่าย"
+        },
+        {
+          "label": "Plotly",
+          "description": "Interactive Graphs คลิกดูรายละเอียดได้"
+        },
+        {
+          "label": "Tableau / Power BI",
+          "description": "Business Intelligence Dashboard สำเร็จรูป"
+        },
+        {
+          "label": "Streamlit / Dash",
+          "description": "สร้าง Web App แสดงผลข้อมูลด้วย Python"
+        }
+      ],
+      "tips": "รายงาน: Seaborn/Plotly | Dashboard: Streamlit/Tableau"
+    },
+    {
+      "id": "deployment_ml",
+      "question": "คุณจะ Deploy โมเดลอย่างไร?",
+      "options": [
+        {
+          "label": "FastAPI / Flask API",
+          "description": "สร้าง REST API ให้บริการโมเดล"
+        },
+        {
+          "label": "MLflow",
+          "description": "จัดการ Model Lifecycle, Versioning"
+        },
+        {
+          "label": "Sagemaker / Vertex AI",
+          "description": "Cloud Platform จัดการ End-to-end"
+        },
+        {
+          "label": "Docker + Kubernetes",
+          "description": "Containerize เพื่อ Scalability"
+        },
+        {
+          "label": "ไม่ Deploy (ใช้ภายใน)",
+          "description": "ใช้สำหรับ Analysis ภายในเท่านั้น"
+        }
+      ],
+      "tips": "เริ่มต้น: FastAPI + Docker | Enterprise: Cloud ML Platform"
+    }
+  ],
+  "final_recommendations": [
+    "ทำ Data Cleaning อย่างรอบคอบ (80% ของเวลา)",
+    "แบ่ง Train/Validation/Test Set ให้ชัดเจน",
+    "ใช้ Cross-Validation เพื่อประเมินโมเดล",
+    "บันทึก Experiment ด้วย MLflow หรือ Weights & Biases",
+    "ตรวจสอบ Bias ในข้อมูลและโมเดล"
+  ]
+}

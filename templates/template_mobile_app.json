@@ -1,0 +1,175 @@
+{
+  "name": "Mobile App Development",
+  "description": "พัฒนาแอปพลิเคชันมือถือ iOS และ Android",
+  "questions": [
+    {
+      "id": "app_type",
+      "question": "คุณต้องการสร้างแอปประเภทใด?",
+      "options": [
+        {
+          "label": "Native iOS (Swift)",
+          "description": "ประสิทธิภาพสูงสุด เข้าถึงฟีเจอร์เครื่องได้เต็มที่"
+        },
+        {
+          "label": "Native Android (Kotlin)",
+          "description": "เข้าถึง Android API ได้ทั้งหมด ประสิทธิภาพดี"
+        },
+        {
+          "label": "Cross-Platform (Flutter)",
+          "description": "เขียนครั้งเดียวได้ทั้ง iOS และ Android เร็ว"
+        },
+        {
+          "label": "Cross-Platform (React Native)",
+          "description": "ใช้ JavaScript/React พัฒนาได้ทั้งสองแพลตฟอร์ม"
+        },
+        {
+          "label": "Progressive Web App (PWA)",
+          "description": "เว็บที่ติดตั้งเป็นแอปได้ ไม่ต้องผ่าน Store"
+        }
+      ],
+      "tips": "งบประมาณจำกัด: Flutter/React Native | ประสิทธิภาพสูงสุด: Native"
+    },
+    {
+      "id": "backend_service",
+      "question": "คุณจะจัดการ Backend อย่างไร?",
+      "options": [
+        {
+          "label": "Firebase",
+          "description": "ครบวงจร Auth, Database, Storage, Push Notification"
+        },
+        {
+          "label": "Supabase",
+          "description": "Open-source Alternative ของ Firebase ใช้ PostgreSQL"
+        },
+        {
+          "label": "Custom Backend (API)",
+          "description": "สร้างเองด้วย Node.js, Python, Go ฯลฯ"
+        },
+        {
+          "label": "AWS Amplify",
+          "description": "Backend as a Service จาก AWS"
+        },
+        {
+          "label": "ไม่ใช้ Backend (Offline First)",
+          "description": "ทำงานบนเครื่องเท่านั้น"
+        }
+      ],
+      "tips": "เริ่มต้นเร็ว: Firebase/Supabase | ควบคุมเต็มที่: Custom Backend"
+    },
+    {
+      "id": "state_management",
+      "question": "(Cross-Platform) คุณจะจัดการ State อย่างไร?",
+      "options": [
+        {
+          "label": "Provider / Riverpod (Flutter)",
+          "description": "นิยมใน Flutter เรียนรู้ง่าย"
+        },
+        {
+          "label": "BLoC (Flutter)",
+          "description": "โครงสร้างชัดเจน เหมาะกับทีมใหญ่"
+        },
+        {
+          "label": "Redux / Zustand (React Native)",
+          "description": "จัดการ State แบบ Global"
+        },
+        {
+          "label": "Context API + Hooks (React Native)",
+          "description": "Built-in ของ React เพียงพอสำหรับแอปเล็ก"
+        },
+        {
+          "label": "ไม่เกี่ยวข้อง (Native)",
+          "description": "ใช้ SwiftUI หรือ Jetpack Compose"
+        }
+      ],
+      "tips": "Flutter: Riverpod สำหรับโปรเจกต์เล็ก-กลาง | BLoC สำหรับ Enterprise"
+    },
+    {
+      "id": "local_storage",
+      "question": "คุณจะเก็บข้อมูลบนเครื่องอย่างไร?",
+      "options": [
+        {
+          "label": "SQLite / Room / CoreData",
+          "description": "Relational Database บนเครื่อง"
+        },
+        {
+          "label": "Hive / Isar (Flutter)",
+          "description": "NoSQL Database เร็วมากสำหรับ Flutter"
+        },
+        {
+          "label": "AsyncStorage / MMKV (React Native)",
+          "description": "Key-Value Storage ง่ายและเร็ว"
+        },
+        {
+          "label": "Realm",
+          "description": "Object Database ข้ามแพลตฟอร์ม"
+        },
+        {
+          "label": "ไม่เก็บข้อมูลถาวร",
+          "description": "โหลดจาก Server ทุกครั้ง"
+        }
+      ],
+      "tips": "ข้อมูลซับซ้อน: SQLite | ข้อมูลง่าย: Hive/MMKV"
+    },
+    {
+      "id": "testing",
+      "question": "คุณจะทดสอบแอปอย่างไร?",
+      "options": [
+        {
+          "label": "Unit Test + Widget Test",
+          "description": "ทดสอบฟังก์ชันและ UI Components"
+        },
+        {
+          "label": "Integration Test",
+          "description": "ทดสอบการทำงานร่วมกันของหลายส่วน"
+        },
+        {
+          "label": "E2E Test (Detox, Maestro)",
+          "description": "ทดสอบเหมือนผู้ใช้จริง"
+        },
+        {
+          "label": "Manual Testing เท่านั้น",
+          "description": "ทดสอบด้วยตัวเองทุกเวอร์ชัน"
+        },
+        {
+          "label": "ยังไม่สนใจเรื่อง Testing",
+          "description": "เน้นทำ MVP ก่อน"
+        }
+      ],
+      "tips": "อย่างน้อยควรมี Unit Test สำหรับ Logic สำคัญ"
+    },
+    {
+      "id": "deployment_store",
+      "question": "คุณจะเผยแพร่แอปที่ไหน?",
+      "options": [
+        {
+          "label": "Apple App Store เท่านั้น",
+          "description": "กลุ่มผู้ใช้ iOS กำลังซื้อสูง"
+        },
+        {
+          "label": "Google Play Store เท่านั้น",
+          "description": "กลุ่มผู้ใช้ Android กว้างขวาง"
+        },
+        {
+          "label": "ทั้งสอง Store",
+          "description": "ครอบคลุมผู้ใช้ทั้งหมด"
+        },
+        {
+          "label": "TestFlight / Internal Testing",
+          "description": "แจกให้ Tester ทดสอบก่อน"
+        },
+        {
+          "label": "Side Load / PWA",
+          "description": "ไม่ผ่าน Store ติดตั้งเอง"
+        }
+      ],
+      "tips": "iOS: ต้องมี Mac + Apple Developer ($99/ปี) | Android: $25 ครั้งเดียว"
+    }
+  ],
+  "final_recommendations": [
+    "ออกแบบ UX/UI ให้เรียบง่าย ใช้งานง่ายด้วยมือเดียว",
+    "รองรับ Dark Mode ตั้งแต่เริ่มต้น",
+    "จัดการ Offline Mode ให้ดี",
+    "ติดตาม Crash ด้วย Firebase Crashlytics หรือ Sentry",
+    "วิเคราะห์พฤติกรรมผู้ใช้ด้วย Analytics"
+  ]
+}
