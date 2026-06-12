@@ -1,0 +1,175 @@
+{
+  "name": "DevOps & Cloud Infrastructure",
+  "description": "วางระบบ CI/CD, Container, Cloud Deployment",
+  "questions": [
+    {
+      "id": "cloud_provider",
+      "question": "คุณจะเลือก Cloud Provider เจ้าใด?",
+      "options": [
+        {
+          "label": "AWS (Amazon Web Services)",
+          "description": "ใหญ่ที่สุด บริการครบ เครื่องมือหลากหลาย"
+        },
+        {
+          "label": "Google Cloud Platform (GCP)",
+          "description": "เก่งด้าน Data/AI Kubernetes (GKE) ดีมาก"
+        },
+        {
+          "label": "Microsoft Azure",
+          "description": "ผสานกับ Microsoft Ecosystem ได้ดี"
+        },
+        {
+          "label": "DigitalOcean / Linode",
+          "description": "ง่าย ราคาถูก เหมาะกับ Startup"
+        },
+        {
+          "label": "ไม่ใช้ Cloud (On-premise)",
+          "description": "ตั้ง Server เองในองค์กร"
+        }
+      ],
+      "tips": "เริ่มต้น: DigitalOcean | Enterprise: AWS/GCP/Azure"
+    },
+    {
+      "id": "containerization",
+      "question": "คุณจะใช้งาน Container อย่างไร?",
+      "options": [
+        {
+          "label": "Docker เท่านั้น",
+          "description": "รันบน VPS ด้วย Docker Compose"
+        },
+        {
+          "label": "Kubernetes (K8s)",
+          "description": "Orchestration ระดับ Production"
+        },
+        {
+          "label": "Managed K8s (EKS/GKE/AKS)",
+          "description": "Cloud จัดการ Control Plane ให้"
+        },
+        {
+          "label": "Serverless Container (Cloud Run/Fargate)",
+          "description": "ไม่ต้องจัดการ Server เลย"
+        },
+        {
+          "label": "ไม่ใช้ Container",
+          "description": "Deploy แบบ Traditional (VM/Physical)"
+        }
+      ],
+      "tips": "เล็ก: Docker Compose | กลาง-ใหญ่: Managed K8s"
+    },
+    {
+      "id": "ci_cd_tool",
+      "question": "คุณจะเลือกเครื่องมือ CI/CD อะไร?",
+      "options": [
+        {
+          "label": "GitHub Actions",
+          "description": "รวมกับ GitHub ได้สะดวก ยอดนิยม"
+        },
+        {
+          "label": "GitLab CI",
+          "description": "Built-in ใน GitLab ครบวงจร"
+        },
+        {
+          "label": "Jenkins",
+          "description": "เก่าแก่ Plugin เยอะ ปรับแต่งได้มาก"
+        },
+        {
+          "label": "CircleCI / Travis CI",
+          "description": "Cloud-based ตั้งค่าง่าย"
+        },
+        {
+          "label": "ArgoCD (GitOps)",
+          "description": "Deploy ด้วย Git บน Kubernetes"
+        }
+      ],
+      "tips": "แนะนำ: GitHub Actions สำหรับส่วนใหญ่ | ArgoCD สำหรับ K8s"
+    },
+    {
+      "id": "infrastructure_as_code",
+      "question": "คุณจะจัดการ Infrastructure ด้วยวิธีใด?",
+      "options": [
+        {
+          "label": "Terraform",
+          "description": "Multi-cloud นิยมสูงสุด"
+        },
+        {
+          "label": "Pulumi",
+          "description": "เขียน IaC ด้วยภาษาโปรแกรม (Python, TS)"
+        },
+        {
+          "label": "AWS CDK / CloudFormation",
+          "description": "เฉพาะ AWS เขียนด้วย Code"
+        },
+        {
+          "label": "Ansible",
+          "description": "Configuration Management"
+        },
+        {
+          "label": "ทำ Manual (Click ใน Console)",
+          "description": "ยังไม่พร้อมใช้ IaC"
+        }
+      ],
+      "tips": "แนะนำ: Terraform สำหรับ Multi-cloud | Pulumi ถ้าชอบเขียน Code"
+    },
+    {
+      "id": "monitoring",
+      "question": "คุณจะติดตามและตรวจสอบระบบอย่างไร?",
+      "options": [
+        {
+          "label": "Prometheus + Grafana",
+          "description": "Open-source มาตรฐานอุตสาหกรรม"
+        },
+        {
+          "label": "Datadog",
+          "description": "Commercial ครบวงจร ใช้ง่าย"
+        },
+        {
+          "label": "New Relic",
+          "description": "APM แข็งแรง วิเคราะห์ Performance ดี"
+        },
+        {
+          "label": "Cloud-native (CloudWatch/Stackdriver)",
+          "description": "ของ Cloud Provider นั้นๆ"
+        },
+        {
+          "label": "ยังไม่ตั้งค่า Monitoring",
+          "description": "คอยเช็ค Log ด้วยตัวเอง"
+        }
+      ],
+      "tips": "เริ่มต้น: Cloud-native + Uptime Kuma | Production: Prometheus/Datadog"
+    },
+    {
+      "id": "security",
+      "question": "คุณจะจัดการความปลอดภัยอย่างไร?",
+      "options": [
+        {
+          "label": "WAF + DDoS Protection",
+          "description": "ป้องกันเว็บโจมตี (Cloudflare, AWS WAF)"
+        },
+        {
+          "label": "Secrets Management (Vault)",
+          "description": "เก็บรหัสผ่าน/API Key อย่างปลอดภัย"
+        },
+        {
+          "label": "Security Scanning (SAST/DAST)",
+          "description": "สแกนช่องโหว่ใน Code และ Runtime"
+        },
+        {
+          "label": "IAM & Access Control",
+          "description": "จัดการสิทธิ์การเข้าถึงทรัพยากร"
+        },
+        {
+          "label": "พื้นฐานเท่านั้น",
+          "description": "Firewall, SSH Key, Update ระบบ"
+        }
+      ],
+      "tips": "ขั้นต่ำ: Firewall + SSH Key + Update | เพิ่ม: WAF + Secrets Mgmt"
+    }
+  ],
+  "final_recommendations": [
+    "ทำ Infrastructure as Code ตั้งแต่เริ่มต้น",
+    "ตั้งค่า Auto-scaling เพื่อรับ Load ที่เปลี่ยนแปลง",
+    "มี Backup Strategy ที่ชัดเจน (3-2-1 Rule)",
+    "ตั้งค่า Alert เมื่อระบบมีปัญหา",
+    "ทำ Disaster Recovery Plan"
+  ]
+}
