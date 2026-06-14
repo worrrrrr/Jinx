@@ -22,6 +22,10 @@ except ImportError:
     _SWE_AVAILABLE = False
     swe = None
 
+# Initialize swisseph if available
+if _SWE_AVAILABLE:
+    swe.set_sid_mode(swe.SIDM_LAHIRI)
+
 
 # ═══════════════════════════════════════════
 # CONSTANTS & METADATA
