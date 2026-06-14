@@ -46,15 +46,27 @@ def search_web(query: str) -> str:
 
 def search_handler(action: str = "search", query: str = "", entities: list = None, **kwargs) -> Dict[str, Any]:
     """Smart Orchestrator: ค้นหาในเครื่องก่อน ถ้าไม่เจอค่อยไปนอก
-    รองรับทั้งการเรียกแบบ action-based และ query-based
+    รองรับทั้งการเรียกแบบ action-based (action, inp, entities) และ query-based
     """
-    # จัดการ input ให้ยืดหยุ่น
+    # จัดการ input ให้ยืดหยุ่น - รองรับทั้งรูปแบบเก่าและใหม่
     if entities is None:
-        entities = []
+        entities = kwargs.get('inp', '')  # รองรับกรณีที่มีการส่ง inp มาใน kwargs
+    
+    # ถ้า action เป็นค่าที่ไม่ใช่ string ที่เหมาะสม หรือมี entities เป็น list
+    # อาจเป็นการเรียกแบบเก่า: search_handler(action, inp, entities)
+    # ตรวจสอบว่า query อาจเป็น inp ที่ส่งมาในตำแหน่งที่ 2
+    if not isinstance(query, str) or (isinstance(action, str) and action not in ['search', 'answer_question'] and query == ''):
+        # กรณีถูกเรียกแบบเก่า: search_handler(action, inp, entities)
+        # action จะอยู่ที่ position 1, inp (query) ที่ position 2, entities ที่ position 3
+        pass  # ใช้ค่าที่มีอยู่แล้ว
     
     # ถ้ามี action แต่ไม่มี query ให้ลองดึงจาก entities
     if not query and entities:
-        query = " ".join(str(e) for e in entities)
+        if isinstance(entities, list):
+            query = " ".join(str(e) for e in entities)
+        else:
+            query = str(entities)
+            entities = []
     
     # ถ้ายังไม่มี query เลย
     if not query:
